@@ -1,5 +1,4 @@
-import java.sql.SQLOutput;
-
+package view;
 public class StocksView {
   public void displaySelectedStockDetails(String company, float open,float high, float low,
       float price, String date, float previousClose ) {

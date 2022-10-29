@@ -1,9 +1,13 @@
+package controller;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import model.Stocks;
+import view.StocksView;
 
 public class StocksController {
 
@@ -14,7 +18,7 @@ public class StocksController {
 
   private URL url = null;
 
-  private void fetchData(String stockSymbol) {
+  private boolean fetchData(String stockSymbol) {
     try {
       System.out.println("Inside Controller fetchData");
       url = new URL("https://www.alphavantage"
@@ -50,14 +54,16 @@ public class StocksController {
       }
       String[] headers = output.toString().split(",");
       String[] values = output1.toString().split(",");
-      if (headers.length == 0) {
-        System.out.println("no price data found for " + stockSymbol + ". Please enter a valid "
-            + "ticker symbol");
+      if (output.toString().equals("{}")) {
+        return false;
+//        System.out.println("no price data found for " + stockSymbol + ". Please enter a valid "
+//            + "ticker symbol");
       } else {
         for (int i = 0; i < headers.length; i++) {
           updateStocksModel(headers[i], values[i]);
         }
         updateStockView();
+        return true;
       }
     } catch (IOException e) {
       throw new IllegalArgumentException("No price data found for " + stockSymbol);
@@ -100,8 +106,8 @@ public class StocksController {
     this.view = view;
   }
 
-  public void getTickerSymbol(String tickerSymbol) {
-    fetchData(tickerSymbol);
+  public boolean getTickerSymbol(String tickerSymbol) {
+    return fetchData(tickerSymbol);
   }
 
   public void setSharesValue(int shares) {
