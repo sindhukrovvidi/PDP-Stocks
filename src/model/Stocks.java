@@ -12,6 +12,15 @@ public class Stocks {
   private String company;
 //  private DATE date;
 
+//  public Stocks(String company, int sharesInvested, float priceOnThatDay,
+//      String dateInvested) {
+//    this.company = company;
+//    this.shares = sharesInvested;
+//    this.priceOnThatDay = priceOnThatDay;
+//    this.dateInvested = dateInvested;
+//    this.totalAmountInvested = priceOnThatDay * sharesInvested;
+////    portfolioData.put(compnay, this);
+//  }
   public void setStocks(int share) {
     shares = share;
   }
