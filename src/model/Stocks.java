@@ -1,96 +1,77 @@
 package model;
+
 public class Stocks {
 
   private int shares;
 
   private float open;
-  private float price;
+  private float close;
   private float high;
   private float low;
-  private String latestDay;
-  private float previousClose;
+  private String date;
   private String company;
-//  private DATE date;
 
-//  public Stocks(String company, int sharesInvested, float priceOnThatDay,
-//      String dateInvested) {
-//    this.company = company;
-//    this.shares = sharesInvested;
-//    this.priceOnThatDay = priceOnThatDay;
-//    this.dateInvested = dateInvested;
-//    this.totalAmountInvested = priceOnThatDay * sharesInvested;
-////    portfolioData.put(compnay, this);
-//  }
-  public void setStocks(int share) {
-    shares = share;
+  private float volume;
+
+
+  public Stocks() {
+    this.company = "";
+    this.open = 0;
+    this.close = 0;
+    this.high = 0;
+    this.low = 0;
+    this.date = "";
+    this.shares = 0;
+    this.volume = 0;
+
   }
 
-  public void setSharesValue(int shares) {
+  public Stocks(String date, float open, float high, float low, float close, float volume) {
+    this.date = date;
+    this.open = open;
+    this.high = high;
+    this.low = low;
+    this.close = close;
+    this.volume = volume;
+  }
+
+  public Stocks(String date, float open, float high, float low, float close, float volume,
+      int shares) {
+    this.date = date;
+    this.open = open;
+    this.high = high;
+    this.low = low;
+    this.close = close;
+    this.volume = volume;
     this.shares = shares;
   }
 
-  public int getSharesValue() {
-    return shares;
+  public String getDate() {
+    return this.date;
   }
 
-  public int getStocks() {
+  public float getOpen() {
+    return this.open;
+  }
+
+  public float getHigh() {
+    return this.high;
+  }
+
+  public float getLow() {
+    return this.low;
+  }
+
+  public float getClose() {
+    return this.close;
+  }
+
+  public float getVolume() {
+    return this.volume;
+  }
+
+  public int getShares() {
     return this.shares;
-  }
-
-  public void setCompany(String companyName) {
-    this.company = companyName;
-  }
-
-  public String getCompany() {
-    return company;
-  }
-
-  public void setOpenValue(float value) {
-    this.open = value;
-  }
-
-  public float getOpenValue() {
-    return open;
-  }
-
-  public void setHighValue(float value) {
-    this.high = value;
-  }
-
-  public float getHighValue() {
-    return high;
-  }
-
-  public void setLowValue(float value) {
-    this.low = value;
-  }
-
-  public float getLowValue() {
-    return low;
-  }
-
-  public void setPriceValue(float value) {
-    this.price = value;
-  }
-
-  public float getPriceValue() {
-    return price;
-  }
-
-  public void setLatestDay(String latestDay) {
-    this.latestDay = latestDay;
-  }
-
-  public String getLatestDay() {
-    return latestDay;
-  }
-
-  public void setPreviousClose(float value) {
-    this.previousClose = value;
-  }
-
-  public float getPreviousClose() {
-    return previousClose;
   }
 
 }
