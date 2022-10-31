@@ -46,12 +46,33 @@ public class Stocks {
     this.shares = shares;
   }
 
+  public void setCurrentStock(String company, String date, float open, float high, float low,
+      float close, float volume,
+      int shares) {
+    this.company = company;
+    this.date = date;
+    this.open = open;
+    this.high = high;
+    this.low = low;
+    this.close = close;
+    this.volume = volume;
+    this.shares = shares;
+  }
+
+  public void updateStockValues(int values) {
+    this.shares = values;
+  }
+
   public String getDate() {
     return this.date;
   }
 
   public float getOpen() {
     return this.open;
+  }
+
+  public String getCompany() {
+    return this.company;
   }
 
   public float getHigh() {

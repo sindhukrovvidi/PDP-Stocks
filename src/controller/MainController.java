@@ -41,7 +41,7 @@ public class MainController {
   }
   public Integer takeIntegerInput(String question) throws IOException {
     Objects.requireNonNull(this);
-    this.out.append(question);
+    this.out.append(question).append("\n");
     Scanner scan = new Scanner(this.in);
     Integer input = scan.nextInt();
     return input;
@@ -49,7 +49,7 @@ public class MainController {
 
   public String takeStringInput(String question) throws IOException {
     Objects.requireNonNull(this);
-    this.out.append(question);
+    this.out.append(question).append("\n");
     Scanner scan = new Scanner(this.in);
     String input = scan.nextLine();
     return input.toString();
@@ -60,7 +60,7 @@ public class MainController {
         "Welcome to stock market. Choose from below options to proceed "
             + "further."
             + "(Type the index number). "
-            + "\n1. Enter company names and create a portfolio.\n2. View portfolio \n3. Exit");
+            + "\n1. Enter company names and create a portfolio.\n2. View portfolio \n3. Exit\n");
     getInitialController(option);
   }
 
@@ -75,18 +75,22 @@ public class MainController {
 
   }
 
-  public void afterStocksDisplay() throws IOException {
-    Integer input = takeIntegerInput("Select from the following options.\n1. Save this to "
-        + "portfolio? (YES/NO).\n 2. Enter a new ticker value.\n 3. Go back. \n 4. Exit");
+  public void afterStocksDisplay(Object model) throws IOException {
+    Integer input = takeIntegerInput("Select from the following options.\n1. Add this to "
+        + "portfolio? (YES/NO).\n 2. Do not add and search stocks for new company.\n 3. Go back. "
+        + "\n 4. Exit\n");
+    Stocks stocksModel = new Stocks();
+    StockView stocksView = new StockView();
+    StockController stockController = new StockController(stocksModel,stocksView);
     switch (input) {
       case 1:
         // save the portfolio
+        stockController.addStockToPortfolio(model);
         break;
       case 2:
-        this.out.append("I case 2");
-        Stocks stocksModel = new Stocks();
-        StockView stocksView = new StockView();
-        StockController stockController = new StockController(stocksModel,stocksView);
+//        Stocks stocksModel = new Stocks();
+//        StockView stocksView = new StockView();
+//        StockController stockController = new StockController(stocksModel,stocksView);
         stockController.getTickerValue();
         break;
       case 3:

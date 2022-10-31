@@ -21,8 +21,8 @@ public class StockView {
     Formatter fmt = new Formatter();
     fmt.format("%15s %15s %15s %15s %15s %15s\n", "Date", "Open", "High", "Low", "Close", "Volume"
             + "\n");
-    for (int i = 0; i < values.size(); i++) {
-      Stocks currentStock = (Stocks) values.get(i);
+    for (Object value : values) {
+      Stocks currentStock = (Stocks) value;
       fmt.format("%15s %15s %15s %15s %15s %15s\n", currentStock.getDate(),
           currentStock.getOpen(), currentStock.getHigh(), currentStock.getLow(),
           currentStock.getClose(), currentStock.getVolume());
