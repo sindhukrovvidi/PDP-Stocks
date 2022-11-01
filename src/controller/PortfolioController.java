@@ -1,13 +1,18 @@
 package controller;
 
 import java.io.IOException;
+
 import model.FileAccessors;
 import model.Portfolio;
 import model.Stocks;
 import view.PortfolioView;
 import view.StockView;
 
-public class PortfolioController extends MainController{
+import static model.Input.takeIntegerInput;
+import static model.Output.append;
+import static model.Output.appendNewLine;
+
+public class PortfolioController extends MainController {
 
 
   private Portfolio model;
@@ -30,19 +35,21 @@ public class PortfolioController extends MainController{
 
   public void addStock() throws IOException {
     model.addStockInPortfolio(stocksModel);
-    FileAccessors files =  new FileAccessors();
-    files.writeIntoCSVFile(fileName);
-    this.out.append("Successfully added the stock in portfolio").append("\n");
-    this.out.append("Draft portfolio!!!!!");
+//    FileAccessors files =  new FileAccessors();
+//    files.writeIntoCSVFile(fileName);
+    append("Successfully added the stock in portfolio");
+    appendNewLine();
+    append("Draft portfolio!!!!!");
     view.displayCurrentPortfolio(model.getPortfolio());
     afterAddingStock(model);
   }
 
   public void afterAddingStock(Portfolio model) throws IOException {
-    this.out.append("Successfully added the stock in portfolio").append("\n");
+    append("Successfully added the stock in portfolio");
+    appendNewLine();
     int input = takeIntegerInput("Choose from below options.\n1."
-        + " Add another stock\n2. Save this portfolio. (You can not edit it after saving!!!)\n3. "
-        + "Back to main menu.\n4. Exit.");
+            + " Add another stock\n2. Save this portfolio. (You can not edit it after saving!!!)\n3. "
+            + "Back to main menu.\n4. Exit.");
     switch (input) {
       case 1:
         StockController stockController = new StockController(new Stocks(), new StockView());
@@ -56,7 +63,7 @@ public class PortfolioController extends MainController{
       case 4:
         System.exit(0);
       default:
-        this.out.append("Invalid input");
+        append("Invalid input");
         System.exit(0);
     }
   }

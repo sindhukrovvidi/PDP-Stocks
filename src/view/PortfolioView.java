@@ -14,13 +14,13 @@ public class PortfolioView {
     this.out = System.out;
   }
 
-  public void displayCurrentPortfolio(HashMap portfolio) throws IOException {
+  public void displayCurrentPortfolio(HashMap<String, Stocks> portfolio) throws IOException {
     this.out.append("Draft Portfolio").append('\n');
 //    while(portfolio.hasNext())
     portfolio.forEach((k, v) -> {
       Stocks currentStock = (Stocks) v;
       try {
-        this.out.append(currentStock.getDate());
+        this.out.append(currentStock.getCompany());
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
