@@ -28,19 +28,21 @@ public class StockController extends MainController {
 
   protected void getTickerValue() throws IOException {
     String tickerValue = takeStringInput("Enter the ticker value.");
-    this.out.append("Ticker value is  ").append(tickerValue);
+//    this.out.append("Ticker value is  ").append(tickerValue);
     HashMap map = this.stocksList;
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
       this.out.append("You entered an invalid ticker symbol. Please try again");
+      go();
     } else {
       Stocks currentStock = (Stocks) values.get(0);
       model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
           currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
           currentStock.getVolume(), 0);
       view.displayListOfDates(tickerValue, values);
+      afterStocksDisplay(model);
     }
-    afterStocksDisplay(model);
+
   }
 
   protected void addStockToPortfolio(Object models) throws IOException {

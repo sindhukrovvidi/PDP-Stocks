@@ -1,5 +1,6 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 public class StocksList implements ListOfStocks {
   HashMap<String, ArrayList<Stocks>> listOfStocks = new HashMap<>();
 
-  public StocksList(FileAccessors stocksData) throws IOException {
+  public StocksList(BufferedReader stocksData) throws IOException {
     String line = stocksData.readLine(); // Reading header, Ignoring;
     while ((line = stocksData.readLine()) != null && !line.isEmpty()) {
       String[] fields = line.split(",");
