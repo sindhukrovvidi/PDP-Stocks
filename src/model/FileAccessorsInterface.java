@@ -1,8 +1,11 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 public interface FileAccessorsInterface {
 
-  FileAccessorsInterface readCSV() throws IOException;
+  BufferedReader readCSV(String file) throws IOException;
+
+  void createCSV(String file);
 }

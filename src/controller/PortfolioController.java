@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import model.FileAccessors;
 import model.Portfolio;
 import model.Stocks;
 import view.PortfolioView;
@@ -29,6 +30,8 @@ public class PortfolioController extends MainController{
 
   public void addStock() throws IOException {
     model.addStockInPortfolio(stocksModel);
+    FileAccessors files =  new FileAccessors();
+    files.writeIntoCSVFile(fileName);
     this.out.append("Successfully added the stock in portfolio").append("\n");
     this.out.append("Draft portfolio!!!!!");
     view.displayCurrentPortfolio(model.getPortfolio());
