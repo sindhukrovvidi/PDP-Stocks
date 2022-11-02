@@ -57,7 +57,7 @@ public class MainController {
 
   public void go() throws IOException {
     Integer option = takeIntegerInput(
-            "Welcome to stock market.\n Choose from below options to proceed "
+            "Choose from below options to proceed "
                     + "further."
                     + "(Type the index number). "
                     + "\n1. Create a portfolio.\n2. View & speculate existing portfolio \n3. Exit\n");
