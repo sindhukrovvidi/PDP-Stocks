@@ -3,12 +3,13 @@ package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import java.util.Arrays;
 import model.FileAccessorsImpl;
 import model.PortfolioImpl;
 import model.StocksImpl;
 import model.ListOfStocksImpl;
-import view.PortfolioView;
-import view.StockView;
+import view.PortfolioViewImpl;
+import view.StockViewImpl;
 
 import static model.Input.takeIntegerInput;
 import static model.Input.takeStringInput;
@@ -32,7 +33,6 @@ public class MainControllerImpl implements MainController {
   }
 
   /**
-   *
    * @return
    * @throws IOException
    */
@@ -45,7 +45,6 @@ public class MainControllerImpl implements MainController {
   }
 
   /**
-   *
    * @throws IOException
    */
   @Override
@@ -65,7 +64,6 @@ public class MainControllerImpl implements MainController {
   }
 
   /**
-   *
    * @param option
    * @throws IOException
    */
@@ -84,18 +82,23 @@ public class MainControllerImpl implements MainController {
         getInitialController(4);
         break;
       case 2:
-        input = takeStringInput("Enter the name for your portfolio to view");
-        PortfolioView portfolioView = new PortfolioView();
+        String[] files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/");
+        input =
+            takeStringInput(
+                "Enter the name of the portfolio from the below list: (Just enter the filename "
+                    + "without the extension \n" + Arrays.toString(files));
+        PortfolioViewImpl portfolioViewImpl = new PortfolioViewImpl();
         PortfolioImpl portfolioImpl = new PortfolioImpl();
-        PortfolioController portfolioController = new PortfolioController(portfolioImpl,
-            portfolioView);
-        portfolioController.viewSpeculate(input, listOfStocksImpl);
+        PortfolioControllerImpl portfolioControllerImpl = new PortfolioControllerImpl(portfolioImpl,
+            portfolioViewImpl);
+        portfolioControllerImpl.viewSpeculate(input, listOfStocksImpl);
         go();
         break;
       case 3:
         System.exit(0);
       case 4:
-        StockController stocksController = new StockController(new StocksImpl(), new StockView());
+        StockControllerImpl stocksController = new StockControllerImpl(new StocksImpl(),
+            new StockViewImpl());
         stocksController.setStocksList(listOfStocksImpl);
         StocksImpl stocksImpl = stocksController.getTickerValue();
         if (stocksImpl == null) {
@@ -106,11 +109,12 @@ public class MainControllerImpl implements MainController {
         }
         break;
       case 5:
-        PortfolioView portfolioViews = new PortfolioView();
-        PortfolioController portfolioControllers = new PortfolioController(this.stocksImpl,
+        PortfolioViewImpl portfolioViewsImpl = new PortfolioViewImpl();
+        PortfolioControllerImpl portfolioControllersImpl = new PortfolioControllerImpl(
+            this.stocksImpl,
             this.portfolioImpl,
-            portfolioViews);
-        this.portfolioImpl = portfolioControllers.addStock();
+            portfolioViewsImpl);
+        this.portfolioImpl = portfolioControllersImpl.addStock();
         if (this.portfolioImpl == null) {
           this.portfolioImpl = new PortfolioImpl();
           go();

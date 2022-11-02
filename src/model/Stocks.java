@@ -68,10 +68,6 @@ public interface Stocks {
    */
   float getVolume();
 
-  /**
-   *
-   * @return
-   */
   int getShares();
 
 
