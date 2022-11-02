@@ -21,6 +21,7 @@ import view.StockView;
 import static model.Input.takeIntegerInput;
 import static model.Input.takeStringInput;
 import static model.Output.append;
+import static model.Output.appendNewLine;
 
 public class MainController {
 
@@ -56,10 +57,10 @@ public class MainController {
 
   public void go() throws IOException {
     Integer option = takeIntegerInput(
-        "Welcome to stock market.\n Choose from below options to proceed "
-            + "further."
-            + "(Type the index number). "
-            + "\n1. Create a portfolio.\n2. View portfolio \n3. Exit\n");
+            "Choose from below options to proceed "
+                    + "further."
+                    + "(Type the index number). "
+                    + "\n1. Create a portfolio.\n2. View & speculate existing portfolio \n3. Exit\n");
     getInitialController(option);
   }
 
@@ -78,17 +79,23 @@ public class MainController {
         break;
       case 2:
         input = takeStringInput("Enter the name for your portfolio to view");
-        try {
-          if (!fileAccessors.isFileExists(input)) {
-            throw new FileNotFoundException(input);
-          }
-
-        } catch (Exception e) {
-          append("Portfolio doesn't exists");
-          go();
-        }
-
+        PortfolioView portfolioView = new PortfolioView();
+        Portfolio portfolio = new Portfolio();
+        PortfolioController portfolioController = new PortfolioController(portfolio, portfolioView);
+        portfolioController.viewSpeculate(input, stocksList);
+        go();
+//        try {
+//
+//          PortfolioView portfolioView = new PortfolioView();
+//          portfolioView.displaySavedPortfolio(input);
+//        } catch (Exception e) {
+//          append("Portfolio doesn't exists");
+//          appendNewLine();
+//          go();
+//        }
         break;
+      case 3:
+        System.exit(0);
       case 4:
         StockController stocksController = new StockController(new Stocks(), new StockView());
         stocksController.setStocksList(stocksList);
@@ -101,11 +108,11 @@ public class MainController {
         }
         break;
       case 5:
-        PortfolioView portfolioView = new PortfolioView();
-        PortfolioController portfolioController = new PortfolioController(this.stocks,
-            this.portfolio,
-            portfolioView);
-        this.portfolio = portfolioController.addStock();
+        PortfolioView portfolioViews = new PortfolioView();
+        PortfolioController portfolioControllers = new PortfolioController(this.stocks,
+                this.portfolio,
+                portfolioViews);
+        this.portfolio = portfolioControllers.addStock();
         if (this.portfolio == null) {
           this.portfolio = new Portfolio();
           go();

@@ -2,7 +2,10 @@ package view;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import model.FileAccessors;
 import model.Stocks;
 
 public class PortfolioView {
@@ -22,11 +25,16 @@ public class PortfolioView {
       try {
         this.out.append(currentStock.getCompany());
         this.out.append(currentStock.getDate());
-        this.out.append((char) currentStock.getShares());
-        this.out.append((char) currentStock.getHigh());
+        this.out.append(String.valueOf(currentStock.getShares()));
+        this.out.append(String.valueOf(currentStock.getHigh()));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
     });
+  }
+
+  public HashMap<String, Stocks> displaySavedPortfolio(String portfolioName) throws IOException {
+    FileAccessors fileAccessors = new FileAccessors();
+    return fileAccessors.viewFile(portfolioName);
   }
 }

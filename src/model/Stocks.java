@@ -36,7 +36,7 @@ public class Stocks {
   }
 
   public Stocks(String date, float open, float high, float low, float close, float volume,
-      int shares) {
+                int shares) {
     this.date = date;
     this.open = open;
     this.high = high;
@@ -47,8 +47,8 @@ public class Stocks {
   }
 
   public void setCurrentStock(String company, String date, float open, float high, float low,
-      float close, float volume,
-      int shares) {
+                              float close, float volume,
+                              int shares) {
     this.company = company;
     this.date = date;
     this.open = open;
