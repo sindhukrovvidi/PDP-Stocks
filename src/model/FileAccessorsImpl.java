@@ -109,4 +109,12 @@ public class FileAccessorsImpl implements FileAccessors {
     reader.close();
     return portfolio;
   }
+
+  @Override
+  public String[] listOfPortfolioFiles(String directory) {
+    String files[] = {};
+    File directoryPath = new File(directory);
+    files = directoryPath.list();
+    return files;
+  }
 }

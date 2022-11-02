@@ -32,4 +32,6 @@ public interface FileAccessors {
   boolean isFileExists(String name);
 
   HashMap<String, StocksImpl> viewFile(String portfolioName) throws IOException;
+
+  String[] listOfPortfolioFiles(String directory);
 }

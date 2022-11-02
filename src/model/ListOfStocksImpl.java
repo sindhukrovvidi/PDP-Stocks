@@ -9,10 +9,10 @@ import java.util.HashMap;
  *
  */
 public class ListOfStocksImpl implements ListOfStocks {
+
   HashMap<String, ArrayList<StocksImpl>> listOfStocks = new HashMap<>();
 
   /**
-   *
    * @param stocksData
    * @throws IOException
    */
@@ -43,7 +43,6 @@ public class ListOfStocksImpl implements ListOfStocks {
   }
 
   /**
-   *
    * @return
    */
   @Override
