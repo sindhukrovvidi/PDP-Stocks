@@ -1,10 +1,10 @@
-import controller.MainController;
+import controller.MainControllerImpl;
 import java.io.IOException;
 
 public class Main {
 
   public static void main(String[] args) throws IOException {
-    MainController helperController = new MainController();
+    MainControllerImpl helperController = new MainControllerImpl();
     helperController.go();
   }
 }

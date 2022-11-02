@@ -2,39 +2,31 @@ package view;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import model.FileAccessors;
-import model.Stocks;
+import java.util.Formatter;
 
 public class PortfolioView {
+
   private Readable in;
-  private Appendable out;
+  private final Appendable out;
 
   public PortfolioView() {
     this.in = new InputStreamReader(System.in);
     this.out = System.out;
   }
 
-  public void displayCurrentPortfolio(HashMap<String, Stocks> portfolio) throws IOException {
-    this.out.append("Draft Portfolio").append('\n');
-//    while(portfolio.hasNext())
-    portfolio.forEach((k, v) -> {
-      Stocks currentStock = (Stocks) v;
-      try {
-        this.out.append(currentStock.getCompany());
-        this.out.append(currentStock.getDate());
-        this.out.append(String.valueOf(currentStock.getShares()));
-        this.out.append(String.valueOf(currentStock.getHigh()));
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    });
-  }
+  public void displayPortfolio(boolean displayHeaders, String company, String date,
+      float open, float high,
+      float low, float close, float volume, int shares) throws IOException {
 
-  public HashMap<String, Stocks> displaySavedPortfolio(String portfolioName) throws IOException {
-    FileAccessors fileAccessors = new FileAccessors();
-    return fileAccessors.viewFile(portfolioName);
+    Formatter fmt = new Formatter();
+    if (displayHeaders) {
+      fmt.format("%15s %15s %15s %15s %15s %15s %15s %15s %15s\n", "Company", "Date", "Open",
+          "High", "Low",
+          "Close", "Volume", "Shares Invested", "Total Value"
+              + "\n");
+    }
+    fmt.format("%15s %15s %15s %15s %15s %15s %15s %15s %15s\n", company, date, open, high, low,
+        close, volume, shares, (shares * close));
+    this.out.append(fmt.toString());
   }
 }
