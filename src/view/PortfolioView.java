@@ -21,6 +21,9 @@ public class PortfolioView {
       Stocks currentStock = (Stocks) v;
       try {
         this.out.append(currentStock.getCompany());
+        this.out.append(currentStock.getDate());
+        this.out.append((char) currentStock.getShares());
+        this.out.append((char) currentStock.getHigh());
       } catch (IOException e) {
         throw new RuntimeException(e);
       }

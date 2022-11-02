@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.FileAlreadyExistsException;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
@@ -19,6 +20,7 @@ import view.StockView;
 
 import static model.Input.takeIntegerInput;
 import static model.Input.takeStringInput;
+import static model.Output.append;
 
 public class MainController {
 
@@ -30,6 +32,8 @@ public class MainController {
   Stocks stocks;
   Portfolio portfolio;
   String fileName;
+
+  private FileAccessors fileAccessors = new FileAccessors();
 
   public MainController() throws IOException {
     this.stocksList = preprocessStocksData();
@@ -52,10 +56,10 @@ public class MainController {
 
   public void go() throws IOException {
     Integer option = takeIntegerInput(
-            "Welcome to stock market\n. Choose from below options to proceed "
-                    + "further."
-                    + "(Type the index number). "
-                    + "\n1. Create a portfolio.\n2. View portfolio \n3. Exit\n");
+        "Welcome to stock market.\n Choose from below options to proceed "
+            + "further."
+            + "(Type the index number). "
+            + "\n1. Create a portfolio.\n2. View portfolio \n3. Exit\n");
     getInitialController(option);
   }
 
@@ -63,23 +67,27 @@ public class MainController {
     System.out.println("Inside getInitialController");
     switch (option) {
       case 1:
-        String input = takeStringInput("Enter the name for your portfolio");
-//        FileAccessors files = new FileAccessors();
-//        this.fileName = input;
-//        files.createCSV(input);
+        String input = takeStringInput("Enter the name for your portfolio.");
+        try {
+          this.portfolio.setPortfolioName(input);
+        } catch (Exception e) {
+          append("The file already exists.");
+          go();
+        }
         getInitialController(4);
         break;
       case 2:
-        PortfolioView portfolioView = new PortfolioView();
-        PortfolioController portfolioController = new PortfolioController(this.stocks, this.portfolio,
-                portfolioView);
-        this.portfolio = portfolioController.addStock();
-        if (this.portfolio == null) {
-          this.portfolio = new Portfolio();
+        input = takeStringInput("Enter the name for your portfolio to view");
+        try {
+          if (!fileAccessors.isFileExists(input)) {
+            throw new FileNotFoundException(input);
+          }
+
+        } catch (Exception e) {
+          append("Portfolio doesn't exists");
           go();
-        } else if (!this.portfolio.isSaved()) {
-          getInitialController(4);
         }
+
         break;
       case 4:
         StockController stocksController = new StockController(new Stocks(), new StockView());
@@ -89,8 +97,22 @@ public class MainController {
           go();
         } else {
           this.stocks = stocks;
-          getInitialController(2);
+          getInitialController(5);
         }
+        break;
+      case 5:
+        PortfolioView portfolioView = new PortfolioView();
+        PortfolioController portfolioController = new PortfolioController(this.stocks,
+            this.portfolio,
+            portfolioView);
+        this.portfolio = portfolioController.addStock();
+        if (this.portfolio == null) {
+          this.portfolio = new Portfolio();
+          go();
+        } else if (!this.portfolio.isSaved()) {
+          getInitialController(4);
+        }
+        break;
     }
 
   }
