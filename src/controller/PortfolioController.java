@@ -33,7 +33,7 @@ public class PortfolioController extends MainController {
     this.view = view;
   }
 
-  public void addStock() throws IOException {
+  public Portfolio addStock() throws IOException {
     model.addStockInPortfolio(stocksModel);
 //    FileAccessors files =  new FileAccessors();
 //    files.writeIntoCSVFile(fileName);
@@ -41,24 +41,24 @@ public class PortfolioController extends MainController {
     appendNewLine();
     append("Draft portfolio!!!!!");
     view.displayCurrentPortfolio(model.getPortfolio());
-    afterAddingStock(model);
+    return afterAddingStock(model);
+   // return model;
   }
 
-  public void afterAddingStock(Portfolio model) throws IOException {
+  public Portfolio afterAddingStock(Portfolio model) throws IOException {
     append("Successfully added the stock in portfolio");
     appendNewLine();
-    int input = takeIntegerInput("Choose from below options.\n1."
+    int input = takeIntegerInput("Choose from below options.\n 1."
             + " Add another stock\n2. Save this portfolio. (You can not edit it after saving!!!)\n3. "
             + "Back to main menu.\n4. Exit.");
     switch (input) {
       case 1:
-        StockController stockController = new StockController(new Stocks(), new StockView());
-        stockController.getTickerValue();
+
         break;
       case 2:
         // write it to a file
       case 3:
-        go();
+        model = null;
         break;
       case 4:
         System.exit(0);
@@ -66,6 +66,7 @@ public class PortfolioController extends MainController {
         append("Invalid input");
         System.exit(0);
     }
+    return model;
   }
 
 }

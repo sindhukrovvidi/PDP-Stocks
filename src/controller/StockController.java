@@ -34,27 +34,27 @@ public class StockController {
     this.view = stockView;
   }
 
-  public boolean afterStocksDisplay(Object model) throws IOException {
+  public Stocks afterStocksDisplay(Object model) throws IOException {
     Integer input = takeIntegerInput("Select from the following options.\n1. Add this to "
             + "portfolio? (YES/NO).\n2. Do not add and search stocks for new company.\n3. Go back. "
             + "\n 4. Exit\n");
-    Stocks stocksModel = new Stocks();
-    StockView stocksView = new StockView();
-    StockController stockController = new StockController(stocksModel, stocksView);
-    boolean isGo = false;
+    // Stocks stocksModel = new Stocks();
+    // StockView stocksView = new StockView();
+    // StockController stockController = new StockController(stocksModel, stocksView);
+    Stocks currModel = (Stocks) model;
     switch (input) {
       case 1:
         // save the portfolio
-        stockController.addStockToPortfolio(model);
+        currModel = this.addStockToPortfolio(currModel);
         break;
       case 2:
 //        Stocks stocksModel = new Stocks();
 //        StockView stocksView = new StockView();
 //        StockController stockController = new StockController(stocksModel,stocksView);
-        stockController.getTickerValue();
+        currModel = this.getTickerValue();
         break;
       case 3:
-        isGo = true;
+       currModel = null;
         break;
       case 4:
         System.exit(0);
@@ -63,19 +63,21 @@ public class StockController {
         System.out.println("Invalid input");
         System.exit(0);
     }
-    return isGo;
+    return currModel;
   }
 
   protected void setStocksList(StocksList list) {
     stocksList = list;
   }
-  protected void getTickerValue() throws IOException {
+
+  protected Stocks getTickerValue() throws IOException {
     String tickerValue = takeStringInput("Enter the ticker value.");
 //    this.out.append("Ticker value is  ").append(tickerValue);
     HashMap map = stocksList.getMap();
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
       append("You entered an invalid ticker symbol. Please try again");
+      return null;
       //go();
     } else {
       Stocks currentStock = (Stocks) values.get(0);
@@ -83,21 +85,17 @@ public class StockController {
               currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
               currentStock.getVolume(), 0);
       view.displayListOfDates(tickerValue, values);
-      afterStocksDisplay(model);
+      return afterStocksDisplay(model);
     }
-
   }
 
-  protected void addStockToPortfolio(Object models) throws IOException {
+  protected Stocks addStockToPortfolio(Object models) throws IOException {
     Stocks currModel = (Stocks) models;
     int value =
             takeIntegerInput(
                     "Enter the number of shares you want to invest in " + currModel.getCompany());
     currModel.updateStockValues(value);
-    PortfolioView portfolioView = new PortfolioView();
-    PortfolioController portfolioController = new PortfolioController(currModel, new Portfolio(),
-            portfolioView);
-    portfolioController.addStock();
+    return currModel;
   }
 
 }

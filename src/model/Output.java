@@ -8,6 +8,6 @@ public class Output {
     out.append(s);
   }
   public static void appendNewLine() throws IOException {
-    out.append("/n");
+    out.append("\n");
   }
 }

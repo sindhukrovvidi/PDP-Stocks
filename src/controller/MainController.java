@@ -11,8 +11,10 @@ import java.util.Scanner;
 
 import model.FileAccessors;
 import model.ListOfStocks;
+import model.Portfolio;
 import model.Stocks;
 import model.StocksList;
+import view.PortfolioView;
 import view.StockView;
 
 import static model.Input.takeIntegerInput;
@@ -25,11 +27,13 @@ public class MainController {
   // protected Appendable out;
 
   StocksList stocksList;
-
+  Stocks stocks;
+  Portfolio portfolio;
   String fileName;
 
   public MainController() throws IOException {
     this.stocksList = preprocessStocksData();
+    this.portfolio = new Portfolio();
 //    preprocessStocksData();
   }
 
@@ -63,11 +67,30 @@ public class MainController {
 //        FileAccessors files = new FileAccessors();
 //        this.fileName = input;
 //        files.createCSV(input);
+        getInitialController(4);
+        break;
+      case 2:
+        PortfolioView portfolioView = new PortfolioView();
+        PortfolioController portfolioController = new PortfolioController(this.stocks, this.portfolio,
+                portfolioView);
+        this.portfolio = portfolioController.addStock();
+        if (this.portfolio == null) {
+          this.portfolio = new Portfolio();
+          go();
+        } else if (!this.portfolio.isSaved()) {
+          getInitialController(4);
+        }
+        break;
+      case 4:
         StockController stocksController = new StockController(new Stocks(), new StockView());
         stocksController.setStocksList(stocksList);
-        stocksController.getTickerValue();
-        go();
-        break;
+        Stocks stocks = stocksController.getTickerValue();
+        if (stocks == null) {
+          go();
+        } else {
+          this.stocks = stocks;
+          getInitialController(2);
+        }
     }
 
   }
