@@ -5,15 +5,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StocksList implements ListOfStocks {
-  HashMap<String, ArrayList<Stocks>> listOfStocks = new HashMap<>();
+/**
+ *
+ */
+public class ListOfStocksImpl implements ListOfStocks {
+  HashMap<String, ArrayList<StocksImpl>> listOfStocks = new HashMap<>();
 
-  public StocksList(BufferedReader stocksData) throws IOException {
+  /**
+   *
+   * @param stocksData
+   * @throws IOException
+   */
+  public ListOfStocksImpl(BufferedReader stocksData) throws IOException {
     String line = stocksData.readLine(); // Reading header, Ignoring;
     while ((line = stocksData.readLine()) != null && !line.isEmpty()) {
       String[] fields = line.split(",");
       String name = fields[0];
-      Stocks newStock = new Stocks(
+      StocksImpl newStock = new StocksImpl(
           fields[1],
           Float.parseFloat(fields[2]),
           Float.parseFloat(fields[3]),
@@ -22,11 +30,11 @@ public class StocksList implements ListOfStocks {
           Float.parseFloat(fields[6])
       );
       if (listOfStocks.containsKey(name)) {
-        ArrayList<Stocks> currentValues = listOfStocks.get(name);
+        ArrayList<StocksImpl> currentValues = listOfStocks.get(name);
         currentValues.add(newStock);
         listOfStocks.put(name, currentValues);
       } else {
-        ArrayList<Stocks> stocks = new ArrayList<Stocks>();
+        ArrayList<StocksImpl> stocks = new ArrayList<StocksImpl>();
         stocks.add(newStock);
         listOfStocks.put(name, stocks);
       }
@@ -34,13 +42,12 @@ public class StocksList implements ListOfStocks {
     stocksData.close();
   }
 
+  /**
+   *
+   * @return
+   */
   @Override
-  public void updateMap() {
-    System.out.println("Inside updateHashMap");
-  }
-
-  @Override
-  public HashMap getMap() {
+  public HashMap getLStocksMap() {
     return listOfStocks;
   }
 

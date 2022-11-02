@@ -4,59 +4,51 @@ import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Portfolio implements PortfolioInterface {
+/**
+ *
+ */
+public interface Portfolio {
 
-  HashMap<String, Stocks> entriesInPortfolio = new HashMap<>();
-  boolean saved = false;
-  private String portfolioName;
+  /**
+   *
+   * @param data
+   */
+  void addStockInPortfolio(StocksImpl data);
 
-  private final FileAccessors fileAccessor = new FileAccessors();
+  /**
+   *
+   * @return
+   */
+  HashMap getPortfolio();
 
-  @Override
-  public void addStockInPortfolio(Stocks data) {
-    String company = data.getCompany();
-    if (entriesInPortfolio.containsKey(company)) {
-      Stocks currStock = entriesInPortfolio.get(company);
-      data.updateStockValues(currStock.getShares() + data.getShares());
-      entriesInPortfolio.put(data.getCompany(), data);
-    }
-    entriesInPortfolio.put(data.getCompany(), data);
-  }
+  /**
+   *
+   * @param portfolio
+   */
+  void setPortfolio(HashMap<String, StocksImpl> portfolio);
 
-  @Override
-  public HashMap getPortfolio() {
-    return entriesInPortfolio;
-  }
+  /**
+   *
+   * @return
+   */
+  ArrayList<StocksImpl> getCompanyNames();
 
-  public void setPortfolio(HashMap<String, Stocks> portfolio) {
-    this.entriesInPortfolio = portfolio;
+  /**
+   *
+   * @return
+   */
+  boolean isSaved();
 
-  }
-  public ArrayList<Stocks> getCompanyNames(){
-    return new ArrayList<Stocks>(entriesInPortfolio.values());
-  }
-  public boolean isSaved() {
-    return saved;
-  }
+  /**
+   *
+   */
+  void save();
 
-  public void save() {
-    fileAccessor.writeIntoCSVFile(portfolioName, entriesInPortfolio);
-    this.saved = true;
-  }
+  /**
+   *
+   * @param name
+   * @throws FileAlreadyExistsException
+   */
+  void setPortfolioName(String name) throws FileAlreadyExistsException;
 
-  public void setPortfolioName(String name) throws FileAlreadyExistsException {
-    if (!fileAccessor.isFileExists(name)) {
-      portfolioName = name;
-    } else {
-      throw new FileAlreadyExistsException(name);
-    }
-  }
-
-  public String getPortfolioName() {
-    return portfolioName;
-  }
-
-  public boolean isCompanyPresent(String tickerSymbol) {
-    return entriesInPortfolio.containsKey(tickerSymbol);
-  }
 }

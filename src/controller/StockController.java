@@ -1,101 +1,123 @@
 package controller;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import model.FileAccessors;
-import model.FileAccessorsInterface;
-import model.ListOfStocks;
-import model.Portfolio;
-import model.Stocks;
-import model.StocksList;
-import view.PortfolioView;
+import java.util.concurrent.atomic.AtomicBoolean;
+import model.StocksImpl;
+import model.ListOfStocksImpl;
 import view.StockView;
 
 import static model.Input.takeIntegerInput;
 import static model.Input.takeStringInput;
 import static model.Output.append;
 
+/**
+ *
+ */
 public class StockController {
 
-  private Stocks model;
+  private StocksImpl model;
   private StockView view;
 
-  private StocksList stocksList;
+  private ListOfStocksImpl listOfStocksImpl;
 
-  public StockController(Stocks stocks, StockView stockView) throws IOException {
-    //super();
-    this.model = stocks;
+  /**
+   *
+   * @param stocksImpl
+   * @param stockView
+   */
+  public StockController(StocksImpl stocksImpl, StockView stockView) {
+    this.model = stocksImpl;
     this.view = stockView;
   }
 
-  public Stocks afterStocksDisplay(Object model) throws IOException {
-    Integer input = takeIntegerInput("Select from the following options.\n1. Add this to "
-            + "portfolio? (YES/NO).\n2. Do not add and search stocks for new company.\n3. Go back. "
-            + "\n 4. Exit\n");
-    // Stocks stocksModel = new Stocks();
-    // StockView stocksView = new StockView();
-    // StockController stockController = new StockController(stocksModel, stocksView);
-    Stocks currModel = (Stocks) model;
-    switch (input) {
-      case 1:
-        // save the portfolio
-        currModel = this.addStockToPortfolio(currModel);
-        break;
-      case 2:
-//        Stocks stocksModel = new Stocks();
-//        StockView stocksView = new StockView();
-//        StockController stockController = new StockController(stocksModel,stocksView);
-        currModel = this.getTickerValue();
-        break;
-      case 3:
-       currModel = null;
-        break;
-      case 4:
-        System.exit(0);
-        break;
-      default:
-        System.out.println("Invalid input");
-        System.exit(0);
+  protected StocksImpl afterStocksDisplay(Object model) throws IOException {
+    StocksImpl currModel = (StocksImpl) model;
+    try {
+      Integer input = takeIntegerInput("Select from the following options.\n1. Add this to "
+          + "portfolio.\n2. Do not add and search stocks for new company.\n3. Go back. "
+          + "\n 4. Exit\n");
+      switch (input) {
+        case 1:
+          currModel = this.addStockToPortfolio(currModel);
+          break;
+        case 2:
+          currModel = this.getTickerValue();
+          break;
+        case 3:
+          currModel = null;
+          break;
+        case 4:
+          System.exit(0);
+          break;
+        default:
+          System.out.println("Invalid input");
+          System.exit(0);
+      }
+    } catch (Exception e) {
+      append("Entered invalid input, try again.");
+      afterStocksDisplay(model);
     }
     return currModel;
   }
 
-  protected void setStocksList(StocksList list) {
-    stocksList = list;
+  protected void setStocksList(ListOfStocksImpl list) {
+    listOfStocksImpl = list;
   }
 
-  protected Stocks getTickerValue() throws IOException {
+  protected StocksImpl getTickerValue() throws IOException {
     String tickerValue = takeStringInput("Enter the ticker value.");
-//    this.out.append("Ticker value is  ").append(tickerValue);
-    HashMap map = stocksList.getMap();
+    HashMap map = listOfStocksImpl.getLStocksMap();
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
       append("You entered an invalid ticker symbol. Please try again");
       return null;
-      //go();
     } else {
-      Stocks currentStock = (Stocks) values.get(0);
+      StocksImpl currentStock = (StocksImpl) values.get(0);
       model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
-              currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-              currentStock.getVolume(), 0);
-      view.displayListOfDates(tickerValue, values);
+          currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+          currentStock.getVolume(), 0);
+      controllerToViewHelperForStocks(tickerValue, values);
+//      view.displayListOfDates(tickerValue, values);
       return afterStocksDisplay(model);
     }
   }
 
-  protected Stocks addStockToPortfolio(Object models) throws IOException {
-    Stocks currModel = (Stocks) models;
-    int value =
-            takeIntegerInput(
-                    "Enter the number of shares you want to invest in " + currModel.getCompany());
-    currModel.updateStockValues(value);
+  protected StocksImpl addStockToPortfolio(Object models) throws IOException {
+    StocksImpl currModel = (StocksImpl) models;
+    try {
+      int value =
+          takeIntegerInput(
+              "Enter the number of shares you want to invest in " + currModel.getCompany());
+      currModel.updateStockValues(value);
+    } catch (Exception e) {
+      append("Please enter a valid number.");
+    }
     return currModel;
+  }
+
+  /**
+   *
+   * @param companyName
+   * @param values
+   */
+  public void controllerToViewHelperForStocks(String companyName,
+      ArrayList<StocksImpl> values) {
+
+    AtomicBoolean displayHeaders = new AtomicBoolean(true);
+    values.forEach((v) -> {
+      try {
+        view.displayListOfDates(displayHeaders.get(), companyName,
+            v.getDate(),
+            v.getOpen(), v.getHigh(), v.getLow(),
+            v.getClose(), v.getVolume());
+        displayHeaders.set(false);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
 }

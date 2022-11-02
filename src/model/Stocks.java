@@ -1,98 +1,78 @@
 package model;
 
-public class Stocks {
+/**
+ *
+ */
+public interface Stocks {
 
-  private int shares;
+  /**
+   *
+   * @param company
+   * @param date
+   * @param open
+   * @param high
+   * @param low
+   * @param close
+   * @param volume
+   * @param shares
+   */
+  void setCurrentStock(String company, String date, float open, float high, float low,
+      float close, float volume,
+      int shares);
 
-  private float open;
-  private float close;
-  private float high;
-  private float low;
-  private String date;
-  private String company;
+  /**
+   *
+   * @param values
+   */
+  void updateStockValues(int values);
 
-  private float volume;
+  /**
+   *
+   * @return
+   */
+  String getDate();
 
+  /**
+   *
+   * @return
+   */
+  float getOpen();
 
-  public Stocks() {
-    this.company = "";
-    this.open = 0;
-    this.close = 0;
-    this.high = 0;
-    this.low = 0;
-    this.date = "";
-    this.shares = 0;
-    this.volume = 0;
+  /**
+   *
+   * @return
+   */
+  String getCompany();
 
-  }
+  /**
+   *
+   * @return
+   */
+  float getHigh();
 
-  public Stocks(String date, float open, float high, float low, float close, float volume) {
-    this.date = date;
-    this.open = open;
-    this.high = high;
-    this.low = low;
-    this.close = close;
-    this.volume = volume;
-  }
+  /**
+   *
+   * @return
+   */
+  float getLow();
 
-  public Stocks(String date, float open, float high, float low, float close, float volume,
-                int shares) {
-    this.date = date;
-    this.open = open;
-    this.high = high;
-    this.low = low;
-    this.close = close;
-    this.volume = volume;
-    this.shares = shares;
-  }
+  /**
+   *
+   * @return
+   */
+  float getClose();
 
-  public void setCurrentStock(String company, String date, float open, float high, float low,
-                              float close, float volume,
-                              int shares) {
-    this.company = company;
-    this.date = date;
-    this.open = open;
-    this.high = high;
-    this.low = low;
-    this.close = close;
-    this.volume = volume;
-    this.shares = shares;
-  }
+  /**
+   *
+   * @return
+   */
+  float getVolume();
 
-  public void updateStockValues(int values) {
-    this.shares = values;
-  }
+  /**
+   *
+   * @return
+   */
+  int getShares();
 
-  public String getDate() {
-    return this.date;
-  }
-
-  public float getOpen() {
-    return this.open;
-  }
-
-  public String getCompany() {
-    return this.company;
-  }
-
-  public float getHigh() {
-    return this.high;
-  }
-
-  public float getLow() {
-    return this.low;
-  }
-
-  public float getClose() {
-    return this.close;
-  }
-
-  public float getVolume() {
-    return this.volume;
-  }
-
-  public int getShares() {
-    return this.shares;
-  }
 
 }

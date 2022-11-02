@@ -6,63 +6,94 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import model.FileAccessors;
-import model.Portfolio;
-import model.Stocks;
-import model.StocksList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import model.FileAccessorsImpl;
+import model.PortfolioImpl;
+import model.StocksImpl;
+import model.ListOfStocksImpl;
 import view.PortfolioView;
-import view.StockView;
 
 import static model.Input.takeIntegerInput;
 import static model.Input.takeStringInput;
 import static model.Output.append;
 import static model.Output.appendNewLine;
 
+/**
+ *
+ */
 public class PortfolioController {
 
 
-  private Portfolio model;
+  private PortfolioImpl model;
   private PortfolioView view;
 
-  private Stocks stocksModel;
+  private StocksImpl stocksImplModel;
 
-  public PortfolioController(Portfolio portfolio, PortfolioView portfolioView) throws IOException {
+  /**
+   *
+   * @param portfolioImpl
+   * @param portfolioView
+   * @throws IOException
+   */
+  public PortfolioController(PortfolioImpl portfolioImpl, PortfolioView portfolioView)
+      throws IOException {
     super();
-    this.model = portfolio;
+    this.model = portfolioImpl;
     this.view = portfolioView;
   }
 
-  public PortfolioController(Stocks model, Portfolio portfolio, PortfolioView view) throws IOException {
+  /**
+   *
+   * @param model
+   * @param portfolioImpl
+   * @param view
+   * @throws IOException
+   */
+  public PortfolioController(StocksImpl model, PortfolioImpl portfolioImpl, PortfolioView view)
+      throws IOException {
     super();
-    this.stocksModel = model;
-    this.model = portfolio;
+    this.stocksImplModel = model;
+    this.model = portfolioImpl;
     this.view = view;
   }
 
-  public Portfolio addStock() throws IOException {
-    model.addStockInPortfolio(stocksModel);
-//    FileAccessors files =  new FileAccessors();
-//    files.writeIntoCSVFile(fileName);
-    append("Successfully added the stock in portfolio");
+  /**
+   *
+   * @return
+   * @throws IOException
+   */
+  public PortfolioImpl addStock() throws IOException {
+    model.addStockInPortfolio(stocksImplModel);
+    append("Successfully added the stock in draft portfolio");
     appendNewLine();
-    append("Draft portfolio!!!!!");
-    view.displayCurrentPortfolio(model.getPortfolio());
+    HashMap<String, StocksImpl> portfolioEntries = model.getPortfolio();
+    controllerToViewHelper(portfolioEntries);
     return afterAddingStock(model);
-    // return model;
   }
 
-  public Portfolio afterAddingStock(Portfolio model) throws IOException {
+  /**
+   *
+   * @param model
+   * @return
+   * @throws IOException
+   */
+  public PortfolioImpl afterAddingStock(PortfolioImpl model) throws IOException {
     append("Successfully added the stock in portfolio");
     appendNewLine();
-    int input = takeIntegerInput("Choose from below options.\n 1."
-            + " Add another stock\n2. Save this portfolio. (You can not edit it after saving!!!)\n3. "
-            + "Back to main menu.\n4. Exit.");
+    int input = 0;
+    try {
+      input = takeIntegerInput("Choose from below options.\n 1."
+          + " Add another stock\n2. Save this portfolio. (You can not edit it after saving!!!)\n3. "
+          + "Back to main menu.\n4. Exit.");
+    } catch (Exception e) {
+      append("Please enter a valid input.\n");
+      afterAddingStock(model);
+    }
     switch (input) {
       case 1:
         break;
       case 2:
         model.save();
-        // write it to a file
       case 3:
         model = null;
         break;
@@ -75,62 +106,94 @@ public class PortfolioController {
     return model;
   }
 
-  public void viewSpeculate(String input, StocksList stocksList) throws IOException {
+  /**
+   *
+   * @param input
+   * @param listOfStocksImpl
+   * @throws IOException
+   */
+  public void viewSpeculate(String input, ListOfStocksImpl listOfStocksImpl) throws IOException {
     try {
-      FileAccessors fileAccessors = new FileAccessors();
-      if (!fileAccessors.isFileExists(input)) {
+      FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
+      if (!fileAccessorsImpl.isFileExists(input)) {
         throw new FileNotFoundException(input);
       }
 
-      model.setPortfolio(view.displaySavedPortfolio(input));
+      HashMap<String, StocksImpl> portfolios = fileAccessorsImpl.viewFile(input);
+      model.setPortfolio(portfolios);
+      controllerToViewHelper(portfolios);
       String currInput = takeStringInput("Would you like to speculate your portfolio?(YES/NO)");
       if (currInput.equals("YES")) {
-        boolean isValidDate = viewSpeculateHelper(input, stocksList);
+        boolean isValidDate = viewSpeculateHelper(input, listOfStocksImpl);
         if (!isValidDate) {
-          isValidDate = viewSpeculateHelper(input, stocksList);
+          isValidDate = viewSpeculateHelper(input, listOfStocksImpl);
         }
       }
-//      else {
-//        go();
-//      }
-
     } catch (FileNotFoundException e) {
       append("Portfolio doesn't exists");
       appendNewLine();
     } catch (IllegalArgumentException e) {
       append(e.getMessage());
-      viewSpeculate(input, stocksList);
     }
   }
 
-  public boolean viewSpeculateHelper(String fileName, StocksList stocksList) throws IOException {
-    Map.Entry<String, ArrayList<Stocks>> entry = (Map.Entry<String, ArrayList<Stocks>>) stocksList.getMap().entrySet().iterator().next();
-    ArrayList<Stocks> currentStock = (ArrayList<Stocks>) stocksList.getMap().get(entry.getKey());
+  /**
+   *
+   * @param fileName
+   * @param listOfStocksImpl
+   * @return
+   * @throws IOException
+   */
+  public boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl)
+      throws IOException {
+    Map.Entry<String, ArrayList<StocksImpl>> entry = (Map.Entry<String, ArrayList<StocksImpl>>) listOfStocksImpl.getLStocksMap()
+        .entrySet().iterator().next();
+    ArrayList<StocksImpl> currentStock = (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
+        .get(entry.getKey());
     String firstStockDate = currentStock.get(0).getDate();
     String lastStockDate = currentStock.get(currentStock.size() - 1).getDate();
     String input =
-            takeStringInput("Enter the date between " + firstStockDate + " and " + lastStockDate);
+        takeStringInput("Enter the date between " + firstStockDate + " and " + lastStockDate);
     float total_value = 0;
 
-    for (Stocks stocks : model.getCompanyNames()) {
-      currentStock = (ArrayList<Stocks>) stocksList.getMap().get(stocks.getCompany());
+    for (StocksImpl stocksImpl : model.getCompanyNames()) {
+      currentStock = (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
+          .get(stocksImpl.getCompany());
       boolean dateExist = false;
-      for (Stocks stock : currentStock) {
+      for (StocksImpl stock : currentStock) {
         if (stock.getDate().equals(input)) {
           dateExist = true;
-          total_value += stock.getClose() * stocks.getShares();
+          total_value += stock.getClose() * stocksImpl.getShares();
         }
 
       }
       if (!dateExist) {
         append("The entered date does not exist, please enter a valid date.\n");
         return false;
-//        viewSpeculateHelper(stocksList);
-//        break;
       }
     }
     append("Total price of portfolio is " + String.valueOf(total_value) + ".\n");
     return true;
+  }
+
+  /**
+   *
+   * @param portfolioEntries
+   */
+  public void controllerToViewHelper(HashMap<String, StocksImpl> portfolioEntries) {
+    AtomicBoolean displayHeaders = new AtomicBoolean(true);
+    portfolioEntries.forEach((k, v) -> {
+      StocksImpl currentStock = v;
+      try {
+        view.displayPortfolio(displayHeaders.get(), currentStock.getCompany(),
+            currentStock.getDate(),
+            currentStock.getOpen(), currentStock.getHigh(), currentStock.getLow(),
+            currentStock.getClose(), currentStock.getVolume(), currentStock.getShares());
+        displayHeaders.set(false);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
 }
