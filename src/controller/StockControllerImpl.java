@@ -73,8 +73,6 @@ public class StockControllerImpl implements StockController {
     HashMap map = listOfStocksImpl.getLStocksMap();
     String tickerValue = takeStringInput("Enter the ticker value from the following set "
         + "of companies:\n" + map.keySet());
-//    String listOfCompanies = String.valueOf(map.keySet());
-//    append(listOfCompanies);
 
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
@@ -106,7 +104,7 @@ public class StockControllerImpl implements StockController {
       }
 
     } catch (Exception e) {
-      append("Please enter a valid number.");
+      append("Please enter a valid number.\n");
       return null;
     }
   }
