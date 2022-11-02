@@ -53,9 +53,9 @@ public class PortfolioController extends MainController {
             + "Back to main menu.\n4. Exit.");
     switch (input) {
       case 1:
-
         break;
       case 2:
+        model.save();
         // write it to a file
       case 3:
         model = null;
