@@ -8,26 +8,32 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
+
 import model.FileAccessors;
 import model.ListOfStocks;
+import model.Portfolio;
 import model.Stocks;
 import model.StocksList;
+import view.PortfolioView;
 import view.StockView;
+
+import static model.Input.takeIntegerInput;
+import static model.Input.takeStringInput;
 
 public class MainController {
 
-  protected Readable in;
+  // protected Readable in;
 
-  protected Appendable out;
+  // protected Appendable out;
 
-  HashMap stocksList;
-
+  StocksList stocksList;
+  Stocks stocks;
+  Portfolio portfolio;
   String fileName;
 
   public MainController() throws IOException {
-    this.in = new InputStreamReader(System.in);
-    this.out = System.out;
     this.stocksList = preprocessStocksData();
+    this.portfolio = new Portfolio();
 //    preprocessStocksData();
   }
 
@@ -36,34 +42,20 @@ public class MainController {
 //    this.out = out;
 //  }
 
-  public HashMap preprocessStocksData() throws IOException {
+  public StocksList preprocessStocksData() throws IOException {
     FileAccessors reader = new FileAccessors();
     BufferedReader output = reader.readCSV("stocksdata/stocks_data.csv");
 
-    return (new StocksList(output)).getMap();
-  }
-  public Integer takeIntegerInput(String question) throws IOException {
-    Objects.requireNonNull(this);
-    this.out.append(question).append("\n");
-    Scanner scan = new Scanner(this.in);
-    Integer input = scan.nextInt();
-    return input;
+    return (new StocksList(output));
   }
 
-  public String takeStringInput(String question) throws IOException {
-    Objects.requireNonNull(this);
-    this.out.append(question).append("\n");
-    Scanner scan = new Scanner(this.in);
-    String input = scan.nextLine();
-    return input.toString();
-  }
 
   public void go() throws IOException {
     Integer option = takeIntegerInput(
-        "Welcome to stock market\n. Choose from below options to proceed "
-            + "further."
-            + "(Type the index number). "
-            + "\n1. Create a portfolio.\n2. View portfolio \n3. Exit\n");
+            "Welcome to stock market\n. Choose from below options to proceed "
+                    + "further."
+                    + "(Type the index number). "
+                    + "\n1. Create a portfolio.\n2. View portfolio \n3. Exit\n");
     getInitialController(option);
   }
 
@@ -72,44 +64,36 @@ public class MainController {
     switch (option) {
       case 1:
         String input = takeStringInput("Enter the name for your portfolio");
-        FileAccessors files = new FileAccessors();
-        this.fileName = input;
-        files.createCSV(input);
-        StockController stocksController = new StockController(new Stocks(), new StockView());
-        stocksController.getTickerValue();
-        break;
-    }
-
-  }
-
-  public void afterStocksDisplay(Object model) throws IOException {
-    Integer input = takeIntegerInput("Select from the following options.\n1. Add this to "
-        + "portfolio? (YES/NO).\n 2. Do not add and search stocks for new company.\n 3. Go back. "
-        + "\n 4. Exit\n");
-    Stocks stocksModel = new Stocks();
-    StockView stocksView = new StockView();
-    StockController stockController = new StockController(stocksModel,stocksView);
-    switch (input) {
-      case 1:
-        // save the portfolio
-        stockController.addStockToPortfolio(model);
+//        FileAccessors files = new FileAccessors();
+//        this.fileName = input;
+//        files.createCSV(input);
+        getInitialController(4);
         break;
       case 2:
-//        Stocks stocksModel = new Stocks();
-//        StockView stocksView = new StockView();
-//        StockController stockController = new StockController(stocksModel,stocksView);
-        stockController.getTickerValue();
-        break;
-      case 3:
-        go();
+        PortfolioView portfolioView = new PortfolioView();
+        PortfolioController portfolioController = new PortfolioController(this.stocks, this.portfolio,
+                portfolioView);
+        this.portfolio = portfolioController.addStock();
+        if (this.portfolio == null) {
+          this.portfolio = new Portfolio();
+          go();
+        } else if (!this.portfolio.isSaved()) {
+          getInitialController(4);
+        }
         break;
       case 4:
-        System.exit(0);
-        break;
-      default:
-        System.out.println("Invalid input");
-        System.exit(0);
+        StockController stocksController = new StockController(new Stocks(), new StockView());
+        stocksController.setStocksList(stocksList);
+        Stocks stocks = stocksController.getTickerValue();
+        if (stocks == null) {
+          go();
+        } else {
+          this.stocks = stocks;
+          getInitialController(2);
+        }
     }
+
   }
+
 
 }
