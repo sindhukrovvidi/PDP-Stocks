@@ -10,10 +10,16 @@ public class Portfolio implements PortfolioInterface {
   boolean saved = false;
   private String portfolioName;
 
-  private final FileAccessors fileAccesor = new FileAccessors();
+  private final FileAccessors fileAccessor = new FileAccessors();
 
   @Override
   public void addStockInPortfolio(Stocks data) {
+    String company = data.getCompany();
+    if (entriesInPortfolio.containsKey(company)) {
+      Stocks currStock = entriesInPortfolio.get(company);
+      data.updateStockValues(currStock.getShares() + data.getShares());
+      entriesInPortfolio.put(data.getCompany(), data);
+    }
     entriesInPortfolio.put(data.getCompany(), data);
   }
 
@@ -22,20 +28,27 @@ public class Portfolio implements PortfolioInterface {
     return entriesInPortfolio;
   }
 
+  public void setPortfolio(HashMap<String, Stocks> portfolio) {
+    this.entriesInPortfolio = portfolio;
+
+  }
+  public ArrayList<Stocks> getCompanyNames(){
+    return new ArrayList<Stocks>(entriesInPortfolio.values());
+  }
   public boolean isSaved() {
     return saved;
   }
 
   public void save() {
-    fileAccesor.writeIntoCSVFile(portfolioName, entriesInPortfolio);
+    fileAccessor.writeIntoCSVFile(portfolioName, entriesInPortfolio);
     this.saved = true;
   }
 
   public void setPortfolioName(String name) throws FileAlreadyExistsException {
-    if (!fileAccesor.isFileExists(name)) {
+    if (!fileAccessor.isFileExists(name)) {
       portfolioName = name;
     } else {
-     throw new FileAlreadyExistsException(name);
+      throw new FileAlreadyExistsException(name);
     }
   }
 
@@ -43,4 +56,7 @@ public class Portfolio implements PortfolioInterface {
     return portfolioName;
   }
 
+  public boolean isCompanyPresent(String tickerSymbol) {
+    return entriesInPortfolio.containsKey(tickerSymbol);
+  }
 }
