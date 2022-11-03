@@ -35,6 +35,13 @@ public class StockControllerImpl implements StockController {
     this.view = stockViewImpl;
   }
 
+  /**
+   * Method used to display the options to the user after he selects the stocks.
+   *
+   * @param model input model.
+   * @return stock implement
+   * @throws IOException
+   */
   @Override
   public StocksImpl afterStocksDisplay(Object model) throws IOException {
     StocksImpl currModel = (StocksImpl) model;

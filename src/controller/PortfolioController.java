@@ -50,7 +50,8 @@ public interface PortfolioController {
   boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl) throws IOException;
 
   /**
-   * @param portfolioEntries
+   * This method sends the data from the controller to view.
+   * @param portfolioEntries  all the mapped entries.
    */
   void controllerToViewHelper(HashMap<String, StocksImpl> portfolioEntries);
 
