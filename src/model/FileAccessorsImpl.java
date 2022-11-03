@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 /**
@@ -36,7 +38,14 @@ public class FileAccessorsImpl implements FileAccessors {
   @Override
   public void writeIntoCSVFile(String filename, HashMap<String, StocksImpl> entriesInPortfolio) {
     try {
-      FileWriter outputFile = new FileWriter("portfolios/" + filename + ".csv");
+      Path currentPath = Paths.get(System.getProperty("user.dir"));
+      Path fp = Paths.get(currentPath.toString(), "portfolios");
+//      System.out.println(fp.toString());
+      File theDir = new File(fp.toString());
+      if (!theDir.exists()) {
+        theDir.mkdirs();
+      }
+      FileWriter outputFile = new FileWriter(fp.toString() + "/" + filename + ".csv");
       BufferedWriter bwr = new BufferedWriter(outputFile);
       entriesInPortfolio.forEach((k, v) -> {
         StocksImpl currentStock = (StocksImpl) v;
@@ -78,7 +87,13 @@ public class FileAccessorsImpl implements FileAccessors {
    */
   @Override
   public boolean isFileExists(String filename) {
-    File f = new File("portfolios/" + filename + ".csv");
+    Path currentPath = Paths.get(System.getProperty("user.dir"));
+    Path fp = Paths.get(currentPath.toString(), "portfolios");
+    File theDir = new File(fp.toString());
+    if (!theDir.exists()) {
+      theDir.mkdirs();
+    }
+    File f = new File(fp.toString()  + "/" + filename + ".csv");
     return f.exists() && !f.isDirectory();
   }
 
@@ -93,7 +108,15 @@ public class FileAccessorsImpl implements FileAccessors {
   public HashMap<String, StocksImpl> viewFile(String portfolioName) throws IOException {
     HashMap<String, StocksImpl> portfolio = new HashMap<>();
     String line;
-    BufferedReader reader = readCSV("portfolios/" + portfolioName + ".csv");
+    Path currentPath = Paths.get(System.getProperty("user.dir"));
+    Path fp = Paths.get(currentPath.toString(), "portfolios");
+    File theDir = new File(fp.toString());
+    if (!theDir.exists()) {
+      theDir.mkdirs();
+    }
+    File f = new File(fp.toString()  + "/" + portfolioName + ".csv");
+
+    BufferedReader reader = readCSV(f.getPath());
     while ((line = reader.readLine()) != null && !line.isEmpty()) {
       String[] fields = line.split(",");
 
@@ -123,7 +146,13 @@ public class FileAccessorsImpl implements FileAccessors {
   @Override
   public String[] listOfPortfolioFiles(String directory) {
     String files[] = {};
-    File directoryPath = new File(directory);
+    Path currentPath = Paths.get(System.getProperty("user.dir"));
+    Path fp = Paths.get(currentPath.toString(), "portfolios");
+    File theDir = new File(fp.toString());
+    if (!theDir.exists()) {
+      theDir.mkdirs();
+    }
+    File directoryPath = new File(fp.toString());
     files = directoryPath.list();
     return files;
   }
