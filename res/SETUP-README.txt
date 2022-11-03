@@ -57,4 +57,14 @@ The menu asks to choose from 3 different options. (Stage 1)
 
   Flow for option 2 - View portfolio and speculate portfolio:
      1. Choose from the list of companies which are displayed in the text interface.
-     2.
+     2. Enter the filename without the .csv extension.
+         a) If filename exists
+            Displays the current portfolio.
+            Prompts - Would you like to speculate your portfolio?(YES/NO)
+              If "YES":
+                Enter the date between the given range and it will display the total portfolio value
+                for that particular day and redirects to STAGE 1.
+         b) File doesn't exist
+            Redirect to "Stage 1"
+
+  Flow for option 3 - Exit from program
