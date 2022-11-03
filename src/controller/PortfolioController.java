@@ -1,21 +1,57 @@
 package controller;
 
 import java.util.HashMap;
+
 import model.ListOfStocksImpl;
 import model.PortfolioImpl;
+
 import java.io.IOException;
+
 import model.StocksImpl;
 
+/**
+ * This is an interface which contains all the methods for the portfolio controller.
+ */
 public interface PortfolioController {
+  /**
+   * Method that adds a stock into a portfolio.
+   *
+   * @return Portfolio after adding a stock.
+   * @throws IOException if the stock is invalid or if the amount to be added is invalid.
+   */
+  PortfolioImpl addStock() throws IOException;
 
-  PortfolioImpl addStock() throws IOException;;
-
+  /**
+   * Method used to write into portfolio after adding a stock.
+   *
+   * @param model takes the model into which the stock is entered.
+   * @return portfolio after saving the stock into it.
+   * @throws IOException if the input parameter is invalid.
+   */
   PortfolioImpl afterAddingStock(PortfolioImpl model) throws IOException;
 
+  /**
+   * Method used to view speculate of a portfolio.
+   *
+   * @param input            file name.
+   * @param listOfStocksImpl list of the stocks present in the portfolio.
+   * @throws IOException if the input name is invalid.
+   */
   void viewSpeculate(String input, ListOfStocksImpl listOfStocksImpl) throws IOException;
 
+  /**
+   * Method that is used as helper for speculation of a portfolio.
+   *
+   * @param fileName         file to be speculated.
+   * @param listOfStocksImpl stocks in the portfolio in the form of a list.
+   * @return true if the file is valid else false.
+   * @throws IOException invalid input.
+   */
   boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl) throws IOException;
 
+  /**
+   * @param portfolioEntries
+   */
   void controllerToViewHelper(HashMap<String, StocksImpl> portfolioEntries);
 
 }

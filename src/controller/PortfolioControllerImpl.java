@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import model.FileAccessorsImpl;
 import model.PortfolioImpl;
 import model.StocksImpl;
@@ -19,9 +20,9 @@ import static model.Output.append;
 import static model.Output.appendNewLine;
 
 /**
- *
+ * Class that controls the portfolios and that implements the functions in  portfolio controller.
  */
-public class PortfolioControllerImpl implements PortfolioController{
+public class PortfolioControllerImpl implements PortfolioController {
 
 
   private PortfolioImpl model;
@@ -30,27 +31,31 @@ public class PortfolioControllerImpl implements PortfolioController{
   private StocksImpl stocksImplModel;
 
   /**
+   * Constructor that takes model and view as the input as parameters and initializes the model and
+   * view.
    *
-   * @param portfolioImpl
-   * @param portfolioViewImpl
-   * @throws IOException
+   * @param portfolioImpl     model input.
+   * @param portfolioViewImpl view input.
+   * @throws IOException invalid input of model or view.
    */
   public PortfolioControllerImpl(PortfolioImpl portfolioImpl, PortfolioViewImpl portfolioViewImpl)
-      throws IOException {
+          throws IOException {
     super();
     this.model = portfolioImpl;
     this.view = portfolioViewImpl;
   }
 
   /**
+   * Constructor that takes model,stock model and view as parameters and initializes them.
    *
-   * @param model
-   * @param portfolioImpl
-   * @param view
-   * @throws IOException
+   * @param model         the model input.
+   * @param portfolioImpl portfolio implementation.
+   * @param view          view input.
+   * @throws IOException if the parameters given are invalid.
    */
-  public PortfolioControllerImpl(StocksImpl model, PortfolioImpl portfolioImpl, PortfolioViewImpl view)
-      throws IOException {
+  public PortfolioControllerImpl(StocksImpl model, PortfolioImpl portfolioImpl,
+                                 PortfolioViewImpl view)
+          throws IOException {
     super();
     this.stocksImplModel = model;
     this.model = portfolioImpl;
@@ -58,9 +63,11 @@ public class PortfolioControllerImpl implements PortfolioController{
   }
 
   /**
+   * Method that is used to map the stocks to the model using a hashmap.Also tells the user that
+   * the stock was added successfully, it is currently in draft.
    *
-   * @return
-   * @throws IOException
+   * @return model after adding the stocks.
+   * @throws IOException invalid stock details.
    */
   @Override
   public PortfolioImpl addStock() throws IOException {
@@ -73,10 +80,12 @@ public class PortfolioControllerImpl implements PortfolioController{
   }
 
   /**
+   * Method that takes a confirmation from the user and saves the stocks into the portfolio.It
+   * also provides an option for the user to add a new stock after adding one and saving it.
    *
-   * @param model
-   * @return
-   * @throws IOException
+   * @param model into which the stocks are to be written.
+   * @return model after updating the stock.
+   * @throws IOException if the entered option is invalid or not listed.
    */
   @Override
   public PortfolioImpl afterAddingStock(PortfolioImpl model) throws IOException {
@@ -85,8 +94,8 @@ public class PortfolioControllerImpl implements PortfolioController{
     int input = 0;
     try {
       input = takeIntegerInput("Choose from below options.\n 1."
-          + " Add another stock\n2. Save this portfolio. (You can not edit it after saving!!!)\n3. "
-          + "Back to main menu.\n4. Exit.");
+              + " Add another stock\n2. Save this portfolio. (You can not edit it after saving!!!)\n3. "
+              + "Back to main menu.\n4. Exit.");
     } catch (Exception e) {
       append("Please enter a valid input.\n");
       afterAddingStock(model);
@@ -109,9 +118,11 @@ public class PortfolioControllerImpl implements PortfolioController{
   }
 
   /**
+   * Method used to ask the user if he wants to speculate and perform speculation on the selected
+   * portfolio.
    *
-   * @param input
-   * @param listOfStocksImpl
+   * @param input            name of the portfolio which the user chooses for speculation.
+   * @param listOfStocksImpl list of stocks present in the portfolio.
    * @throws IOException
    */
   @Override
@@ -125,7 +136,8 @@ public class PortfolioControllerImpl implements PortfolioController{
       HashMap<String, StocksImpl> portfolios = fileAccessorsImpl.viewFile(input);
       model.setPortfolio(portfolios);
       controllerToViewHelper(portfolios);
-      String currInput = takeStringInput("Would you like to speculate your portfolio?(YES/NO)");
+      String currInput = takeStringInput("Would you like to speculate your " +
+              "portfolio?(YES/NO)");
       if (currInput.equals("YES")) {
         boolean isValidDate = viewSpeculateHelper(input, listOfStocksImpl);
         if (!isValidDate) {
@@ -141,28 +153,31 @@ public class PortfolioControllerImpl implements PortfolioController{
   }
 
   /**
+   * Method to perform speculation operation on the portfolio.
    *
-   * @param fileName
-   * @param listOfStocksImpl
-   * @return
-   * @throws IOException
+   * @param fileName         name of the file for the speculation.
+   * @param listOfStocksImpl list of all the stocks in the file.
+   * @return total value of the portfolio.
+   * @throws IOException if the file name entered is invalid.
    */
   @Override
   public boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl)
-      throws IOException {
-    Map.Entry<String, ArrayList<StocksImpl>> entry = (Map.Entry<String, ArrayList<StocksImpl>>) listOfStocksImpl.getLStocksMap()
-        .entrySet().iterator().next();
+          throws IOException {
+    Map.Entry<String, ArrayList<StocksImpl>> entry = (Map.Entry<String, ArrayList<StocksImpl>>)
+            listOfStocksImpl.getLStocksMap()
+                    .entrySet().iterator().next();
     ArrayList<StocksImpl> currentStock = (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-        .get(entry.getKey());
+            .get(entry.getKey());
     String firstStockDate = currentStock.get(0).getDate();
     String lastStockDate = currentStock.get(currentStock.size() - 1).getDate();
     String input =
-        takeStringInput("Enter the date between " + firstStockDate + " and " + lastStockDate);
+            takeStringInput("Enter the date between " + firstStockDate + " and "
+                    + lastStockDate);
     float total_value = 0;
 
     for (StocksImpl stocksImpl : model.getCompanyNames()) {
       currentStock = (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-          .get(stocksImpl.getCompany());
+              .get(stocksImpl.getCompany());
       boolean dateExist = false;
       for (StocksImpl stock : currentStock) {
         if (stock.getDate().equals(input)) {
@@ -181,8 +196,9 @@ public class PortfolioControllerImpl implements PortfolioController{
   }
 
   /**
+   * Method used to format the view of a portfolio.
    *
-   * @param portfolioEntries
+   * @param portfolioEntries hash map of the portfolio entries in the file.
    */
   @Override
   public void controllerToViewHelper(HashMap<String, StocksImpl> portfolioEntries) {
@@ -191,9 +207,9 @@ public class PortfolioControllerImpl implements PortfolioController{
       StocksImpl currentStock = v;
       try {
         view.displayPortfolio(displayHeaders.get(), currentStock.getCompany(),
-            currentStock.getDate(),
-            currentStock.getOpen(), currentStock.getHigh(), currentStock.getLow(),
-            currentStock.getClose(), currentStock.getVolume(), currentStock.getShares());
+                currentStock.getDate(),
+                currentStock.getOpen(), currentStock.getHigh(), currentStock.getLow(),
+                currentStock.getClose(), currentStock.getVolume(), currentStock.getShares());
         displayHeaders.set(false);
       } catch (IOException e) {
         throw new RuntimeException(e);

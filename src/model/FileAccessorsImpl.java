@@ -9,15 +9,16 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- *
+ * Class that controls all the file actions and implements methods of the FileAccessors interface.
  */
 public class FileAccessorsImpl implements FileAccessors {
 
   /**
+   * Method used to read a CSV file.
    *
-   * @param file
-   * @return
-   * @throws IOException
+   * @param file to be read.
+   * @return reads the content of the file into a buffer reader.
+   * @throws IOException invalid file name or if the file does not exist.
    */
   @Override
   public BufferedReader readCSV(String file) throws IOException {
@@ -27,9 +28,10 @@ public class FileAccessorsImpl implements FileAccessors {
   }
 
   /**
+   * Method used to write all the information into a CSV file.
    *
-   * @param filename
-   * @param entriesInPortfolio
+   * @param filename           name of the file to be written into.
+   * @param entriesInPortfolio content to be written into the file.
    */
   @Override
   public void writeIntoCSVFile(String filename, HashMap<String, StocksImpl> entriesInPortfolio) {
@@ -69,9 +71,10 @@ public class FileAccessorsImpl implements FileAccessors {
   }
 
   /**
+   * Method used to check if the file exists or not.
    *
-   * @param filename
-   * @return
+   * @param filename name of the file to check.
+   * @return true if the file exists else false.
    */
   @Override
   public boolean isFileExists(String filename) {
@@ -80,10 +83,11 @@ public class FileAccessorsImpl implements FileAccessors {
   }
 
   /**
+   * Method used to view or display a file.
    *
-   * @param portfolioName
-   * @return
-   * @throws IOException
+   * @param portfolioName name of the portfolio.
+   * @return content present in the portfolio in the form of a map.
+   * @throws IOException invalid file name.
    */
   @Override
   public HashMap<String, StocksImpl> viewFile(String portfolioName) throws IOException {
@@ -95,14 +99,14 @@ public class FileAccessorsImpl implements FileAccessors {
 
       StocksImpl stocksImpl = new StocksImpl();
       stocksImpl.setCurrentStock(
-          fields[0],
-          fields[1],
-          Float.parseFloat(fields[2]),
-          Float.parseFloat(fields[3]),
-          Float.parseFloat(fields[4]),
-          Float.parseFloat(fields[5]),
-          Float.parseFloat(fields[6]),
-          Integer.parseInt(fields[7])
+              fields[0],
+              fields[1],
+              Float.parseFloat(fields[2]),
+              Float.parseFloat(fields[3]),
+              Float.parseFloat(fields[4]),
+              Float.parseFloat(fields[5]),
+              Float.parseFloat(fields[6]),
+              Integer.parseInt(fields[7])
       );
       portfolio.put(fields[0], stocksImpl);
     }
@@ -110,6 +114,12 @@ public class FileAccessorsImpl implements FileAccessors {
     return portfolio;
   }
 
+  /**
+   * Method used to display the list of portfolios present in the directory.
+   *
+   * @param directory name of the directory for which we need the list of portfolios.
+   * @return list of portfolios present in the directory.
+   */
   @Override
   public String[] listOfPortfolioFiles(String directory) {
     String files[] = {};

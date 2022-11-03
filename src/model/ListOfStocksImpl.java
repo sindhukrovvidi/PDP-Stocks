@@ -22,12 +22,12 @@ public class ListOfStocksImpl implements ListOfStocks {
       String[] fields = line.split(",");
       String name = fields[0];
       StocksImpl newStock = new StocksImpl(
-          fields[1],
-          Float.parseFloat(fields[2]),
-          Float.parseFloat(fields[3]),
-          Float.parseFloat(fields[4]),
-          Float.parseFloat(fields[5]),
-          Float.parseFloat(fields[6])
+              fields[1],
+              Float.parseFloat(fields[2]),
+              Float.parseFloat(fields[3]),
+              Float.parseFloat(fields[4]),
+              Float.parseFloat(fields[5]),
+              Float.parseFloat(fields[6])
       );
       if (listOfStocks.containsKey(name)) {
         ArrayList<StocksImpl> currentValues = listOfStocks.get(name);
@@ -43,7 +43,9 @@ public class ListOfStocksImpl implements ListOfStocks {
   }
 
   /**
-   * @return
+   * Method used to fetch the list of stocks.
+   *
+   * @return the list of stocks when called with the particular model.
    */
   @Override
   public HashMap getLStocksMap() {
