@@ -6,6 +6,9 @@ import static org.junit.Assert.assertEquals;
 
 import view.StockViewImpl;
 
+/**
+ * Testing stock view.
+ */
 public class StockViewImplTest {
 
   @Test
@@ -25,7 +28,7 @@ public class StockViewImplTest {
         1.23f, 1.34f,
         1.567f, 9.77f, 9.00f);
     String result = fmt.toString();
-    assertEquals(result.toString(), (out.append(fmt.toString())).toString());
+    assertEquals(result, (out.append(fmt)).toString());
   }
 
   @Test
@@ -41,7 +44,7 @@ public class StockViewImplTest {
         1.23f, 1.34f,
         1.567f, 9.77f, 9.00f);
     String result = fmt.toString();
-    assertEquals(result.toString(), (out.append(fmt.toString())).toString());
+    assertEquals(result, (out.append(fmt)).toString());
   }
 
 }

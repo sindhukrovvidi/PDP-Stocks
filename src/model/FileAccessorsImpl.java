@@ -40,7 +40,6 @@ public class FileAccessorsImpl implements FileAccessors {
     try {
       Path currentPath = Paths.get(System.getProperty("user.dir"));
       Path fp = Paths.get(currentPath.toString(), "portfolios");
-//      System.out.println(fp.toString());
       File theDir = new File(fp.toString());
       if (!theDir.exists()) {
         theDir.mkdirs();
@@ -93,7 +92,7 @@ public class FileAccessorsImpl implements FileAccessors {
     if (!theDir.exists()) {
       theDir.mkdirs();
     }
-    File f = new File(fp.toString()  + "/" + filename + ".csv");
+    File f = new File(fp.toString() + "/" + filename + ".csv");
     return f.exists() && !f.isDirectory();
   }
 
@@ -114,7 +113,7 @@ public class FileAccessorsImpl implements FileAccessors {
     if (!theDir.exists()) {
       theDir.mkdirs();
     }
-    File f = new File(fp.toString()  + "/" + portfolioName + ".csv");
+    File f = new File(fp.toString() + "/" + portfolioName + ".csv");
 
     BufferedReader reader = readCSV(f.getPath());
     while ((line = reader.readLine()) != null && !line.isEmpty()) {
@@ -122,14 +121,14 @@ public class FileAccessorsImpl implements FileAccessors {
 
       StocksImpl stocksImpl = new StocksImpl();
       stocksImpl.setCurrentStock(
-              fields[0],
-              fields[1],
-              Float.parseFloat(fields[2]),
-              Float.parseFloat(fields[3]),
-              Float.parseFloat(fields[4]),
-              Float.parseFloat(fields[5]),
-              Float.parseFloat(fields[6]),
-              Integer.parseInt(fields[7])
+          fields[0],
+          fields[1],
+          Float.parseFloat(fields[2]),
+          Float.parseFloat(fields[3]),
+          Float.parseFloat(fields[4]),
+          Float.parseFloat(fields[5]),
+          Float.parseFloat(fields[6]),
+          Integer.parseInt(fields[7])
       );
       portfolio.put(fields[0], stocksImpl);
     }
@@ -145,7 +144,7 @@ public class FileAccessorsImpl implements FileAccessors {
    */
   @Override
   public String[] listOfPortfolioFiles(String directory) {
-    String files[] = {};
+    String[] files = {};
     Path currentPath = Paths.get(System.getProperty("user.dir"));
     Path fp = Paths.get(currentPath.toString(), "portfolios");
     File theDir = new File(fp.toString());

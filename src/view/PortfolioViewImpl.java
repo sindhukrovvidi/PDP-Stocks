@@ -4,16 +4,35 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Formatter;
 
-public class PortfolioViewImpl implements PortfolioView{
+/**
+ * This class implements all the methods in the portfolioview interface.
+ */
+public class PortfolioViewImpl implements PortfolioView {
 
-  private Readable in;
   private final Appendable out;
 
+  /**
+   * constructor to initialize the in and out.
+   */
   public PortfolioViewImpl() {
-    this.in = new InputStreamReader(System.in);
+    Readable in = new InputStreamReader(System.in);
     this.out = System.out;
   }
 
+  /**
+   * Method used to display a formatted portfolio.
+   *
+   * @param displayHeaders headers.
+   * @param company        name of the company.
+   * @param date           date.
+   * @param open           opening price.
+   * @param high           high price.
+   * @param low            low price.
+   * @param close          closing price.
+   * @param volume         volume of stocks.
+   * @param shares         shares brought.
+   * @throws IOException invalid input.
+   */
   @Override
   public void displayPortfolio(boolean displayHeaders, String company, String date,
       float open, float high,

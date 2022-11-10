@@ -13,6 +13,7 @@ import model.StocksImpl;
  * This is an interface which contains all the methods for the portfolio controller.
  */
 public interface PortfolioController {
+
   /**
    * Method that adds a stock into a portfolio.
    *
@@ -42,15 +43,17 @@ public interface PortfolioController {
   /**
    * Method that is used as helper for speculation of a portfolio.
    *
-   * @param fileName         file to be speculated.
+   * @param name             file to be speculated.
    * @param listOfStocksImpl stocks in the portfolio in the form of a list.
    * @return true if the file is valid else false.
    * @throws IOException invalid input.
    */
-  boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl) throws IOException;
+  boolean viewSpeculateHelper(String name, ListOfStocksImpl listOfStocksImpl) throws IOException;
 
   /**
-   * @param portfolioEntries
+   * Fetches the data from the model for each argument and passes it to view.
+   *
+   * @param portfolioEntries has the list of portfolios.
    */
   void controllerToViewHelper(HashMap<String, StocksImpl> portfolioEntries);
 

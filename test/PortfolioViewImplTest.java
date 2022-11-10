@@ -3,10 +3,11 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.Formatter;
 import org.junit.Test;
-import view.PortfolioView;
 import view.PortfolioViewImpl;
-import view.StockViewImpl;
 
+/**
+ * Testing view.
+ */
 public class PortfolioViewImplTest {
 
   @Test
@@ -27,7 +28,7 @@ public class PortfolioViewImplTest {
         4.56f,
         1.9f, 5.6f, 10, 19);
     String result = fmt.toString();
-    assertEquals(result.toString(), (out.append(fmt.toString())).toString());
+    assertEquals(result, (out.append(fmt)).toString());
   }
 
   @Test
@@ -42,7 +43,7 @@ public class PortfolioViewImplTest {
         4.56f,
         1.9f, 5.6f, 10, 19);
     String result = fmt.toString();
-    assertEquals(result.toString(), (out.append(fmt.toString())).toString());
+    assertEquals(result, (out.append(fmt)).toString());
   }
 
 }
