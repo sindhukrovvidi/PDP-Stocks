@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * Class that implements the portfolio interface and is responsible for portfolio actions.
  */
 public class PortfolioImpl implements Portfolio {
 
@@ -16,7 +16,9 @@ public class PortfolioImpl implements Portfolio {
   private final FileAccessorsImpl fileAccessor = new FileAccessorsImpl();
 
   /**
-   * @param data
+   * Method used to add stock to the portfolio.
+   *
+   * @param data data to be added.
    */
   @Override
   public void addStockInPortfolio(StocksImpl data) {
@@ -30,7 +32,9 @@ public class PortfolioImpl implements Portfolio {
   }
 
   /**
-   * @return
+   * Method used to get portfolio.
+   *
+   * @return portfolio.
    */
   @Override
   public HashMap getPortfolio() {
@@ -38,7 +42,9 @@ public class PortfolioImpl implements Portfolio {
   }
 
   /**
-   * @param portfolio
+   * Method to create a portfolio.
+   *
+   * @param portfolio mapping of the portfolio.
    */
   @Override
   public void setPortfolio(HashMap<String, StocksImpl> portfolio) {
@@ -47,7 +53,9 @@ public class PortfolioImpl implements Portfolio {
   }
 
   /**
-   * @return
+   * Method used to get company name.
+   *
+   * @return the list of company names.
    */
   @Override
   public ArrayList<StocksImpl> getCompanyNames() {
@@ -55,7 +63,9 @@ public class PortfolioImpl implements Portfolio {
   }
 
   /**
-   * @return
+   * Method used to check if file is saved or not.
+   *
+   * @return checks whether the file is saved or not.
    */
   @Override
   public boolean isSaved() {
@@ -63,7 +73,7 @@ public class PortfolioImpl implements Portfolio {
   }
 
   /**
-   *
+   * Readers and saves the portfolio in file.
    */
   @Override
   public void save() {
@@ -72,8 +82,10 @@ public class PortfolioImpl implements Portfolio {
   }
 
   /**
-   * @param name
-   * @throws FileAlreadyExistsException
+   * Method used to check if the file is already created.
+   *
+   * @param name sets the name of the portfolio.
+   * @throws FileAlreadyExistsException file doesn't exist.
    */
   @Override
   public void setPortfolioName(String name) throws FileAlreadyExistsException {

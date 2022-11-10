@@ -35,13 +35,20 @@ public class StockControllerImpl implements StockController {
     this.view = stockViewImpl;
   }
 
+  /**
+   * Method used to display the options after selecting a stock.
+   *
+   * @param model input model.
+   * @return model.
+   * @throws IOException invalid input.
+   */
   @Override
   public StocksImpl afterStocksDisplay(Object model) throws IOException {
     StocksImpl currModel = (StocksImpl) model;
     try {
       Integer input = takeIntegerInput("Select from the following options.\n1. Add this to "
-              + "portfolio.\n2. Do not add and search stocks for new company.\n3. Go back. "
-              + "\n 4. Exit\n");
+          + "portfolio.\n2. Do not add and search stocks for new company.\n3. Go back. "
+          + "\n 4. Exit\n");
       switch (input) {
         case 1:
           currModel = this.addStockToPortfolio(currModel);
@@ -80,7 +87,7 @@ public class StockControllerImpl implements StockController {
   public StocksImpl getTickerValue() throws IOException {
     HashMap map = listOfStocksImpl.getLStocksMap();
     String tickerValue = takeStringInput("Enter the ticker value from the following set "
-            + "of companies:\n" + map.keySet());
+        + "of companies:\n" + map.keySet());
 
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
@@ -89,8 +96,8 @@ public class StockControllerImpl implements StockController {
     } else {
       StocksImpl currentStock = (StocksImpl) values.get(0);
       model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
-              currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-              currentStock.getVolume(), 0);
+          currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+          currentStock.getVolume(), 0);
       controllerToViewHelperForStocks(tickerValue, values);
       return afterStocksDisplay(model);
     }
@@ -108,11 +115,11 @@ public class StockControllerImpl implements StockController {
     StocksImpl currModel = (StocksImpl) models;
     try {
       int value =
-              takeIntegerInput(
-                      "Enter the number of shares you want to invest in " + currModel.getCompany());
+          takeIntegerInput(
+              "Enter the number of shares you want to invest in " + currModel.getCompany());
       if (value <= 0) {
         throw new IllegalArgumentException("The number of stocks to be invested should be greater"
-                + " than 0.\n");
+            + " than 0.\n");
       } else {
         currModel.updateStockValues(value);
         return currModel;
@@ -132,15 +139,15 @@ public class StockControllerImpl implements StockController {
    */
   @Override
   public void controllerToViewHelperForStocks(String companyName,
-                                              ArrayList<StocksImpl> values) {
+      ArrayList<StocksImpl> values) {
 
     AtomicBoolean displayHeaders = new AtomicBoolean(true);
     values.forEach((v) -> {
       try {
         view.displayListOfDates(displayHeaders.get(), companyName,
-                v.getDate(),
-                v.getOpen(), v.getHigh(), v.getLow(),
-                v.getClose(), v.getVolume());
+            v.getDate(),
+            v.getOpen(), v.getHigh(), v.getLow(),
+            v.getClose(), v.getVolume());
         displayHeaders.set(false);
       } catch (IOException e) {
         throw new RuntimeException(e);

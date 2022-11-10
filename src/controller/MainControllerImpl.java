@@ -58,18 +58,17 @@ public class MainControllerImpl implements MainController {
    * @throws IOException when the user chooses an invalid or unlisted option.
    */
   @Override
-  public void go() throws IOException {
+  public void programStartsHere() throws IOException {
     try {
       Integer option = takeIntegerInput(
-              "Choose from below options to proceed "
-                      + "further."
-                      + "(Type the index number). "
-                      + "\n1. Create a portfolio.\n2. View & speculate existing portfolio " +
-                      "\n3. Exit\n");
+          "Choose from below options to proceed further. (Type the index number)."
+              + " \n1. Create a "
+              + "portfolio.\n2. View & speculate existing portfolio " +
+              "\n3. Exit\n");
       getInitialController(option);
     } catch (Exception e) {
       append("Please enter a valid input.");
-      go();
+      programStartsHere();
     }
 
   }
@@ -90,33 +89,33 @@ public class MainControllerImpl implements MainController {
           this.portfolioImpl.setPortfolioName(input);
         } catch (Exception e) {
           append("Invalid input or the file already exists. Please try again.\n");
-          go();
+          programStartsHere();
         }
         getInitialController(4);
         break;
       case 2:
         String[] files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/");
         input =
-                takeStringInput(
-                        "Enter the name of the portfolio from the below list: " +
-                                "(Just enter the filename "
-                                + "without the extension \n" + Arrays.toString(files));
+            takeStringInput(
+                "Enter the name of the portfolio from the below list: " +
+                    "(Just enter the filename without the extension \n" + Arrays.toString(files));
         PortfolioViewImpl portfolioViewImpl = new PortfolioViewImpl();
         PortfolioImpl portfolioImpl = new PortfolioImpl();
         PortfolioControllerImpl portfolioControllerImpl = new PortfolioControllerImpl(portfolioImpl,
-                portfolioViewImpl);
+            portfolioViewImpl);
         portfolioControllerImpl.viewSpeculate(input, listOfStocksImpl);
-        go();
+        programStartsHere();
         break;
       case 3:
         System.exit(0);
+        break;
       case 4:
         StockControllerImpl stocksController = new StockControllerImpl(new StocksImpl(),
-                new StockViewImpl());
+            new StockViewImpl());
         stocksController.setStocksList(listOfStocksImpl);
         StocksImpl stocksImpl = stocksController.getTickerValue();
         if (stocksImpl == null) {
-          go();
+          programStartsHere();
         } else {
           this.stocksImpl = stocksImpl;
           getInitialController(5);
@@ -125,16 +124,19 @@ public class MainControllerImpl implements MainController {
       case 5:
         PortfolioViewImpl portfolioViewsImpl = new PortfolioViewImpl();
         PortfolioControllerImpl portfolioControllersImpl = new PortfolioControllerImpl(
-                this.stocksImpl,
-                this.portfolioImpl,
-                portfolioViewsImpl);
+            this.stocksImpl,
+            this.portfolioImpl,
+            portfolioViewsImpl);
         this.portfolioImpl = portfolioControllersImpl.addStock();
         if (this.portfolioImpl == null) {
           this.portfolioImpl = new PortfolioImpl();
-          go();
+          programStartsHere();
         } else if (!this.portfolioImpl.isSaved()) {
           getInitialController(4);
         }
+        break;
+      default:
+        System.exit(0);
         break;
     }
 

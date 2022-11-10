@@ -1,6 +1,3 @@
-/**
- * This is the controller package which contains main,portfolio and the stock controller.
- */
 package controller;
 
 import java.io.IOException;
@@ -25,7 +22,7 @@ public interface MainController {
    *
    * @throws IOException when the given input is not in the list.
    */
-  void go() throws IOException;
+  void programStartsHere() throws IOException;
 
   /**
    * It calls the related controller based on the choice from the main menu.

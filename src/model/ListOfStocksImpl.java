@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * This class contains the methods to display the list of stocks.
  */
 public class ListOfStocksImpl implements ListOfStocks {
 
   HashMap<String, ArrayList<StocksImpl>> listOfStocks = new HashMap<>();
 
   /**
-   * @param stocksData
-   * @throws IOException
+   * Method used to fetch the list of stocks.
+   *
+   * @param stocksData data.
+   * @throws IOException invalid data.
    */
   public ListOfStocksImpl(BufferedReader stocksData) throws IOException {
     String line = stocksData.readLine(); // Reading header, Ignoring;
@@ -22,12 +24,12 @@ public class ListOfStocksImpl implements ListOfStocks {
       String[] fields = line.split(",");
       String name = fields[0];
       StocksImpl newStock = new StocksImpl(
-              fields[1],
-              Float.parseFloat(fields[2]),
-              Float.parseFloat(fields[3]),
-              Float.parseFloat(fields[4]),
-              Float.parseFloat(fields[5]),
-              Float.parseFloat(fields[6])
+          fields[1],
+          Float.parseFloat(fields[2]),
+          Float.parseFloat(fields[3]),
+          Float.parseFloat(fields[4]),
+          Float.parseFloat(fields[5]),
+          Float.parseFloat(fields[6])
       );
       if (listOfStocks.containsKey(name)) {
         ArrayList<StocksImpl> currentValues = listOfStocks.get(name);
