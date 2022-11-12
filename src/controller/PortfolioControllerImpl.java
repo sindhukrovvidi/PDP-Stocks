@@ -141,6 +141,7 @@ public class PortfolioControllerImpl implements PortfolioController {
       String currInput = takeStringInput("Would you like to speculate your " +
           "portfolio?(YES/NO)");
       if (currInput.equals("YES")) {
+        // TODO if isFlexible is true give 3 options(sell,total cost basis, total value)
         boolean isValidDate = viewSpeculateHelper(input, listOfStocksImpl);
         if (!isValidDate) {
           isValidDate = viewSpeculateHelper(input, listOfStocksImpl);
