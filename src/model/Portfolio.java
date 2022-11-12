@@ -48,7 +48,7 @@ public interface Portfolio {
    * Method used to save a file.
    */
   void save();
-
+// TODO setter and getter for isFlexible.
   /**
    * Method used to check if the file is already created.
    *

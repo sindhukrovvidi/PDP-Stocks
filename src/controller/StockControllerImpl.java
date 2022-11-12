@@ -88,7 +88,7 @@ public class StockControllerImpl implements StockController {
     HashMap map = listOfStocksImpl.getLStocksMap();
     String tickerValue = takeStringInput("Enter the ticker value from the following set "
         + "of companies:\n" + map.keySet());
-
+// TODO ask for the date if isFlexible is true.
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
       append("You entered an invalid ticker symbol. Please try again");

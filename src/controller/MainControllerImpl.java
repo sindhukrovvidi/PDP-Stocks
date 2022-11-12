@@ -91,6 +91,7 @@ public class MainControllerImpl implements MainController {
           append("Invalid input or the file already exists. Please try again.\n");
           programStartsHere();
         }
+        // TODO ask for the type of the portfolio to be created.(flexible, inflexible)
         getInitialController(4);
         break;
       case 2:
@@ -98,7 +99,7 @@ public class MainControllerImpl implements MainController {
         input =
             takeStringInput(
                 "Enter the name of the portfolio from the below list: " +
-                    "(Just enter the filename without the extension \n" + Arrays.toString(files));
+                    "(Just enter the filename without the extension)\n" + Arrays.toString(files));
         PortfolioViewImpl portfolioViewImpl = new PortfolioViewImpl();
         PortfolioImpl portfolioImpl = new PortfolioImpl();
         PortfolioControllerImpl portfolioControllerImpl = new PortfolioControllerImpl(portfolioImpl,
@@ -113,6 +114,7 @@ public class MainControllerImpl implements MainController {
         StockControllerImpl stocksController = new StockControllerImpl(new StocksImpl(),
             new StockViewImpl());
         stocksController.setStocksList(listOfStocksImpl);
+        // TODO set flag to determine
         StocksImpl stocksImpl = stocksController.getTickerValue();
         if (stocksImpl == null) {
           programStartsHere();

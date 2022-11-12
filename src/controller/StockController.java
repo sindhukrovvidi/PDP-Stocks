@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import model.ListOfStocksImpl;
 import model.StocksImpl;
-
+// TODO set function for isFlexible.
 /**
  * Interface that has all the methods responsible for controlling the stocks.
  */
