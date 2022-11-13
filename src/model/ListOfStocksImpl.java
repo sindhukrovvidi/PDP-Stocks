@@ -10,38 +10,10 @@ import java.util.HashMap;
  */
 public class ListOfStocksImpl implements ListOfStocks {
 
-  HashMap<String, ArrayList<StocksImpl>> listOfStocks = new HashMap<>();
+  HashMap<String, ArrayList<StocksImpl>> listOfStocks;
 
-  /**
-   * Method used to fetch the list of stocks.
-   *
-   * @param stocksData data.
-   * @throws IOException invalid data.
-   */
-  public ListOfStocksImpl(BufferedReader stocksData) throws IOException {
-    String line = stocksData.readLine(); // Reading header, Ignoring;
-    while ((line = stocksData.readLine()) != null && !line.isEmpty()) {
-      String[] fields = line.split(",");
-      String name = fields[0];
-      StocksImpl newStock = new StocksImpl(
-          fields[1],
-          Float.parseFloat(fields[2]),
-          Float.parseFloat(fields[3]),
-          Float.parseFloat(fields[4]),
-          Float.parseFloat(fields[5]),
-          Float.parseFloat(fields[6])
-      );
-      if (listOfStocks.containsKey(name)) {
-        ArrayList<StocksImpl> currentValues = listOfStocks.get(name);
-        currentValues.add(newStock);
-        listOfStocks.put(name, currentValues);
-      } else {
-        ArrayList<StocksImpl> stocks = new ArrayList<StocksImpl>();
-        stocks.add(newStock);
-        listOfStocks.put(name, stocks);
-      }
-    }
-    stocksData.close();
+  public ListOfStocksImpl() throws IOException {
+    listOfStocks = new HashMap<>();
   }
 
   /**
@@ -53,6 +25,38 @@ public class ListOfStocksImpl implements ListOfStocks {
   public HashMap getLStocksMap() {
     return listOfStocks;
   }
+
+  public void updateStocksList(HashMap stocksList,
+      StringBuilder data,
+      String company) {
+    if (!stocksList.containsKey(company)) {
+      String line; // Reading header, Ignoring;
+      String[] entries = data.toString().split("\r\n");
+      for (int i = 1; i < entries.length; i++) {
+
+        String[] fields = entries[i].split(",");
+        StocksImpl newStock = new StocksImpl(
+            fields[0],
+            Float.parseFloat(fields[1]),
+            Float.parseFloat(fields[2]),
+            Float.parseFloat(fields[3]),
+            Float.parseFloat(fields[4]),
+            Float.parseFloat(fields[5])
+        );
+        if (listOfStocks.containsKey(company)) {
+          ArrayList<StocksImpl> currentValues = listOfStocks.get(company);
+          currentValues.add(newStock);
+          listOfStocks.put(company, currentValues);
+        } else {
+          ArrayList<StocksImpl> stocks = new ArrayList<StocksImpl>();
+          stocks.add(newStock);
+          listOfStocks.put(company, stocks);
+        }
+      }
+
+    }
+  }
+
 
 }
 
