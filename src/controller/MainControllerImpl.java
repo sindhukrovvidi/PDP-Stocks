@@ -34,7 +34,7 @@ public class MainControllerImpl implements MainController {
    * @throws IOException invalid stocks or portfolio.
    */
   public MainControllerImpl() throws IOException {
-    this.listOfStocksImpl = preprocessStocksData();
+    this.listOfStocksImpl = new ListOfStocksImpl();
     this.portfolioImpl = new PortfolioImpl();
   }
 
@@ -49,7 +49,7 @@ public class MainControllerImpl implements MainController {
     FileAccessorsImpl reader = new FileAccessorsImpl();
     BufferedReader output = reader.readCSV("stocksdata/stocks_data.csv");
 
-    return (new ListOfStocksImpl(output));
+    return (new ListOfStocksImpl());
   }
 
   /**

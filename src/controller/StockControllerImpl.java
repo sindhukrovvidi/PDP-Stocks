@@ -6,6 +6,8 @@ import java.util.HashMap;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import model.HTTPRequests;
+import model.HTTPRequestsImpl;
 import model.StocksImpl;
 import model.ListOfStocksImpl;
 import view.StockViewImpl;
@@ -87,8 +89,13 @@ public class StockControllerImpl implements StockController {
   public StocksImpl getTickerValue() throws IOException {
     HashMap map = listOfStocksImpl.getLStocksMap();
     String tickerValue = takeStringInput("Enter the ticker value from the following set "
-        + "of companies:\n" + map.keySet());
-
+        + "of companies:\n");
+    HTTPRequests requests = new HTTPRequestsImpl();
+    StringBuilder currTickerData = requests.getData(tickerValue);
+    listOfStocksImpl.updateStocksList(map,
+        currTickerData, tickerValue);
+    setStocksList(listOfStocksImpl);
+    map = listOfStocksImpl.getLStocksMap();
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
       append("You entered an invalid ticker symbol. Please try again");
