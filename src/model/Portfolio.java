@@ -48,7 +48,7 @@ public interface Portfolio {
    * Method used to save a file.
    */
   void save();
-// TODO setter and getter for isFlexible.
+
   /**
    * Method used to check if the file is already created.
    *
@@ -56,5 +56,15 @@ public interface Portfolio {
    * @throws FileAlreadyExistsException if the file already exists.
    */
   void setPortfolioName(String name) throws FileAlreadyExistsException;
+
+  /**
+   * @param isFlexible
+   */
+  void setIsFlexible(boolean isFlexible);
+
+  /**
+   * @return
+   */
+  boolean getIsFlexible();
 
 }

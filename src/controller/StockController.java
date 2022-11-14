@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import model.ListOfStocksImpl;
 import model.StocksImpl;
-// TODO set function for isFlexible.
+
 /**
  * Interface that has all the methods responsible for controlling the stocks.
  */
@@ -18,13 +18,6 @@ public interface StockController {
    * @throws IOException invalid input.
    */
   StocksImpl afterStocksDisplay(Object model) throws IOException;
-
-  /**
-   * Method used to set the list of stocks to a single list.
-   *
-   * @param list to be set to a stock list.
-   */
-  void setStocksList(ListOfStocksImpl list);
 
   /**
    * Method used to take a ticker value.
@@ -51,5 +44,8 @@ public interface StockController {
    */
   void controllerToViewHelperForStocks(String companyName,
                                        ArrayList<StocksImpl> values);
+
+  void setIsFlexible(boolean isFlexible);
+
 
 }

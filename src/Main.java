@@ -1,9 +1,11 @@
 import controller.MainControllerImpl;
+
 import java.io.IOException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 /**
  * Main class which starts the program.
  */
@@ -19,6 +21,7 @@ public class Main {
   private String apiKey = "CAAPHOM3N94LAFJL";
   //  private String stockSymbol = "GOOG";
   private URL url = null;
+
   public static void main(String[] args) throws IOException {
 
     String apiKey = "CAAPHOM3N94LAFJL";

@@ -21,10 +21,9 @@ import static model.Output.append;
  */
 public class MainControllerImpl implements MainController {
 
-  ListOfStocksImpl listOfStocksImpl;
   StocksImpl stocksImpl;
   PortfolioImpl portfolioImpl;
-
+  private boolean isFlexible;
 
   private FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
 
@@ -34,23 +33,9 @@ public class MainControllerImpl implements MainController {
    * @throws IOException invalid stocks or portfolio.
    */
   public MainControllerImpl() throws IOException {
-    this.listOfStocksImpl = new ListOfStocksImpl();
     this.portfolioImpl = new PortfolioImpl();
   }
 
-  /**
-   * This method reads and processes the data and forms lists to be used for stock selection.
-   *
-   * @return list of the stocks after processing and forming a list.
-   * @throws IOException when the entered data is invalid.
-   */
-  @Override
-  public ListOfStocksImpl preprocessStocksData() throws IOException {
-    FileAccessorsImpl reader = new FileAccessorsImpl();
-    BufferedReader output = reader.readCSV("stocksdata/stocks_data.csv");
-
-    return (new ListOfStocksImpl());
-  }
 
   /**
    * This method is responsible for the display of main menu and handles the main menu.
@@ -61,14 +46,15 @@ public class MainControllerImpl implements MainController {
   public void programStartsHere() throws IOException {
     try {
       Integer option = takeIntegerInput(
-          "Choose from below options to proceed further. (Type the index number)."
-              + " \n1. Create a "
-              + "portfolio.\n2. View & speculate existing portfolio " +
-              "\n3. Exit\n");
+              "Choose from below options to proceed further. (Type the index number)."
+                      + " \n1. Create a "
+                      + "portfolio.\n2. View & speculate existing portfolio " +
+                      "\n3. Exit\n");
       getInitialController(option);
     } catch (Exception e) {
-      append("Please enter a valid input.");
-      programStartsHere();
+      throw e;
+      //append("Please enter a valid input.");
+      // programStartsHere();
     }
 
   }
@@ -91,20 +77,28 @@ public class MainControllerImpl implements MainController {
           append("Invalid input or the file already exists. Please try again.\n");
           programStartsHere();
         }
-        // TODO ask for the type of the portfolio to be created.(flexible, inflexible)
+        String input1 = takeStringInput("Do you want the type of portfolio as flexible?" +
+                "(YES/NO)");
+        if (input1.equals("YES")) {
+          isFlexible = true;
+          this.portfolioImpl.setIsFlexible(true);
+        } else {
+          this.portfolioImpl.setIsFlexible(false);
+          isFlexible = false;
+        }
         getInitialController(4);
         break;
       case 2:
         String[] files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/");
         input =
-            takeStringInput(
-                "Enter the name of the portfolio from the below list: " +
-                    "(Just enter the filename without the extension)\n" + Arrays.toString(files));
+                takeStringInput(
+                        "Enter the name of the portfolio from the below list: " +
+                                "(Just enter the filename without the extension \n" + Arrays.toString(files));
         PortfolioViewImpl portfolioViewImpl = new PortfolioViewImpl();
         PortfolioImpl portfolioImpl = new PortfolioImpl();
         PortfolioControllerImpl portfolioControllerImpl = new PortfolioControllerImpl(portfolioImpl,
-            portfolioViewImpl);
-        portfolioControllerImpl.viewSpeculate(input, listOfStocksImpl);
+                portfolioViewImpl);
+        portfolioControllerImpl.viewSpeculate(input);
         programStartsHere();
         break;
       case 3:
@@ -112,9 +106,8 @@ public class MainControllerImpl implements MainController {
         break;
       case 4:
         StockControllerImpl stocksController = new StockControllerImpl(new StocksImpl(),
-            new StockViewImpl());
-        stocksController.setStocksList(listOfStocksImpl);
-        // TODO set flag to determine
+                new StockViewImpl());
+        stocksController.setIsFlexible(isFlexible);
         StocksImpl stocksImpl = stocksController.getTickerValue();
         if (stocksImpl == null) {
           programStartsHere();
@@ -126,9 +119,9 @@ public class MainControllerImpl implements MainController {
       case 5:
         PortfolioViewImpl portfolioViewsImpl = new PortfolioViewImpl();
         PortfolioControllerImpl portfolioControllersImpl = new PortfolioControllerImpl(
-            this.stocksImpl,
-            this.portfolioImpl,
-            portfolioViewsImpl);
+                this.stocksImpl,
+                this.portfolioImpl,
+                portfolioViewsImpl);
         this.portfolioImpl = portfolioControllersImpl.addStock();
         if (this.portfolioImpl == null) {
           this.portfolioImpl = new PortfolioImpl();

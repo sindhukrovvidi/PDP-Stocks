@@ -14,6 +14,7 @@ public class PortfolioImpl implements Portfolio {
   HashMap<String, StocksImpl> entriesInPortfolio = new HashMap<>();
   boolean saved = false;
   private String portfolioName;
+  boolean isFlexible;
 
   private final FileAccessorsImpl fileAccessor = new FileAccessorsImpl();
 
@@ -97,6 +98,16 @@ public class PortfolioImpl implements Portfolio {
     } else {
       throw new FileAlreadyExistsException(name);
     }
+  }
+
+  @Override
+  public void setIsFlexible(boolean isFlexible) {
+    this.isFlexible = isFlexible;
+  }
+
+  @Override
+  public boolean getIsFlexible() {
+    return isFlexible;
   }
 
 }
