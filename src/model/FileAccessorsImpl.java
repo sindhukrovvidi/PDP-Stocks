@@ -66,9 +66,9 @@ public class FileAccessorsImpl implements FileAccessors {
           bwr.write(",");
           bwr.write(String.valueOf(currentStock.getShares())); // no shares invested on that day
           bwr.write(",");
-          bwr.write(String.valueOf(currentStock.getClose() * currentStock.getShares())); // total
-          bwr.write(",");
           bwr.write(String.valueOf(currentStock.getCommisionFee())); // commission fee
+          bwr.write(",");
+          bwr.write(String.valueOf(currentStock.getClose() * currentStock.getShares())); // total
           // price for that company
           bwr.write("\n");
         } catch (IOException e) {
@@ -124,14 +124,15 @@ public class FileAccessorsImpl implements FileAccessors {
 
       StocksImpl stocksImpl = new StocksImpl();
       stocksImpl.setCurrentStock(
-              fields[0],
-              fields[1],
-              Float.parseFloat(fields[2]),
-              Float.parseFloat(fields[3]),
-              Float.parseFloat(fields[4]),
-              Float.parseFloat(fields[5]),
-              Float.parseFloat(fields[6]),
-              Integer.parseInt(fields[7])
+          fields[0],
+          fields[1],
+          Float.parseFloat(fields[2]),
+          Float.parseFloat(fields[3]),
+          Float.parseFloat(fields[4]),
+          Float.parseFloat(fields[5]),
+          Float.parseFloat(fields[6]),
+          Integer.parseInt(fields[7]),
+          Float.parseFloat(fields[8])
       );
       portfolio.put(fields[0], stocksImpl);
     }

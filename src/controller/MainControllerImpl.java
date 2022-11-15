@@ -151,7 +151,7 @@ public class MainControllerImpl implements MainController {
         }
         StocksImpl stocksImpl = stocksController.getTickerValue();
         if (stocksImpl == null) {
-          programStartsHere();
+          getInitialController(4);
         } else {
           this.stocksImpl = stocksImpl;
           getInitialController(5);
