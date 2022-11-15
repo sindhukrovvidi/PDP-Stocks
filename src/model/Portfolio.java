@@ -21,7 +21,7 @@ public interface Portfolio {
    *
    * @return portfolio.
    */
-  HashMap getPortfolio();
+  HashMap<String,StocksImpl> getPortfolio();
 
   /**
    * Method to create a portfolio.
@@ -47,7 +47,9 @@ public interface Portfolio {
   /**
    * Method used to save a file.
    */
-  void save();
+  void save(String path);
+
+//  void saveInflexible();
 
   /**
    * Method used to check if the file is already created.

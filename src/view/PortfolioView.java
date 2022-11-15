@@ -23,6 +23,6 @@ public interface PortfolioView {
    */
   void displayPortfolio(boolean displayHeaders, String company, String date,
                         float open, float high,
-                        float low, float close, float volume, int shares) throws IOException;
+                        float low, float close, float volume, int shares, float fee) throws IOException;
 
 }

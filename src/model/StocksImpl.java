@@ -16,6 +16,7 @@ public class StocksImpl implements Stocks {
   private String company;
 
   private float volume;
+  private float commisionFee;
 
   /**
    * Constructor that initializes the company, open,close,high,low,date,shares and the volume.
@@ -29,7 +30,7 @@ public class StocksImpl implements Stocks {
     this.date = "";
     this.shares = 0;
     this.volume = 0;
-
+    this.commisionFee = 0;
   }
 
   /**
@@ -75,6 +76,30 @@ public class StocksImpl implements Stocks {
   }
 
   /**
+   * Constructor that takes date,open,high,low,close,volume and shares as parameters and
+   * initializes them.
+   *
+   * @param date   the date.
+   * @param open   opening price.
+   * @param high   highest price.
+   * @param low    lowest price.
+   * @param close  closing price.
+   * @param volume volume of shares of the company.
+   * @param shares number of shares.
+   */
+  public StocksImpl(String date, float open, float high, float low, float close, float volume,
+                    int shares, float fee) {
+    this.date = date;
+    this.open = open;
+    this.high = high;
+    this.low = low;
+    this.close = close;
+    this.volume = volume;
+    this.shares = shares;
+    this.commisionFee = fee;
+  }
+
+  /**
    * Method used to set the values of a current stock.
    *
    * @param company name of the company.
@@ -100,6 +125,21 @@ public class StocksImpl implements Stocks {
     this.shares = shares;
   }
 
+
+  public void setCurrentStockWithFee(String company, String date, float open, float high, float low,
+                                     float close, float volume,
+                                     int shares, float fee) {
+    this.company = company;
+    this.date = date;
+    this.open = open;
+    this.high = high;
+    this.low = low;
+    this.close = close;
+    this.volume = volume;
+    this.shares = shares;
+    this.commisionFee = fee;
+  }
+
   /**
    * Method used to update the quantity of the stocks.
    *
@@ -108,6 +148,14 @@ public class StocksImpl implements Stocks {
   @Override
   public void updateStockValues(int values) {
     this.shares = values;
+  }
+
+  public void updateCommisionValue(float fee) {
+    this.commisionFee = fee;
+  }
+
+  public float getCommisionFee() {
+    return this.commisionFee;
   }
 
   /**

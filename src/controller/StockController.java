@@ -45,7 +45,7 @@ public interface StockController {
   void controllerToViewHelperForStocks(String companyName,
                                        ArrayList<StocksImpl> values);
 
-  void setIsFlexible(boolean isFlexible);
+
 
 
 }

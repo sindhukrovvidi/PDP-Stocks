@@ -49,4 +49,13 @@ public class Input {
     }
     return input;
   }
+
+  public static float takeFloatInput(String question) throws IOException {
+    Readable in = new InputStreamReader(System.in);
+    append(question);
+    appendNewLine();
+    Scanner scan = new Scanner(in);
+    Float input = scan.nextFloat();
+    return input;
+  }
 }
