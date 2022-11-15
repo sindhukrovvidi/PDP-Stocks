@@ -20,13 +20,6 @@ public interface StockController {
   StocksImpl afterStocksDisplay(Object model) throws IOException;
 
   /**
-   * Method used to set the list of stocks to a single list.
-   *
-   * @param list to be set to a stock list.
-   */
-  void setStocksList(ListOfStocksImpl list);
-
-  /**
    * Method used to take a ticker value.
    *
    * @return displays all the 10 days data model of the selected ticker value.
@@ -51,5 +44,8 @@ public interface StockController {
    */
   void controllerToViewHelperForStocks(String companyName,
                                        ArrayList<StocksImpl> values);
+
+  void setIsFlexible(boolean isFlexible);
+
 
 }

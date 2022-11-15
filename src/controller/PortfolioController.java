@@ -34,11 +34,10 @@ public interface PortfolioController {
   /**
    * Method used to view speculate of a portfolio.
    *
-   * @param input            file name.
-   * @param listOfStocksImpl list of the stocks present in the portfolio.
+   * @param input file name.
    * @throws IOException if the input name is invalid.
    */
-  void viewSpeculate(String input, ListOfStocksImpl listOfStocksImpl) throws IOException;
+  void viewSpeculate(String input) throws IOException;
 
   /**
    * Method that is used as helper for speculation of a portfolio.
