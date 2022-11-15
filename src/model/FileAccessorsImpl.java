@@ -36,10 +36,11 @@ public class FileAccessorsImpl implements FileAccessors {
    * @param entriesInPortfolio content to be written into the file.
    */
   @Override
-  public void writeIntoCSVFile(String filename, HashMap<String, StocksImpl> entriesInPortfolio) {
+  public void writeIntoCSVFile(String filename, HashMap<String, StocksImpl> entriesInPortfolio,
+                               String path) {
     try {
       Path currentPath = Paths.get(System.getProperty("user.dir"));
-      Path fp = Paths.get(currentPath.toString(), "portfolios");
+      Path fp = Paths.get(currentPath.toString(), path);
       File theDir = new File(fp.toString());
       if (!theDir.exists()) {
         theDir.mkdirs();
@@ -66,6 +67,8 @@ public class FileAccessorsImpl implements FileAccessors {
           bwr.write(String.valueOf(currentStock.getShares())); // no shares invested on that day
           bwr.write(",");
           bwr.write(String.valueOf(currentStock.getClose() * currentStock.getShares())); // total
+          bwr.write(",");
+          bwr.write(String.valueOf(currentStock.getCommisionFee())); // commission fee
           // price for that company
           bwr.write("\n");
         } catch (IOException e) {
@@ -85,9 +88,9 @@ public class FileAccessorsImpl implements FileAccessors {
    * @return true if the file exists else false.
    */
   @Override
-  public boolean isFileExists(String filename) {
+  public boolean isFileExists(String filename, String path) {
     Path currentPath = Paths.get(System.getProperty("user.dir"));
-    Path fp = Paths.get(currentPath.toString(), "portfolios");
+    Path fp = Paths.get(currentPath.toString(), path);
     File theDir = new File(fp.toString());
     if (!theDir.exists()) {
       theDir.mkdirs();
@@ -104,11 +107,11 @@ public class FileAccessorsImpl implements FileAccessors {
    * @throws IOException invalid file name.
    */
   @Override
-  public HashMap<String, StocksImpl> viewFile(String portfolioName) throws IOException {
+  public HashMap<String, StocksImpl> viewFile(String portfolioName, String path) throws IOException {
     HashMap<String, StocksImpl> portfolio = new HashMap<>();
     String line;
     Path currentPath = Paths.get(System.getProperty("user.dir"));
-    Path fp = Paths.get(currentPath.toString(), "portfolios");
+    Path fp = Paths.get(currentPath.toString(), path);
     File theDir = new File(fp.toString());
     if (!theDir.exists()) {
       theDir.mkdirs();
@@ -146,7 +149,7 @@ public class FileAccessorsImpl implements FileAccessors {
   public String[] listOfPortfolioFiles(String directory) {
     String[] files = {};
     Path currentPath = Paths.get(System.getProperty("user.dir"));
-    Path fp = Paths.get(currentPath.toString(), "portfolios");
+    Path fp = Paths.get(currentPath.toString(), directory);
     File theDir = new File(fp.toString());
     if (!theDir.exists()) {
       theDir.mkdirs();

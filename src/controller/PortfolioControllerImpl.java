@@ -1,34 +1,29 @@
 package controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import model.FileAccessorsImpl;
+import model.Portfolio;
 import model.PortfolioImpl;
 import model.StocksImpl;
-import model.ListOfStocksImpl;
 import view.PortfolioViewImpl;
 
 import static model.Input.takeIntegerInput;
-import static model.Input.takeStringInput;
 import static model.Output.append;
 import static model.Output.appendNewLine;
 
 /**
  * Class that controls the portfolios and that implements the functions in  portfolio controller.
  */
-public class PortfolioControllerImpl extends Controller implements PortfolioController {
+abstract public class PortfolioControllerImpl extends Controller implements PortfolioController {
 
 
-  private PortfolioImpl model;
-  private PortfolioViewImpl view;
+  protected Portfolio model;
+  protected PortfolioViewImpl view;
 
-  private StocksImpl stocksImplModel;
+  protected StocksImpl stocksImplModel;
 
   /**
    * Constructor that takes model and view as the input as parameters and initializes the model and
@@ -38,7 +33,7 @@ public class PortfolioControllerImpl extends Controller implements PortfolioCont
    * @param portfolioViewImpl view input.
    * @throws IOException invalid input of model or view.
    */
-  public PortfolioControllerImpl(PortfolioImpl portfolioImpl, PortfolioViewImpl portfolioViewImpl)
+  public PortfolioControllerImpl(Portfolio portfolioImpl, PortfolioViewImpl portfolioViewImpl)
           throws IOException {
     super();
     this.model = portfolioImpl;
@@ -53,7 +48,7 @@ public class PortfolioControllerImpl extends Controller implements PortfolioCont
    * @param view          view input.
    * @throws IOException if the parameters given are invalid.
    */
-  public PortfolioControllerImpl(StocksImpl model, PortfolioImpl portfolioImpl,
+  public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
                                  PortfolioViewImpl view)
           throws IOException {
     super();
@@ -70,7 +65,7 @@ public class PortfolioControllerImpl extends Controller implements PortfolioCont
    * @throws IOException invalid stock details.
    */
   @Override
-  public PortfolioImpl addStock() throws IOException {
+  public Portfolio addStock() throws IOException {
     model.addStockInPortfolio(stocksImplModel);
     append("Successfully added the stock in draft portfolio");
     appendNewLine();
@@ -88,7 +83,7 @@ public class PortfolioControllerImpl extends Controller implements PortfolioCont
    * @throws IOException if the entered option is invalid or not listed.
    */
   @Override
-  public PortfolioImpl afterAddingStock(PortfolioImpl model) throws IOException {
+  public Portfolio afterAddingStock(Portfolio model) throws IOException {
     append("Successfully added the stock in portfolio");
     appendNewLine();
     int input = 0;
@@ -104,7 +99,12 @@ public class PortfolioControllerImpl extends Controller implements PortfolioCont
       case 1:
         break;
       case 2:
-        model.save();
+        if(model.getIsFlexible()) {
+          model.save("portfolios/flexible");
+        } else {
+          model.save("portfolios/inflexible");
+        }
+
         break;
       case 3:
         model = null;
@@ -117,91 +117,6 @@ public class PortfolioControllerImpl extends Controller implements PortfolioCont
         System.exit(0);
     }
     return model;
-  }
-
-  /**
-   * Method used to ask the user if he wants to speculate and perform speculation on the selected
-   * portfolio.
-   *
-   * @param input name of the portfolio which the user chooses for speculation.
-   * @throws IOException invalid input.
-   */
-  @Override
-  public void viewSpeculate(String input) throws IOException {
-    try {
-      FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
-      if (!fileAccessorsImpl.isFileExists(input)) {
-        throw new FileNotFoundException(input);
-      }
-
-      HashMap<String, StocksImpl> portfolios = fileAccessorsImpl.viewFile(input);
-      for (String s : portfolios.keySet()) {
-        updateListOfStocks(s);
-      }
-      model.setPortfolio(portfolios);
-      controllerToViewHelper(portfolios);
-      String currInput = takeStringInput("Would you like to speculate your " +
-              "portfolio?(YES/NO)");
-      if (currInput.equals("YES")) {
-
-        // TODO if isFlexible is true give 3 options(sell,total cost basis, total value)
-//        if(isFlexible){
-//
-//        }
-        boolean isValidDate = viewSpeculateHelper(input, getStockList());
-        if (!isValidDate) {
-          isValidDate = viewSpeculateHelper(input, getStockList());
-        }
-      }
-    } catch (FileNotFoundException e) {
-      append("Portfolio doesn't exists");
-      appendNewLine();
-    } catch (IllegalArgumentException e) {
-      append(e.getMessage());
-    }
-  }
-
-  /**
-   * Method to perform speculation operation on the portfolio.
-   *
-   * @param fileName         name of the file for the speculation.
-   * @param listOfStocksImpl list of all the stocks in the file.
-   * @return total value of the portfolio.
-   * @throws IOException if the file name entered is invalid.
-   */
-  @Override
-  public boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl)
-          throws IOException {
-    Map.Entry<String, ArrayList<StocksImpl>> entry = (Map.Entry<String, ArrayList<StocksImpl>>)
-            listOfStocksImpl.getLStocksMap()
-                    .entrySet().iterator().next();
-    ArrayList<StocksImpl> currentStock = (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-            .get(entry.getKey());
-    String firstStockDate = currentStock.get(0).getDate();
-    String lastStockDate = currentStock.get(currentStock.size() - 1).getDate();
-    String input =
-            takeStringInput("Enter the date between " + lastStockDate + " and "
-                    + firstStockDate);
-    float total_value = 0;
-
-    for (StocksImpl stocksImpl : model.getCompanyNames()) {
-      currentStock = (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-              .get(stocksImpl.getCompany());
-      boolean dateExist = false;
-      for (StocksImpl stock : currentStock) {
-        if (stock.getDate().equals(input)) {
-          dateExist = true;
-          total_value += stock.getClose() * stocksImpl.getShares();
-        }
-
-      }
-      if (!dateExist) {
-        append("The entered date does not exist, please enter a valid date.\n");
-        return false;
-      }
-    }
-    append("Total price of portfolio is " + String.valueOf(total_value) + ".\n");
-    return true;
   }
 
   /**
@@ -218,7 +133,8 @@ public class PortfolioControllerImpl extends Controller implements PortfolioCont
         view.displayPortfolio(displayHeaders.get(), currentStock.getCompany(),
                 currentStock.getDate(),
                 currentStock.getOpen(), currentStock.getHigh(), currentStock.getLow(),
-                currentStock.getClose(), currentStock.getVolume(), currentStock.getShares());
+                currentStock.getClose(), currentStock.getVolume(), currentStock.getShares(),
+                currentStock.getCommisionFee());
         displayHeaders.set(false);
       } catch (IOException e) {
         throw new RuntimeException(e);

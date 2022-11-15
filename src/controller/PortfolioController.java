@@ -2,7 +2,7 @@ package controller;
 
 import java.util.HashMap;
 
-import model.ListOfStocksImpl;
+import model.Portfolio;
 import model.PortfolioImpl;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public interface PortfolioController {
    * @return Portfolio after adding a stock.
    * @throws IOException if the stock is invalid or if the amount to be added is invalid.
    */
-  PortfolioImpl addStock() throws IOException;
+  Portfolio addStock() throws IOException;
 
   /**
    * Method used to write into portfolio after adding a stock.
@@ -29,7 +29,7 @@ public interface PortfolioController {
    * @return portfolio after saving the stock into it.
    * @throws IOException if the input parameter is invalid.
    */
-  PortfolioImpl afterAddingStock(PortfolioImpl model) throws IOException;
+  Portfolio afterAddingStock(Portfolio model) throws IOException;
 
   /**
    * Method used to view speculate of a portfolio.
@@ -37,17 +37,7 @@ public interface PortfolioController {
    * @param input file name.
    * @throws IOException if the input name is invalid.
    */
-  void viewSpeculate(String input) throws IOException;
-
-  /**
-   * Method that is used as helper for speculation of a portfolio.
-   *
-   * @param name             file to be speculated.
-   * @param listOfStocksImpl stocks in the portfolio in the form of a list.
-   * @return true if the file is valid else false.
-   * @throws IOException invalid input.
-   */
-  boolean viewSpeculateHelper(String name, ListOfStocksImpl listOfStocksImpl) throws IOException;
+  Portfolio viewSpeculate(String input) throws IOException;
 
   /**
    * Fetches the data from the model for each argument and passes it to view.

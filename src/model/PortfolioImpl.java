@@ -26,6 +26,9 @@ public class PortfolioImpl implements Portfolio {
   @Override
   public void addStockInPortfolio(StocksImpl data) {
     String company = data.getCompany();
+    String key = isFlexible ? data.getCompany() +"_"+ data.getDate() : data.getCompany();
+    // GOOG_2022-11-24
+    // GOOG_2022-11-26
     if (entriesInPortfolio.containsKey(company)) {
       StocksImpl currStock = entriesInPortfolio.get(company);
       // TODO handle cases when isFlexible is true
@@ -41,7 +44,7 @@ public class PortfolioImpl implements Portfolio {
    * @return portfolio.
    */
   @Override
-  public HashMap getPortfolio() {
+  public HashMap<String, StocksImpl> getPortfolio() {
     return entriesInPortfolio;
   }
 
@@ -80,8 +83,8 @@ public class PortfolioImpl implements Portfolio {
    * Readers and saves the portfolio in file.
    */
   @Override
-  public void save() {
-    fileAccessor.writeIntoCSVFile(portfolioName, entriesInPortfolio);
+  public void save(String path) {
+    fileAccessor.writeIntoCSVFile(portfolioName, entriesInPortfolio, path);
     this.saved = true;
   }
 
@@ -93,11 +96,7 @@ public class PortfolioImpl implements Portfolio {
    */
   @Override
   public void setPortfolioName(String name) throws FileAlreadyExistsException {
-    if (!fileAccessor.isFileExists(name)) {
-      portfolioName = name;
-    } else {
-      throw new FileAlreadyExistsException(name);
-    }
+    portfolioName = name;
   }
 
   @Override

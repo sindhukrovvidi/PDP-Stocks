@@ -24,7 +24,7 @@ public interface FileAccessors {
    * @param fileName name of the file to be written into.
    * @param hashMap  content to be written into the file.
    */
-  void writeIntoCSVFile(String fileName, HashMap<String, StocksImpl> hashMap);
+  void writeIntoCSVFile(String fileName, HashMap<String, StocksImpl> hashMap, String path);
 
   /**
    * Method used to check if the file exists or not.
@@ -32,7 +32,7 @@ public interface FileAccessors {
    * @param name name of the file to check.
    * @return true if the file exists else false.
    */
-  boolean isFileExists(String name);
+  boolean isFileExists(String name, String path);
 
   /**
    * Method used to view or display a file.
@@ -41,7 +41,7 @@ public interface FileAccessors {
    * @return content present in the portfolio in the form of a map.
    * @throws IOException invalid file name.
    */
-  HashMap<String, StocksImpl> viewFile(String portfolioName) throws IOException;
+  HashMap<String, StocksImpl> viewFile(String portfolioName, String path) throws IOException;
 
   /**
    * Method used to display the list of portfolios present in the directory.
