@@ -145,9 +145,9 @@ public class PortfolioControllerImpl extends Controller implements PortfolioCont
       if (currInput.equals("YES")) {
 
         // TODO if isFlexible is true give 3 options(sell,total cost basis, total value)
-        if(isFlexible){
-
-        }
+//        if(isFlexible){
+//
+//        }
         boolean isValidDate = viewSpeculateHelper(input, getStockList());
         if (!isValidDate) {
           isValidDate = viewSpeculateHelper(input, getStockList());
