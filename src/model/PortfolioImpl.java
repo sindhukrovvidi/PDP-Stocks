@@ -8,10 +8,13 @@ import java.util.HashMap;
  * Class that implements the portfolio interface and is responsible for portfolio actions.
  */
 public class PortfolioImpl implements Portfolio {
+// TODO add a new function to handle selling the stocks.
+  // TODO incorporate broker fees.
 
   HashMap<String, StocksImpl> entriesInPortfolio = new HashMap<>();
   boolean saved = false;
   private String portfolioName;
+  boolean isFlexible;
 
   private final FileAccessorsImpl fileAccessor = new FileAccessorsImpl();
 
@@ -25,6 +28,7 @@ public class PortfolioImpl implements Portfolio {
     String company = data.getCompany();
     if (entriesInPortfolio.containsKey(company)) {
       StocksImpl currStock = entriesInPortfolio.get(company);
+      // TODO handle cases when isFlexible is true
       data.updateStockValues(currStock.getShares() + data.getShares());
       entriesInPortfolio.put(data.getCompany(), data);
     }
@@ -94,6 +98,16 @@ public class PortfolioImpl implements Portfolio {
     } else {
       throw new FileAlreadyExistsException(name);
     }
+  }
+
+  @Override
+  public void setIsFlexible(boolean isFlexible) {
+    this.isFlexible = isFlexible;
+  }
+
+  @Override
+  public boolean getIsFlexible() {
+    return isFlexible;
   }
 
 }

@@ -57,4 +57,14 @@ public interface Portfolio {
    */
   void setPortfolioName(String name) throws FileAlreadyExistsException;
 
+  /**
+   * @param isFlexible
+   */
+  void setIsFlexible(boolean isFlexible);
+
+  /**
+   * @return
+   */
+  boolean getIsFlexible();
+
 }

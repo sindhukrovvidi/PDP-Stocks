@@ -12,10 +12,10 @@ public class HTTPRequestsImpl implements HTTPRequests {
   public StringBuilder getData(String tickerSymbol) throws IOException {
     URL url = null;
     url = new URL("https://www.alphavantage"
-        + ".co/query?function=TIME_SERIES_DAILY"
-        + "&outputsize=full"
-        + "&symbol"
-        + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
+            + ".co/query?function=TIME_SERIES_DAILY"
+            + "&outputsize=full"
+            + "&symbol"
+            + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
     InputStream in = null;
     StringBuilder output = new StringBuilder();
     in = url.openStream();
