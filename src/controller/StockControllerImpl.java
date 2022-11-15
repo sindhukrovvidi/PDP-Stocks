@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import model.HTTPRequests;
@@ -11,7 +12,8 @@ import model.HTTPRequestsImpl;
 import model.StocksImpl;
 import model.ListOfStocksImpl;
 import view.StockViewImpl;
-
+import java.util.Date;
+import java.text.*;
 import static model.Input.takeIntegerInput;
 import static model.Input.takeStringInput;
 import static model.Output.append;
@@ -89,28 +91,42 @@ public class StockControllerImpl extends Controller implements StockController {
       return null;
     } else {
       if (isFlexible) {
-
-        String input = takeStringInput("Enter a date for purchasing the stocks:");
+//        String input = takeStringInput("Enter a date for purchasing the stocks:");
         // TODO handle invalid date.
         // TODO give the date span.
-        int n = values.size();
-        for (int i = 0; i < n; i++) {
-          StocksImpl currentStock = (StocksImpl) values.get(i);
-          if (currentStock.getDate().equals(input)) {
-            model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
-                    currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-                    currentStock.getVolume(), 0);
-            break;
+        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+        Date d1, d2;
+        try {
+          d1 = sdformat.parse(((StocksImpl) values.get(values.size() - 1)).getDate());
+          d2 = sdformat.parse(((StocksImpl) values.get(0)).getDate());
 
+          String dateInput =
+              takeStringInput("Enter the dates between " + sdformat.format(d1) + " and " + sdformat.format(d2));
+          Date newDate = sdformat.parse(dateInput);
+          if(newDate.compareTo(d1) < 0 || newDate.compareTo(d2) > 0) {
+            append("Entered an invalid date. Please enter the date within the given timerange.\n");
           }
+          String formattedDateInput = sdformat.format(newDate);
+          for (Object value : values) {
+            StocksImpl currentStock = (StocksImpl) value;
+            if(Objects.equals(currentStock.getDate(), formattedDateInput)) {
+              model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
+                  currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+                  currentStock.getVolume(), 0);
+              break;
+            }
+          }
+        } catch (ParseException e) {
+          append("RuntimeException, entered bad date format " + e + "\n");
+          getTickerValue();
         }
       } else {
         StocksImpl currentStock = (StocksImpl) values.get(0);
         model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
                 currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
                 currentStock.getVolume(), 0);
+        controllerToViewHelperForStocks(tickerValue, values);
       }
-      controllerToViewHelperForStocks(tickerValue, values);
       return afterStocksDisplay(model);
     }
   }
