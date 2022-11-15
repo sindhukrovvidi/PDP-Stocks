@@ -30,16 +30,19 @@ public class InflexibleStockControllerImpl extends StockControllerImpl{
     HashMap map = getStockList().getLStocksMap();
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
-      append("You entered an invalid ticker symbol. Please try again");
+      append("You entered an invalid ticker symbol. Please try again\n");
+//      getTickerValue();
       return null;
     } else {
         StocksImpl currentStock = (StocksImpl) values.get(0);
         model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
                 currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-                currentStock.getVolume(), 0);
+                currentStock.getVolume(), 0, 0);
         controllerToViewHelperForStocks(tickerValue, values);
       return afterStocksDisplay(model);
     }
+
+//    return (values.size() > 0 ? afterStocksDisplay(model) : null);
   }
 
 }

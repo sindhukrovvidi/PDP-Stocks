@@ -58,7 +58,7 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
           if (Objects.equals(currentStock.getDate(), formattedDateInput)) {
             model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
                     currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-                    currentStock.getVolume(), 0);
+                    currentStock.getVolume(), 0, 0);
             break;
           }
         }

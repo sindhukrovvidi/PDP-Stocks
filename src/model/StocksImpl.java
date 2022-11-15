@@ -102,7 +102,7 @@ public class StocksImpl implements Stocks {
   /**
    * Method used to set the values of a current stock.
    *
-   * @param company name of the company.
+   * @param name name of the company.
    * @param date    date on which the data is retrieved.
    * @param open    price at open.
    * @param high    highest price of the day.
@@ -112,10 +112,10 @@ public class StocksImpl implements Stocks {
    * @param shares  number of share purchased.
    */
   @Override
-  public void setCurrentStock(String company, String date, float open, float high, float low,
+  public void setCurrentStock(String name, String date, float open, float high, float low,
                               float close, float volume,
-                              int shares) {
-    this.company = company;
+                              int shares, float fee) {
+    this.company = name;
     this.date = date;
     this.open = open;
     this.high = high;
@@ -123,6 +123,7 @@ public class StocksImpl implements Stocks {
     this.close = close;
     this.volume = volume;
     this.shares = shares;
+    this.commisionFee = fee;
   }
 
 
