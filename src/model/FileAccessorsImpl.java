@@ -84,10 +84,9 @@ public class FileAccessorsImpl implements FileAccessors {
 //      throw new RuntimeException(e);
 //    }
 //  }
-
   @Override
   public void writeIntoCSVFile(String filename,
-      HashMap<String, TreeMap<Date, StocksImpl>> entriesInPortfolio, String path) {
+                               HashMap<String, TreeMap<Date, StocksImpl>> entriesInPortfolio, String path) {
 
     try {
       Path currentPath = Paths.get(System.getProperty("user.dir"));
@@ -193,10 +192,9 @@ public class FileAccessorsImpl implements FileAccessors {
 //    reader.close();
 //    return portfolio;
 //  }
-
   @Override
   public HashMap<String, TreeMap<Date, StocksImpl>> viewFile(String portfolioName, String path)
-      throws IOException, ParseException {
+          throws IOException, ParseException {
     HashMap<String, TreeMap<Date, StocksImpl>> portfolio = new HashMap<>();
     String line;
     Path currentPath = Paths.get(System.getProperty("user.dir"));
@@ -213,15 +211,15 @@ public class FileAccessorsImpl implements FileAccessors {
 
       StocksImpl stocksImpl = new StocksImpl();
       stocksImpl.setCurrentStock(
-          fields[0],
-          fields[1],
-          Float.parseFloat(fields[2]),
-          Float.parseFloat(fields[3]),
-          Float.parseFloat(fields[4]),
-          Float.parseFloat(fields[5]),
-          Float.parseFloat(fields[6]),
-          Integer.parseInt(fields[7]),
-          Float.parseFloat(fields[8])
+              fields[0],
+              fields[1],
+              Float.parseFloat(fields[2]),
+              Float.parseFloat(fields[3]),
+              Float.parseFloat(fields[4]),
+              Float.parseFloat(fields[5]),
+              Float.parseFloat(fields[6]),
+              Integer.parseInt(fields[7]),
+              Float.parseFloat(fields[8])
       );
 
       SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
