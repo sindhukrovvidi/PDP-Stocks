@@ -46,6 +46,4 @@ public interface StockController {
                                        ArrayList<StocksImpl> values);
 
 
-
-
 }

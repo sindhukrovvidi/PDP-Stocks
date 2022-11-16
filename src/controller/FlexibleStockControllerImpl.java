@@ -83,10 +83,8 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
 
       if (value <= 0 || fee <= 0) {
         append("The entered values (shares & fee) should be greater"
-            + " than 0.\n");
+                + " than 0.\n");
         return null;
-//        throw new IllegalArgumentException("The entered values (shares & fee) should be greater"
-//                + " than 0.\n");
       } else {
         currModel.updateStockValues(value);
         currModel.updateCommisionValue(fee);

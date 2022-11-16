@@ -94,7 +94,7 @@ abstract public class StockControllerImpl extends Controller implements StockCon
                               + currModel.getCompany());
       if (value <= 0) {
         append("The number of stocks to be invested should be greater"
-            + " than 0.\n");
+                + " than 0.\n");
         return null;
       } else {
         currModel.updateStockValues(value);
