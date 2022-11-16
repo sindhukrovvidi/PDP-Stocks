@@ -66,6 +66,7 @@ public class PortfolioImpl implements Portfolio {
       if (currStockData.containsKey(newDate)) {
         StocksImpl currStock = (entriesInPortfolio.get(company)).get(newDate);
         data.updateStockValues(currStock.getShares() + data.getShares());
+        data.updateCommisionValue(currStock.getCommisionFee() + data.getCommisionFee());
         currStockData.put(newDate, data);
       } else {
         (entriesInPortfolio.get(company)).put(newDate, data);

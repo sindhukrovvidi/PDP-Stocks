@@ -121,7 +121,6 @@ public class MainControllerImpl implements MainController {
           isFlexible = false;
           files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/inflexible");
         }
-        // TODO ask the user if he wants flexible or inflexible.
         input =
                 takeStringInput(
                         "Enter the name of the portfolio from the below list: " +
@@ -137,8 +136,6 @@ public class MainControllerImpl implements MainController {
         }
 
         this.portfolioImpl = portfolioControllerImpl.viewSpeculate(input);
-        System.out.println(portfolioImpl.getIsFlexible());
-        System.out.println( portfolioImpl.getBuy());
         if(portfolioImpl.getIsFlexible() && portfolioImpl.getBuy()){
           getInitialController(4);
         }
