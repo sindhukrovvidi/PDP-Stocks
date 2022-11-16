@@ -11,7 +11,7 @@ import java.util.TreeMap;
 /**
  * Class that implements the portfolio interface and is responsible for portfolio actions.
  */
-public class PortfolioImpl implements Portfolio{
+public class PortfolioImpl implements Portfolio {
 // TODO add a new function to handle selling the stocks.
   // TODO incorporate broker fees.
 
@@ -24,6 +24,7 @@ public class PortfolioImpl implements Portfolio{
   boolean isFlexible;
 
   private final FileAccessorsImpl fileAccessor = new FileAccessorsImpl();
+  private boolean buy;
 
   /**
    * Method used to add stock to the portfolio.
@@ -52,7 +53,6 @@ public class PortfolioImpl implements Portfolio{
 //      entriesInPortfolio.put(data.getCompany(), currStockData);
 //    }
 //  }
-
   @Override
   public void addStockInPortfolio(StocksImpl data) throws ParseException {
     String company = data.getCompany();
@@ -147,6 +147,16 @@ public class PortfolioImpl implements Portfolio{
   @Override
   public boolean getIsFlexible() {
     return isFlexible;
+  }
+
+  @Override
+  public void setBuy(boolean buy) {
+    this.buy = buy;
+  }
+
+  @Override
+  public boolean getBuy() {
+    return buy;
   }
 
 }

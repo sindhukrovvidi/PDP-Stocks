@@ -239,5 +239,8 @@ public class StocksImpl implements Stocks {
   public int getShares() {
     return this.shares;
   }
+  public void setShares(int shares){
+    this.shares = shares;
+  }
 
 }

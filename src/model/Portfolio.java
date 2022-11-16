@@ -73,4 +73,16 @@ public interface Portfolio {
    */
   boolean getIsFlexible();
 
+  /**
+   *
+   * @param buy
+   */
+  void setBuy(boolean buy);
+
+  /**
+   *
+   * @return
+   */
+  boolean getBuy();
+
 }

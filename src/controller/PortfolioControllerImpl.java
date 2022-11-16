@@ -145,5 +145,4 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
       });
     });
   }
-
 }
