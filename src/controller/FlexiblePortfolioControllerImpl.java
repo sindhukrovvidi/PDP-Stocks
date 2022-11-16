@@ -118,6 +118,8 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     return model;
   }
 
+
+
   private void viewDatesByCompany(HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries,
                                   String company) {
     AtomicBoolean displayHeaders = new AtomicBoolean(true);
