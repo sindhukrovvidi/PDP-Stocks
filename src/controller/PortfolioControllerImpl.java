@@ -1,8 +1,11 @@
 package controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import model.Portfolio;
@@ -34,7 +37,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException invalid input of model or view.
    */
   public PortfolioControllerImpl(Portfolio portfolioImpl, PortfolioViewImpl portfolioViewImpl)
-          throws IOException {
+      throws IOException {
     super();
     this.model = portfolioImpl;
     this.view = portfolioViewImpl;
@@ -49,8 +52,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException if the parameters given are invalid.
    */
   public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
-                                 PortfolioViewImpl view)
-          throws IOException {
+      PortfolioViewImpl view)
+      throws IOException {
     super();
     this.stocksImplModel = model;
     this.model = portfolioImpl;
@@ -65,11 +68,11 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException invalid stock details.
    */
   @Override
-  public Portfolio addStock() throws IOException {
+  public Portfolio addStock() throws IOException, ParseException {
     model.addStockInPortfolio(stocksImplModel);
     append("Successfully added the stock in draft portfolio");
     appendNewLine();
-    HashMap<String, StocksImpl> portfolioEntries = model.getPortfolio();
+    HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries = model.getPortfolio();
     controllerToViewHelper(portfolioEntries);
     return afterAddingStock(model);
   }
@@ -89,8 +92,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     int input = 0;
     try {
       input = takeIntegerInput("Choose from below options.\n 1."
-              + " Add another stock\n2. Save this portfolio.\n3. "
-              + "Back to main menu.\n4. Exit.");
+          + " Add another stock\n2. Save this portfolio.\n3. "
+          + "Back to main menu.\n4. Exit.");
     } catch (Exception e) {
       append("Please enter a valid input.\n");
       afterAddingStock(model);
@@ -99,7 +102,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
       case 1:
         break;
       case 2:
-        if(model.getIsFlexible()) {
+        if (model.getIsFlexible()) {
           model.save("portfolios/flexible");
         } else {
           model.save("portfolios/inflexible");
@@ -125,20 +128,32 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @param portfolioEntries hash map of the portfolio entries in the file.
    */
   @Override
-  public void controllerToViewHelper(HashMap<String, StocksImpl> portfolioEntries) {
+  public void controllerToViewHelper(HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries) {
     AtomicBoolean displayHeaders = new AtomicBoolean(true);
     portfolioEntries.forEach((k, v) -> {
-      StocksImpl currentStock = v;
-      try {
-        view.displayPortfolio(displayHeaders.get(), currentStock.getCompany(),
-                currentStock.getDate(),
-                currentStock.getOpen(), currentStock.getHigh(), currentStock.getLow(),
-                currentStock.getClose(), currentStock.getVolume(), currentStock.getShares(),
-                currentStock.getCommisionFee());
-        displayHeaders.set(false);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+      v.forEach((key, value) -> {
+        try {
+          view.displayPortfolio(displayHeaders.get(), value.getCompany(),
+              value.getDate(),
+              value.getOpen(), value.getHigh(), value.getLow(),
+              value.getClose(), value.getVolume(), value.getShares(),
+              value.getCommisionFee());
+          displayHeaders.set(false);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      });
+//      TreeMap<Date, StocksImpl> currentStock = v;
+//      try {
+//        view.displayPortfolio(displayHeaders.get(), currentStock.getCompany(),
+//                currentStock.getDate(),
+//                currentStock.getOpen(), currentStock.getHigh(), currentStock.getLow(),
+//                currentStock.getClose(), currentStock.getVolume(), currentStock.getShares(),
+//                currentStock.getCommisionFee());
+//        displayHeaders.set(false);
+//      } catch (IOException e) {
+//        throw new RuntimeException(e);
+//      }
     });
   }
 

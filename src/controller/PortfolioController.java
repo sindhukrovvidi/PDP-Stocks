@@ -1,7 +1,10 @@
 package controller;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 
+import java.util.TreeMap;
 import model.Portfolio;
 import model.PortfolioImpl;
 
@@ -20,7 +23,7 @@ public interface PortfolioController {
    * @return Portfolio after adding a stock.
    * @throws IOException if the stock is invalid or if the amount to be added is invalid.
    */
-  Portfolio addStock() throws IOException;
+  Portfolio addStock() throws IOException, ParseException;
 
   /**
    * Method used to write into portfolio after adding a stock.
@@ -44,6 +47,6 @@ public interface PortfolioController {
    *
    * @param portfolioEntries has the list of portfolios.
    */
-  void controllerToViewHelper(HashMap<String, StocksImpl> portfolioEntries);
+  void controllerToViewHelper(HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries);
 
 }

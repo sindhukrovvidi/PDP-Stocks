@@ -1,10 +1,7 @@
 import controller.MainControllerImpl;
 
 import java.io.IOException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.text.ParseException;
 
 /**
  * Main class which starts the program.
@@ -18,11 +15,7 @@ public class Main {
    * @throws IOException invalid input.
    */
 
-  private String apiKey = "CAAPHOM3N94LAFJL";
-  //  private String stockSymbol = "GOOG";
-  private URL url = null;
-
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, ParseException {
     MainControllerImpl helperController = new MainControllerImpl();
     helperController.programStartsHere();
   }

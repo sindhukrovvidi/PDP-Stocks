@@ -1,8 +1,11 @@
 package model;
 
 import java.nio.file.FileAlreadyExistsException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Interface that contains methods to get and set the values in portfolio.
@@ -14,28 +17,28 @@ public interface Portfolio {
    *
    * @param data data to be added.
    */
-  void addStockInPortfolio(StocksImpl data);
+  void addStockInPortfolio(StocksImpl data) throws ParseException;
 
   /**
    * Method used to get portfolio.
    *
    * @return portfolio.
    */
-  HashMap<String,StocksImpl> getPortfolio();
+  HashMap<String, TreeMap<Date, StocksImpl>> getPortfolio();
 
   /**
    * Method to create a portfolio.
    *
    * @param portfolio mapping of the portfolio.
    */
-  void setPortfolio(HashMap<String, StocksImpl> portfolio);
+  void setPortfolio(HashMap<String, TreeMap<Date, StocksImpl>> portfolio);
 
   /**
    * Method used to get company name.
    *
    * @return array list of stocks for a company.
    */
-  ArrayList<StocksImpl> getCompanyNames();
+  ArrayList<TreeMap<Date, StocksImpl>> getCompanyNames();
 
   /**
    * Method used to check if file is saved or not.
