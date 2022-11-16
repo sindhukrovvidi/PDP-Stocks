@@ -68,3 +68,9 @@ The menu asks to choose from 3 different options. (Stage 1)
             Redirect to "Stage 1"
 
   Flow for option 3 - Exit from program
+
+
+ASSIGNMENT 5:
+Create a portfolio:
+
+

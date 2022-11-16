@@ -114,8 +114,11 @@ public class MainControllerImpl implements MainController {
         PortfolioImpl portfolioImpl = new PortfolioImpl();
         String[] files;
         if (input2.equals("YES")) {
+          portfolioImpl.setIsFlexible(true);
+          isFlexible =true;
           files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/flexible");
         } else {
+          isFlexible = false;
           files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/inflexible");
         }
         // TODO ask the user if he wants flexible or inflexible.
@@ -125,6 +128,7 @@ public class MainControllerImpl implements MainController {
                                 "(Just enter the filename without the extension \n" + Arrays.toString(files));
         PortfolioControllerImpl portfolioControllerImpl;
         if (input2.equals("YES")) {
+
           portfolioControllerImpl = new FlexiblePortfolioControllerImpl(portfolioImpl,
                   portfolioViewImpl);
         } else {
@@ -133,7 +137,9 @@ public class MainControllerImpl implements MainController {
         }
 
         this.portfolioImpl = portfolioControllerImpl.viewSpeculate(input);
-        if(portfolioImpl.getIsFlexible()){
+        System.out.println(portfolioImpl.getIsFlexible());
+        System.out.println( portfolioImpl.getBuy());
+        if(portfolioImpl.getIsFlexible() && portfolioImpl.getBuy()){
           getInitialController(4);
         }
         programStartsHere();
