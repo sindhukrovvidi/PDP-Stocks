@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import java.nio.file.FileAlreadyExistsException;
+import java.text.ParseException;
 import java.util.Arrays;
 
 import model.FileAccessors;
@@ -46,7 +47,7 @@ public class MainControllerImpl implements MainController {
    * @throws IOException when the user chooses an invalid or unlisted option.
    */
   @Override
-  public void programStartsHere() throws IOException {
+  public void programStartsHere() throws IOException, ParseException {
     try {
       Integer option = takeIntegerInput(
               "Choose from below options to proceed further. (Type the index number)."
@@ -56,8 +57,6 @@ public class MainControllerImpl implements MainController {
       getInitialController(option);
     } catch (Exception e) {
       throw e;
-      //append("Please enter a valid input.");
-      // programStartsHere();
     }
 
   }
@@ -69,7 +68,7 @@ public class MainControllerImpl implements MainController {
    * @throws IOException when the user chooses an invalid or unlisted option.
    */
   @Override
-  public void getInitialController(int option) throws IOException {
+  public void getInitialController(int option) throws IOException, ParseException {
     String input;
     switch (option) {
       case 1:
@@ -151,7 +150,7 @@ public class MainControllerImpl implements MainController {
         }
         StocksImpl stocksImpl = stocksController.getTickerValue();
         if (stocksImpl == null) {
-          programStartsHere();
+          getInitialController(4);
         } else {
           this.stocksImpl = stocksImpl;
           getInitialController(5);

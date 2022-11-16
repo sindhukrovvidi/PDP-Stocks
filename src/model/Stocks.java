@@ -19,7 +19,7 @@ public interface Stocks {
    */
   void setCurrentStock(String company, String date, float open, float high, float low,
                        float close, float volume,
-                       int shares);
+                       int shares, float commissionFee);
 
   /**
    * Method used to update the quantity of the stocks.

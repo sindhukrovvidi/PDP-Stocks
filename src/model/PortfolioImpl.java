@@ -1,17 +1,24 @@
 package model;
 
 import java.nio.file.FileAlreadyExistsException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Class that implements the portfolio interface and is responsible for portfolio actions.
  */
-public class PortfolioImpl implements Portfolio {
+public class PortfolioImpl implements Portfolio{
 // TODO add a new function to handle selling the stocks.
   // TODO incorporate broker fees.
 
-  HashMap<String, StocksImpl> entriesInPortfolio = new HashMap<>();
+//  HashMap<String, StocksImpl> entriesInPortfolio = new HashMap<>();
+
+  HashMap<String, TreeMap<Date, StocksImpl>> entriesInPortfolio = new HashMap<>();
+
   boolean saved = false;
   private String portfolioName;
   boolean isFlexible;
@@ -23,19 +30,50 @@ public class PortfolioImpl implements Portfolio {
    *
    * @param data data to be added.
    */
+//  @Override
+//  public void addStockInPortfolio(StocksImpl data) {
+//    String company = data.getCompany();
+//    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+//    TreeMap<Date, StocksImpl> currStockData = new TreeMap<>();
+//    Date newDate = sdformat.parse(data.getDate());
+////    Date newDate = data.getDate();
+//    if (entriesInPortfolio.containsKey(company)) {
+//      currStockData = entriesInPortfolio.get(company);
+//
+//      if (currStockData.containsKey(newDate)) {
+//        StocksImpl currStock = (entriesInPortfolio.get(company)).get(newDate);
+//        data.updateStockValues(currStock.getShares() + data.getShares());
+//        currStockData.put(newDate, data);
+//      } else {
+//        (entriesInPortfolio.get(company)).put(newDate, data);
+//      }
+//    } else {
+//      currStockData.put(newDate, data);
+//      entriesInPortfolio.put(data.getCompany(), currStockData);
+//    }
+//  }
+
   @Override
-  public void addStockInPortfolio(StocksImpl data) {
+  public void addStockInPortfolio(StocksImpl data) throws ParseException {
     String company = data.getCompany();
-    String key = isFlexible ? data.getCompany() +"_"+ data.getDate() : data.getCompany();
-    // GOOG_2022-11-24
-    // GOOG_2022-11-26
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+    TreeMap<Date, StocksImpl> currStockData = new TreeMap<>();
+    Date newDate = sdformat.parse(data.getDate());
+
     if (entriesInPortfolio.containsKey(company)) {
-      StocksImpl currStock = entriesInPortfolio.get(company);
-      // TODO handle cases when isFlexible is true
-      data.updateStockValues(currStock.getShares() + data.getShares());
-      entriesInPortfolio.put(data.getCompany(), data);
+      currStockData = entriesInPortfolio.get(company);
+
+      if (currStockData.containsKey(newDate)) {
+        StocksImpl currStock = (entriesInPortfolio.get(company)).get(newDate);
+        data.updateStockValues(currStock.getShares() + data.getShares());
+        currStockData.put(newDate, data);
+      } else {
+        (entriesInPortfolio.get(company)).put(newDate, data);
+      }
+    } else {
+      currStockData.put(newDate, data);
+      entriesInPortfolio.put(data.getCompany(), currStockData);
     }
-    entriesInPortfolio.put(data.getCompany(), data);
   }
 
   /**
@@ -44,7 +82,7 @@ public class PortfolioImpl implements Portfolio {
    * @return portfolio.
    */
   @Override
-  public HashMap<String, StocksImpl> getPortfolio() {
+  public HashMap<String, TreeMap<Date, StocksImpl>> getPortfolio() {
     return entriesInPortfolio;
   }
 
@@ -54,7 +92,7 @@ public class PortfolioImpl implements Portfolio {
    * @param portfolio mapping of the portfolio.
    */
   @Override
-  public void setPortfolio(HashMap<String, StocksImpl> portfolio) {
+  public void setPortfolio(HashMap<String, TreeMap<Date, StocksImpl>> portfolio) {
     this.entriesInPortfolio = portfolio;
 
   }
@@ -65,8 +103,10 @@ public class PortfolioImpl implements Portfolio {
    * @return the list of company names.
    */
   @Override
-  public ArrayList<StocksImpl> getCompanyNames() {
-    return new ArrayList<StocksImpl>(entriesInPortfolio.values());
+  public TreeMap getCompanyNames() {
+    System.out.println(entriesInPortfolio.values());
+    return (TreeMap) entriesInPortfolio.values();
+//    return new ArrayList<StocksImpl>(entriesInPortfolio.values());
   }
 
   /**
