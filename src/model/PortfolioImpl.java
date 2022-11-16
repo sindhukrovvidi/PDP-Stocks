@@ -103,8 +103,9 @@ public class PortfolioImpl implements Portfolio{
    * @return the list of company names.
    */
   @Override
-  public ArrayList<TreeMap<Date, StocksImpl>> getCompanyNames() {
-    return (ArrayList<TreeMap<Date, StocksImpl>>) entriesInPortfolio.values();
+  public TreeMap getCompanyNames() {
+    System.out.println(entriesInPortfolio.values());
+    return (TreeMap) entriesInPortfolio.values();
 //    return new ArrayList<StocksImpl>(entriesInPortfolio.values());
   }
 
