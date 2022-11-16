@@ -38,8 +38,9 @@ public interface Portfolio {
    *
    * @return array list of stocks for a company.
    */
-  ArrayList<TreeMap<Date, StocksImpl>> getCompanyNames();
+//  ArrayList<TreeMap<Date, StocksImpl>> getCompanyNames();
 
+  TreeMap getCompanyNames();
   /**
    * Method used to check if file is saved or not.
    *

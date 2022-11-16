@@ -31,7 +31,6 @@ public class InflexibleStockControllerImpl extends StockControllerImpl{
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
       append("You entered an invalid ticker symbol. Please try again\n");
-//      getTickerValue();
       return null;
     } else {
         StocksImpl currentStock = (StocksImpl) values.get(0);
@@ -41,8 +40,6 @@ public class InflexibleStockControllerImpl extends StockControllerImpl{
         controllerToViewHelperForStocks(tickerValue, values);
       return afterStocksDisplay(model);
     }
-
-//    return (values.size() > 0 ? afterStocksDisplay(model) : null);
   }
 
 }

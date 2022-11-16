@@ -57,8 +57,6 @@ public class MainControllerImpl implements MainController {
       getInitialController(option);
     } catch (Exception e) {
       throw e;
-      //append("Please enter a valid input.");
-      // programStartsHere();
     }
 
   }

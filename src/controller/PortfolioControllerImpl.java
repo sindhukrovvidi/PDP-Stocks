@@ -143,17 +143,6 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
           throw new RuntimeException(e);
         }
       });
-//      TreeMap<Date, StocksImpl> currentStock = v;
-//      try {
-//        view.displayPortfolio(displayHeaders.get(), currentStock.getCompany(),
-//                currentStock.getDate(),
-//                currentStock.getOpen(), currentStock.getHigh(), currentStock.getLow(),
-//                currentStock.getClose(), currentStock.getVolume(), currentStock.getShares(),
-//                currentStock.getCommisionFee());
-//        displayHeaders.set(false);
-//      } catch (IOException e) {
-//        throw new RuntimeException(e);
-//      }
     });
   }
 
