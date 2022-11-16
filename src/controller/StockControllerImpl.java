@@ -68,7 +68,7 @@ abstract public class StockControllerImpl extends Controller implements StockCon
           break;
         default:
           System.out.println("Invalid input");
-          System.exit(0);
+          afterStocksDisplay(model);
       }
     } catch (Exception e) {
       append("Entered invalid input, try again.");
@@ -93,8 +93,9 @@ abstract public class StockControllerImpl extends Controller implements StockCon
                       "Enter the number of shares you want to invest in "
                               + currModel.getCompany());
       if (value <= 0) {
-        throw new IllegalArgumentException("The number of stocks to be invested should be greater"
-                + " than 0.\n");
+        append("The number of stocks to be invested should be greater"
+            + " than 0.\n");
+        return null;
       } else {
         currModel.updateStockValues(value);
         return currModel;

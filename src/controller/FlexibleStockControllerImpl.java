@@ -32,6 +32,7 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
 
   public StocksImpl getTickerValue() throws IOException {
     String tickerValue = takeStringInput("Enter the ticker value:\n");
+    tickerValue = tickerValue.toUpperCase();
     updateListOfStocks(tickerValue);
     HashMap map = getStockList().getLStocksMap();
     ArrayList values = (ArrayList) map.get(tickerValue);
@@ -51,6 +52,7 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
         Date newDate = sdformat.parse(dateInput);
         if (newDate.compareTo(d1) < 0 || newDate.compareTo(d2) > 0) {
           append("Entered an invalid date. Please enter the date within the given time range.\n");
+          getTickerValue();
         }
         String formattedDateInput = sdformat.format(newDate);
         for (Object value : values) {
@@ -79,9 +81,12 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
                               + currModel.getCompany());
       float fee = takeFloatInput("Enter the commission fee and it has to greater than zero");
 
-      if (value <= 0 || fee < 0) {
-        throw new IllegalArgumentException("The entered values should be greater"
-                + " than 0.\n");
+      if (value <= 0 || fee <= 0) {
+        append("The entered values (shares & fee) should be greater"
+            + " than 0.\n");
+        return null;
+//        throw new IllegalArgumentException("The entered values (shares & fee) should be greater"
+//                + " than 0.\n");
       } else {
         currModel.updateStockValues(value);
         currModel.updateCommisionValue(fee);

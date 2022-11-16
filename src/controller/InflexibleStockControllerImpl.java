@@ -26,6 +26,7 @@ public class InflexibleStockControllerImpl extends StockControllerImpl{
   }
   public StocksImpl getTickerValue() throws IOException {
     String tickerValue = takeStringInput("Enter the ticker value:\n");
+    tickerValue = tickerValue.toUpperCase();
     updateListOfStocks(tickerValue);
     HashMap map = getStockList().getLStocksMap();
     ArrayList values = (ArrayList) map.get(tickerValue);

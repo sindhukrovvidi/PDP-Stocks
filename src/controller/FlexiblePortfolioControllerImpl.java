@@ -100,15 +100,15 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
           break;
         }
         if (numberOfSellingStocks >= entry.getValue().getShares()) {
-          entry.getValue().setShares(0);
           numberOfSellingStocks -= entry.getValue().getShares();
+          entry.getValue().setShares(0);
         } else {
           entry.getValue().setShares(entry.getValue().getShares() - numberOfSellingStocks);
           numberOfSellingStocks = 0;
         }
       }
       if (numberOfSellingStocks != 0) {
-        append("Your portfolio lacks" + numberOfSellingStocks + "they are not sold!");
+        append("Your portfolio lacks " + numberOfSellingStocks + " they are not sold!\n");
       }
       viewDatesByCompany(checklist, tickerValue);
     }
