@@ -26,38 +26,22 @@ public class PortfolioImpl implements Portfolio {
   private final FileAccessorsImpl fileAccessor = new FileAccessorsImpl();
   private boolean buy;
 
+  private boolean isCostBasis;
+
   /**
    * Method used to add stock to the portfolio.
    *
    * @param data data to be added.
    */
-//  @Override
-//  public void addStockInPortfolio(StocksImpl data) {
-//    String company = data.getCompany();
-//    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-//    TreeMap<Date, StocksImpl> currStockData = new TreeMap<>();
-//    Date newDate = sdformat.parse(data.getDate());
-////    Date newDate = data.getDate();
-//    if (entriesInPortfolio.containsKey(company)) {
-//      currStockData = entriesInPortfolio.get(company);
-//
-//      if (currStockData.containsKey(newDate)) {
-//        StocksImpl currStock = (entriesInPortfolio.get(company)).get(newDate);
-//        data.updateStockValues(currStock.getShares() + data.getShares());
-//        currStockData.put(newDate, data);
-//      } else {
-//        (entriesInPortfolio.get(company)).put(newDate, data);
-//      }
-//    } else {
-//      currStockData.put(newDate, data);
-//      entriesInPortfolio.put(data.getCompany(), currStockData);
-//    }
-//  }
+
   @Override
   public void addStockInPortfolio(StocksImpl data) throws ParseException {
     String company = data.getCompany();
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     TreeMap<Date, StocksImpl> currStockData = new TreeMap<>();
+    if(data.getDate() == "") {
+
+    }
     Date newDate = sdformat.parse(data.getDate());
 
     if (entriesInPortfolio.containsKey(company)) {
@@ -158,6 +142,16 @@ public class PortfolioImpl implements Portfolio {
   @Override
   public boolean getBuy() {
     return buy;
+  }
+
+  @Override
+  public void setIsCostBasis(boolean isCostBasis) {
+    this.isCostBasis = isCostBasis;
+  }
+
+  @Override
+  public boolean getIsCostBasis() {
+    return isCostBasis;
   }
 
 }
