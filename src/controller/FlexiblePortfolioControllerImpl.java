@@ -2,8 +2,11 @@ package controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 
+import java.util.TreeMap;
 import model.FileAccessorsImpl;
 import model.ListOfStocksImpl;
 import model.Portfolio;
@@ -37,7 +40,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         throw new FileNotFoundException(input);
       }
 
-      HashMap<String, StocksImpl> portfolios = fileAccessorsImpl.viewFile(input, "portfolios" +
+      HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(input, "portfolios" +
               "/flexible");
       for (String s : portfolios.keySet()) {
         updateListOfStocks(s);
@@ -56,6 +59,8 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       appendNewLine();
     } catch (IllegalArgumentException e) {
       append(e.getMessage());
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
     }
     return model;
   }
@@ -66,6 +71,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
             "composition of the portfolio.\n 5.Get the portfolio performance over time.\n 6.Exit");
     switch (input) {
       case 1:
+
 
     }
     return false;

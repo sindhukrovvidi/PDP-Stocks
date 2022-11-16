@@ -2,10 +2,13 @@ package controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.TreeMap;
 import model.FileAccessorsImpl;
 import model.ListOfStocksImpl;
 import model.Portfolio;
@@ -38,7 +41,7 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         throw new FileNotFoundException(input);
       }
 
-      HashMap<String, StocksImpl> portfolios = fileAccessorsImpl.viewFile(input, "portfolios" +
+      HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(input, "portfolios" +
               "/inflexible");
       for (String s : portfolios.keySet()) {
         updateListOfStocks(s);
@@ -58,6 +61,8 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       appendNewLine();
     } catch (IllegalArgumentException e) {
       append(e.getMessage());
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
     }
     return model;
   }
@@ -75,23 +80,29 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
             takeStringInput("Enter the date between " + lastStockDate + " and "
                     + firstStockDate);
     float total_value = 0;
-
-    for (StocksImpl stocksImpl : model.getCompanyNames()) {
-      currentStock = (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-              .get(stocksImpl.getCompany());
-      boolean dateExist = false;
-      for (StocksImpl stock : currentStock) {
-        if (stock.getDate().equals(input)) {
-          dateExist = true;
-          total_value += stock.getClose() * stocksImpl.getShares();
-        }
-
-      }
-      if (!dateExist) {
-        append("The entered date does not exist, please enter a valid date.\n");
-        return false;
-      }
+    for(int i =0; i<model.getCompanyNames().size(); i++) {
+      System.out.println();
     }
+
+// here to
+//    for (StocksImpl stocksImpl : model.getCompanyNames()) {
+//      currentStock = (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
+//              .get(stocksImpl.getCompany());
+//      boolean dateExist = false;
+//      for (StocksImpl stock : currentStock) {
+//        if (stock.getDate().equals(input)) {
+//          dateExist = true;
+//          total_value += stock.getClose() * stocksImpl.getShares();
+//        }
+//
+//      }
+//      if (!dateExist) {
+//        append("The entered date does not exist, please enter a valid date.\n");
+//        return false;
+//      }
+//    }
+
+    // here
     append("Total price of portfolio is " + String.valueOf(total_value) + ".\n");
     return true;
   }
