@@ -1,39 +1,32 @@
+import controller.FlexibleStockControllerImpl;
+import controller.MainController;
+import controller.MainControllerImpl;
 import controller.PortfolioControllerImpl;
 import java.io.IOException;
+import java.text.ParseException;
 import model.Portfolio;
 import model.PortfolioImpl;
 import model.StocksImpl;
 import org.junit.Test;
 import view.PortfolioViewImpl;
+import view.StockViewImpl;
 
 import static org.junit.Assert.assertEquals;
 
 
 public class FlexibleControllerTest {
 
-  public class FlexiblePortfolioControllerImplTest extends PortfolioControllerImpl {
+  @Test
+  public void testPurchaseStocks() throws IOException, ParseException {
+    StringBuilder log = new StringBuilder(); //log for mock model
 
-    private StringBuilder log;
+    MainController mainController = new MainControllerImpl();
+    mainController.programStartsHere();
+    MockStocksModel stocksController = new FlexibleStockControllerImpl(new MockStocksModel(log),
+        new StockViewImpl());
 
-    public FlexiblePortfolioControllerImplTest(StocksImpl stocksImpl, Portfolio portfolioImpl,
-        PortfolioViewImpl
-            portfolioViewImpl) throws IOException {
-      super(stocksImpl, portfolioImpl, portfolioViewImpl);
-    }
-
-    public FlexiblePortfolioControllerImplTest(PortfolioImpl portfolioImpl, PortfolioViewImpl
-        portfolioViewImpl) throws IOException {
-      super(portfolioImpl, portfolioViewImpl);
-    }
-
-    @Override
-    public Portfolio viewSpeculate(String input) throws IOException {
-      return null;
-    }
   }
 
   @Test
-  public void testBuyStocksForParticularDate() {
-    StringBuilder modelLog = new StringBuilder();
-  }
+  public void test
 }

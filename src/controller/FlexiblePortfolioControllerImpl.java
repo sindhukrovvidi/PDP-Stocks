@@ -4,20 +4,27 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import model.FileAccessorsImpl;
+import model.HTTPRequests;
+import model.HTTPRequestsImpl;
 import model.Portfolio;
 import model.PortfolioImpl;
 import model.StocksImpl;
@@ -96,7 +103,13 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         getCompositionOfPortfolio();
         break;
       case 5:
-
+//        String date1 = takeStringInput("Enter the lower limit of the time range in the format of");
+//        String date2 = takeStringInput("Enter the upper limit of the time range");
+//
+//        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+//        Date newDate1 = sdformat.parse(date1);
+//        Date newDate2 = sdformat.parse(date2);
+        performanceOverTime();
         break;
       case 6:
         System.exit(0);
@@ -157,37 +170,94 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   private void performanceOverTime() throws IOException, ParseException {
     String date1 = takeStringInput("Enter the lower limit of the time range in the format of");
     String date2 = takeStringInput("Enter the upper limit of the time range");
+
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     Date newDate1 = sdformat.parse(date1);
     Date newDate2 = sdformat.parse(date2);
     LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     long t = ChronoUnit.DAYS.between(dateLower, dateUpper);
+
     HashMap<String, TreeMap<Date, StocksImpl>> entries = model.getPortfolio();
+    HashMap<String, Integer> companyShares = model.getCompanyWiseShares();
+
+    HTTPRequests requests = new HTTPRequestsImpl();
+    TreeMap<String, Integer> barData = new TreeMap();
+
     if (t < 5) {
       append("Enter the time range which has at least 5 days");
       performanceOverTime();
     } else if (t >= 5 && t <= 30) {
-      TreeMap<Date, Float> barData = new TreeMap<Date, Float>();
-      entries.forEach((k, v) -> {
-        v.forEach((dateKey, stocks) -> {
-          if (dateKey.compareTo(newDate1) >= 0 && dateKey.compareTo(newDate2) <= 0) {
-            if (barData.containsKey(dateKey)) {
-              barData.put(dateKey, (stocks.getClose() * stocks.getShares()) + barData.get(dateKey));
-            } else {
-              barData.put(dateKey, stocks.getClose() * stocks.getShares());
-            }
-          }
-        });
-      });
-    } else if (31 <= t && t < 150) {
-    } else if (150 <= t && t <= 900) {
+
+      barData = model.getDaysWiseData(entries, newDate1, newDate2);
+
+    } else if (31 <= t && t < 150) { // weekly data
+      HashMap<String, StringBuilder> weeklyStocksData = new HashMap();
+
+      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+        String comp = entry.getKey();
+        StringBuilder data = requests.getWeeklyData(comp);
+        weeklyStocksData.put(comp, data);
+      }
+
+      barData =  model.getWeekWiseData(weeklyStocksData, newDate1, newDate2);
+
+    } else if (150 <= t && t <= 900) { // month
+      HashMap<String, StringBuilder> monthlyStocksData = new HashMap();
+
+      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+        String comp = entry.getKey();
+        StringBuilder data = requests.getMonthlyData(comp);
+        monthlyStocksData.put(comp, data);
+      }
+
+      barData =  model.getMonthWiseData(monthlyStocksData, newDate1, newDate2);
+
     } else if (900 <= t && t <= 1825) {
     } else if (1825 <= t && t <= 10950) {
     } else {
       append("The given dates are either invalid or exceed the limit of 30 years span!!!");
     }
   }
+//
+//  private List getDatesBetweenTwoDates(LocalDate dateLower, LocalDate dateUpper) {
+//    LocalDate startFridayDate = dateLower.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
+//    LocalDate endFridayDate = dateUpper.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
+//    List<LocalDate> listOfDates = new ArrayList<LocalDate>();
+//    listOfDates.add(startFridayDate);
+//    LocalDate startDate = startFridayDate;
+//    LocalDate endDate;
+//    do {
+//      endDate = startDate.plusDays(7);
+//      if (endDate.compareTo(endFridayDate) <= 0) {
+//        listOfDates.add(endDate);
+//      }
+//
+//      startDate = endDate;
+//    } while (startDate.compareTo(endFridayDate) <= 0);
+//    return listOfDates;
+//  }
+//
+//  private HashMap<String, StocksImpl> readTheData(StringBuilder data) {
+//    HashMap<String, StocksImpl> currListStocks = new HashMap();
+//    String line; // Reading header, Ignoring;
+//    String[] entries = data.toString().split("\r\n");
+//    for (int i = 1; i < entries.length; i++) {
+//
+//      String[] fields = entries[i].split(",");
+//      StocksImpl newStock = new StocksImpl(
+//          fields[0],
+//          Float.parseFloat(fields[1]),
+//          Float.parseFloat(fields[2]),
+//          Float.parseFloat(fields[3]),
+//          Float.parseFloat(fields[4]),
+//          Float.parseFloat(fields[6])
+////            Integer.parseInt(fields[6])
+//      );
+//      currListStocks.put(fields[0], newStock);
+//    }
+//    return currListStocks;
+//  }
 
   private void viewDatesByCompany(HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries,
       String company) {
@@ -205,17 +275,6 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         throw new RuntimeException(e);
       }
     });
-  }
-
-  private Date parseDate(String input) throws ParseException, IOException {
-    try {
-      SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-      return sdformat.parse(input);
-    } catch (Exception e) {
-      append("Entered invalid date, try again!!!");
-      speculateMenu();
-    }
-    return null;
   }
 
   public void getCompositionOfPortfolio() throws IOException, ParseException {

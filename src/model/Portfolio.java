@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -88,5 +89,17 @@ public interface Portfolio {
   void setIsCostBasis(boolean isCostBasis);
 
   boolean getIsCostBasis();
+
+  HashMap<String , Integer> getCompanyWiseShares();
+
+//  void performanceOverTime(Date date1, Date date2)  throws IOException, ParseException;
+  TreeMap<String, Integer> getDaysWiseData(HashMap<String, TreeMap<Date, StocksImpl>> entries,
+      Date newDate1, Date newDate2);
+
+  TreeMap<String, Integer> getWeekWiseData(HashMap<String , StringBuilder> entries,
+      Date newDate1, Date newDate2);
+
+  TreeMap<String, Integer>  getMonthWiseData(HashMap<String , StringBuilder> entries,
+      Date newDate1, Date newDate2);
 
 }
