@@ -20,6 +20,7 @@ import static model.Output.append;
  *
  */
 public class FlexibleStockControllerImpl extends StockControllerImpl {
+
   /**
    * Constructor that takes stocks model and view as parameters and initializes them.
    *
@@ -47,22 +48,32 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
         d2 = sdformat.parse(((StocksImpl) values.get(0)).getDate());
 
         String dateInput =
-                takeStringInput("Enter the dates between " + sdformat.format(d1) + " and "
-                        + sdformat.format(d2));
+            takeStringInput("Enter the dates between " + sdformat.format(d1) + " and "
+                + sdformat.format(d2));
         Date newDate = sdformat.parse(dateInput);
         if (newDate.compareTo(d1) < 0 || newDate.compareTo(d2) > 0) {
           append("Entered an invalid date. Please enter the date within the given time range.\n");
           getTickerValue();
         }
+        // check whether the date exists or not for that particular stocks
+//        if(dateInput) {
+//
+//        }
         String formattedDateInput = sdformat.format(newDate);
+        boolean foundDate = false;
         for (Object value : values) {
           StocksImpl currentStock = (StocksImpl) value;
           if (Objects.equals(currentStock.getDate(), formattedDateInput)) {
             model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
-                    currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-                    currentStock.getVolume(), 0, 0);
+                currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+                currentStock.getVolume(), 0, 0);
+            foundDate = true;
             break;
           }
+        }
+        if (!foundDate) {
+          append("There is not stock data for the entered date as it could be an holiday.\n");
+          model.setCurrentStock(tickerValue, dateInput, 0, 0, 0, 0, 0, 0, 0);
         }
       } catch (ParseException e) {
         append("RuntimeException, entered bad date format " + e + "\n");
@@ -76,14 +87,14 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
     StocksImpl currModel = (StocksImpl) models;
     try {
       int value =
-              takeIntegerInput(
-                      "Enter the number of shares you want to invest in "
-                              + currModel.getCompany());
+          takeIntegerInput(
+              "Enter the number of shares you want to invest in "
+                  + currModel.getCompany());
       float fee = takeFloatInput("Enter the commission fee and it has to greater than zero");
 
       if (value <= 0 || fee <= 0) {
         append("The entered values (shares & fee) should be greater"
-                + " than 0.\n");
+            + " than 0.\n");
         return null;
       } else {
         currModel.updateStockValues(value);
@@ -95,6 +106,10 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
       append("Please enter a valid number.\n");
       return null;
     }
+  }
+
+  private void helperGetHelperTicker(String date) {
+
   }
 
 }

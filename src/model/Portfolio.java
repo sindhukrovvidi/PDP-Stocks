@@ -85,4 +85,8 @@ public interface Portfolio {
    */
   boolean getBuy();
 
+  void setIsCostBasis(boolean isCostBasis);
+
+  boolean getIsCostBasis();
+
 }
