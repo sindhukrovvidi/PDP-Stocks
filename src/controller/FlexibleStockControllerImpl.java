@@ -55,10 +55,7 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
           append("Entered an invalid date. Please enter the date within the given time range.\n");
           getTickerValue();
         }
-        // check whether the date exists or not for that particular stocks
-//        if(dateInput) {
-//
-//        }
+
         String formattedDateInput = sdformat.format(newDate);
         boolean foundDate = false;
         for (Object value : values) {
@@ -106,10 +103,6 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
       append("Please enter a valid number.\n");
       return null;
     }
-  }
-
-  private void helperGetHelperTicker(String date) {
-
   }
 
 }

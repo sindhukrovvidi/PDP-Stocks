@@ -58,6 +58,5 @@ public class ListOfStocksImpl implements ListOfStocks {
     }
   }
 
-
 }
 

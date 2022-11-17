@@ -1,12 +1,25 @@
 package model;
 
+import static model.Input.takeStringInput;
+import static model.Output.append;
+
+import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Class that implements the portfolio interface and is responsible for portfolio actions.
@@ -39,7 +52,7 @@ public class PortfolioImpl implements Portfolio {
     String company = data.getCompany();
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     TreeMap<Date, StocksImpl> currStockData = new TreeMap<>();
-    if(data.getDate() == "") {
+    if (data.getDate() == "") {
 
     }
     Date newDate = sdformat.parse(data.getDate());
@@ -59,6 +72,21 @@ public class PortfolioImpl implements Portfolio {
       currStockData.put(newDate, data);
       entriesInPortfolio.put(data.getCompany(), currStockData);
     }
+  }
+
+  @Override
+  public HashMap<String, Integer> getCompanyWiseShares() {
+    HashMap<String, Integer> companyShares = new HashMap();
+    entriesInPortfolio.forEach((comp, stocks) -> {
+      stocks.forEach((date, stock) -> {
+        if (companyShares.containsKey(comp)) {
+          companyShares.put(comp, companyShares.get(comp) + stock.getShares());
+        } else {
+          companyShares.put(comp, stock.getShares());
+        }
+      });
+    });
+    return companyShares;
   }
 
   /**
@@ -89,7 +117,6 @@ public class PortfolioImpl implements Portfolio {
    */
   @Override
   public TreeMap getCompanyNames() {
-    System.out.println(entriesInPortfolio.values());
     return (TreeMap) entriesInPortfolio.values();
 //    return new ArrayList<StocksImpl>(entriesInPortfolio.values());
   }
@@ -152,6 +179,126 @@ public class PortfolioImpl implements Portfolio {
   @Override
   public boolean getIsCostBasis() {
     return isCostBasis;
+  }
+
+  @Override
+  public TreeMap<String, Integer> getDaysWiseData(
+      HashMap<String, TreeMap<Date, StocksImpl>> entries,
+      Date newDate1, Date newDate2) {
+    TreeMap<String, Integer> barData = new TreeMap<String, Integer>();
+    entries.forEach((k, v) -> {
+      v.forEach((dateKey, stocks) -> {
+        if (dateKey.compareTo(newDate1) >= 0 && dateKey.compareTo(newDate2) <= 0) {
+          if (barData.containsKey(stocks.getDate())) {
+            barData.put(stocks.getDate(),
+                Math.round(stocks.getClose() * stocks.getShares()) + barData.get(dateKey));
+          } else {
+            barData.put(stocks.getDate(), Math.round(stocks.getClose() * stocks.getShares()));
+          }
+        }
+      });
+    });
+    return barData;
+  }
+
+  @Override
+  public TreeMap<String, Integer> getWeekWiseData(HashMap<String, StringBuilder> entries,
+      Date newDate1,
+      Date newDate2) {
+    LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+    HashMap<String, Integer> companyShares = this.getCompanyWiseShares();
+    TreeMap<String, Integer> performanceData = new TreeMap<String, Integer>();
+    entries.forEach((k, v) -> {
+      HashMap<String, StocksImpl> currentData = readTheData(v);
+      List<LocalDate> listOfDates = getWeeksBetweenTwoDates(dateLower, dateUpper);
+      listOfDates.forEach((date) -> {
+        StocksImpl currStock = currentData.get(date.toString());
+        float close = currStock.getClose();
+        String currDate = currStock.getDate();
+        int shares = companyShares.get(k);
+        if (performanceData.containsKey(currDate)) {
+          performanceData.put(currDate, Math.round(shares * close + performanceData.get(currDate)));
+        } else {
+          performanceData.put(currDate, Math.round(shares * close));
+        }
+      });
+    });
+
+    return performanceData;
+  }
+
+  @Override
+  public TreeMap<String, Integer> getMonthWiseData(HashMap<String, StringBuilder> entries,
+      Date newDate1, Date newDate2) {
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+    System.out.println(newDate1.toString());
+    String newDateString1 = (sdformat.format(newDate1)).substring(0,7);
+    String newDateString2 = (sdformat.format(newDate2)).substring(0,7);
+
+
+
+
+    return null;
+  }
+
+  private List getWeeksBetweenTwoDates(LocalDate dateLower, LocalDate dateUpper) {
+    LocalDate startFridayDate = dateLower.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
+    LocalDate endFridayDate = dateUpper.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
+    List<LocalDate> listOfDates = new ArrayList<LocalDate>();
+    listOfDates.add(startFridayDate);
+    LocalDate startDate = startFridayDate;
+    LocalDate endDate;
+    do {
+      endDate = startDate.plusDays(7);
+      if (endDate.compareTo(endFridayDate) <= 0) {
+        listOfDates.add(endDate);
+      }
+
+      startDate = endDate;
+    } while (startDate.compareTo(endFridayDate) <= 0);
+    return listOfDates;
+  }
+
+//  private List getMonthsBetweenTwoDates(LocalDate dateLower, LocalDate dateUpper) {
+//    LocalDate lastMonthDate = dateLower.with(TemporalAdjusters.firstDayOfMonth());
+//    LocalDate startFridayDate = dateLower.with(TemporalAdjusters.next(()));
+//    LocalDate endFridayDate = dateUpper.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
+//    List<LocalDate> listOfDates = new ArrayList<LocalDate>();
+//    listOfDates.add(startFridayDate);
+//    LocalDate startDate = startFridayDate;
+//    LocalDate endDate;
+//    do {
+//      endDate = startDate.plusDays(7);
+//      if (endDate.compareTo(endFridayDate) <= 0) {
+//        listOfDates.add(endDate);
+//      }
+//
+//      startDate = endDate;
+//    } while (startDate.compareTo(endFridayDate) <= 0);
+//    return listOfDates;
+//  }
+
+  private HashMap<String, StocksImpl> readTheData(StringBuilder data) {
+    HashMap<String, StocksImpl> currListStocks = new HashMap();
+    String line; // Reading header, Ignoring;
+    String[] entries = data.toString().split("\r\n");
+    for (int i = 1; i < entries.length; i++) {
+
+      String[] fields = entries[i].split(",");
+      StocksImpl newStock = new StocksImpl(
+          fields[0],
+          Float.parseFloat(fields[1]),
+          Float.parseFloat(fields[2]),
+          Float.parseFloat(fields[3]),
+          Float.parseFloat(fields[4]),
+          Float.parseFloat(fields[6])
+//            Integer.parseInt(fields[6])
+      );
+      currListStocks.put(fields[0], newStock);
+    }
+    return currListStocks;
   }
 
 }

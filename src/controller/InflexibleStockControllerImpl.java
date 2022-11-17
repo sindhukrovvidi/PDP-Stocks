@@ -15,6 +15,7 @@ import static model.Input.takeStringInput;
 import static model.Output.append;
 
 public class InflexibleStockControllerImpl extends StockControllerImpl {
+
   /**
    * Constructor that takes stocks model and view as parameters and initializes them.
    *
@@ -37,8 +38,8 @@ public class InflexibleStockControllerImpl extends StockControllerImpl {
     } else {
       StocksImpl currentStock = (StocksImpl) values.get(0);
       model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
-              currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-              currentStock.getVolume(), 0, 0);
+          currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+          currentStock.getVolume(), 0, 0);
       controllerToViewHelperForStocks(tickerValue, values);
       return afterStocksDisplay(model);
     }
