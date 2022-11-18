@@ -1,8 +1,8 @@
 package model;
 
 /**
- * Class that contains all the operations required for retrieving data of a stock and implements
- * the methods of stocks interface.
+ * Class that contains all the operations required for retrieving data of a stock and implements the
+ * methods of stocks interface.
  */
 public class StocksImpl implements Stocks {
 
@@ -53,8 +53,8 @@ public class StocksImpl implements Stocks {
   }
 
   /**
-   * Constructor that takes date,open,high,low,close,volume and shares as parameters and
-   * initializes them.
+   * Constructor that takes date,open,high,low,close,volume and shares as parameters and initializes
+   * them.
    *
    * @param date   the date.
    * @param open   opening price.
@@ -65,7 +65,7 @@ public class StocksImpl implements Stocks {
    * @param shares number of shares.
    */
   public StocksImpl(String date, float open, float high, float low, float close, float volume,
-                    int shares) {
+      int shares) {
     this.date = date;
     this.open = open;
     this.high = high;
@@ -76,8 +76,8 @@ public class StocksImpl implements Stocks {
   }
 
   /**
-   * Constructor that takes date,open,high,low,close,volume and shares as parameters and
-   * initializes them.
+   * Constructor that takes date,open,high,low,close,volume and shares as parameters and initializes
+   * them.
    *
    * @param date   the date.
    * @param open   opening price.
@@ -88,7 +88,7 @@ public class StocksImpl implements Stocks {
    * @param shares number of shares.
    */
   public StocksImpl(String date, float open, float high, float low, float close, float volume,
-                    int shares, float fee) {
+      int shares, float fee) {
     this.date = date;
     this.open = open;
     this.high = high;
@@ -102,19 +102,19 @@ public class StocksImpl implements Stocks {
   /**
    * Method used to set the values of a current stock.
    *
-   * @param name name of the company.
-   * @param date    date on which the data is retrieved.
-   * @param open    price at open.
-   * @param high    highest price of the day.
-   * @param low     lowest price of the day.
-   * @param close   closing price of the day.
-   * @param volume  amount of stocks available for that company.
-   * @param shares  number of share purchased.
+   * @param name   name of the company.
+   * @param date   date on which the data is retrieved.
+   * @param open   price at open.
+   * @param high   highest price of the day.
+   * @param low    lowest price of the day.
+   * @param close  closing price of the day.
+   * @param volume amount of stocks available for that company.
+   * @param shares number of share purchased.
    */
   @Override
   public void setCurrentStock(String name, String date, float open, float high, float low,
-                              float close, float volume,
-                              int shares, float fee) {
+      float close, float volume,
+      int shares, float fee) {
     this.company = name;
     this.date = date;
     this.open = open;
@@ -128,8 +128,8 @@ public class StocksImpl implements Stocks {
 
 
   public void setCurrentStockWithFee(String company, String date, float open, float high, float low,
-                                     float close, float volume,
-                                     int shares, float fee) {
+      float close, float volume,
+      int shares, float fee) {
     this.company = company;
     this.date = date;
     this.open = open;
@@ -239,7 +239,8 @@ public class StocksImpl implements Stocks {
   public int getShares() {
     return this.shares;
   }
-  public void setShares(int shares){
+
+  public void setShares(int shares) {
     this.shares = shares;
   }
 

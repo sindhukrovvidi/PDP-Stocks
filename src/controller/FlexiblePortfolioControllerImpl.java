@@ -4,24 +4,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import model.FileAccessorsImpl;
 import model.HTTPRequests;
 import model.HTTPRequestsImpl;
@@ -36,19 +31,45 @@ import static model.Input.takeStringInput;
 import static model.Output.append;
 import static model.Output.appendNewLine;
 
+/**
+ * Class that contains all operations that are specific to the flexible portfolio and extends the
+ * abstract class PortfolioControllerImpl.
+ */
 public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
 
+  /**
+   * Constructor that takes the parameters and initialize them.
+   *
+   * @param stocksImpl        list of stocks.
+   * @param portfolioImpl     portfolio.
+   * @param portfolioViewImpl view of the portfolio.
+   * @throws IOException
+   */
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
       PortfolioViewImpl
           portfolioViewImpl) throws IOException {
     super(stocksImpl, portfolioImpl, portfolioViewImpl);
   }
 
+  /**
+   * Constructor that takes the parameters and initialize them.
+   *
+   * @param portfolioImpl     object for portfolioImpl.
+   * @param portfolioViewImpl view for portfolio.
+   * @throws IOException given invalid data.
+   */
   public FlexiblePortfolioControllerImpl(PortfolioImpl portfolioImpl, PortfolioViewImpl
       portfolioViewImpl) throws IOException {
     super(portfolioImpl, portfolioViewImpl);
   }
 
+  /**
+   * Method used to view and speculate a flexible portfolio.
+   *
+   * @param input file name.
+   * @return the chosen portfolio.
+   * @throws IOException given invalid data.
+   */
   @Override
   public Portfolio viewSpeculate(String input) throws IOException {
     try {
@@ -58,16 +79,16 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       }
 
       HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(input,
-          "portfolios" +
-              "/flexible");
+          "portfolios"
+              + "/flexible");
       for (String s : portfolios.keySet()) {
         updateListOfStocks(s);
       }
       model.setPortfolio(portfolios);
       model.setPortfolioName(input);
       controllerToViewHelper(portfolios);
-      String currInput = takeStringInput("Would you like to speculate your " +
-          "portfolio?(YES/NO)");
+      String currInput = takeStringInput("Would you like to speculate your "
+          + "portfolio?(YES/NO)");
       if (currInput.equals("YES")) {
         model = speculateMenu();
       }
@@ -83,10 +104,17 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     return model;
   }
 
+  /**
+   * Method used to display the speculation menu for the flexible portfolio.
+   *
+   * @return the required portfolio.
+   * @throws IOException    given invalid data.
+   * @throws ParseException invalid date.
+   */
   public Portfolio speculateMenu() throws IOException, ParseException {
-    int input = takeIntegerInput("Choose from the below options:\n 1.Buy stocks.\n " +
-        "2.Sell the stocks.\n 3.Get the total cost basis for the portfolio.\n 4.Get the " +
-        "composition of the portfolio.\n 5.Get the portfolio performance over time.\n 6.Exit");
+    int input = takeIntegerInput("Choose from the below options:\n 1.Buy stocks.\n "
+        + "2.Sell the stocks.\n 3.Get the total cost basis for the portfolio.\n 4.Get the "
+        + "composition of the portfolio.\n 5.Get the portfolio performance over time.\n 6.Exit");
     switch (input) {
       case 1:
         model.setBuy(true);
@@ -103,16 +131,12 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         getCompositionOfPortfolio();
         break;
       case 5:
-//        String date1 = takeStringInput("Enter the lower limit of the time range in the format of");
-//        String date2 = takeStringInput("Enter the upper limit of the time range");
-//
-//        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-//        Date newDate1 = sdformat.parse(date1);
-//        Date newDate2 = sdformat.parse(date2);
         performanceOverTime();
         break;
       case 6:
         System.exit(0);
+      default:
+        break;
     }
     return model;
   }
@@ -129,6 +153,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       //TODO while invalid date
       validatingSellStocks(validDatesList, newDate);
       viewDatesByCompany(checklist, tickerValue);
+      model.save("portfolios/flexible");
     } else {
       append("The ticker symbol entered is invalid.\n");
       sellingHelper();
@@ -178,18 +203,29 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     long t = ChronoUnit.DAYS.between(dateLower, dateUpper);
 
-    HashMap<String, TreeMap<Date, StocksImpl>> entries = model.getPortfolio();
+    HashMap entries = getStockList().getLStocksMap();
     HashMap<String, Integer> companyShares = model.getCompanyWiseShares();
 
     HTTPRequests requests = new HTTPRequestsImpl();
-    TreeMap<String, Integer> barData = new TreeMap();
+    TreeMap<LocalDate, Integer> barData = new TreeMap();
 
     if (t < 5) {
       append("Enter the time range which has at least 5 days");
       performanceOverTime();
     } else if (t >= 5 && t <= 30) {
 
-      barData = model.getDaysWiseData(entries, newDate1, newDate2);
+      HashMap<String, StringBuilder> dailyStocksData = new HashMap();
+
+      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+        String comp = entry.getKey();
+        StringBuilder data = requests.getDailyData(comp);
+        dailyStocksData.put(comp, data);
+      }
+
+      barData = model.getDaysWiseData(dailyStocksData, newDate1, newDate2);
+      String data = model.getScaleValue(barData, date1, date2);
+      view.displayThePerformance(data);
+
 
     } else if (31 <= t && t < 150) { // weekly data
       HashMap<String, StringBuilder> weeklyStocksData = new HashMap();
@@ -200,7 +236,9 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         weeklyStocksData.put(comp, data);
       }
 
-      barData =  model.getWeekWiseData(weeklyStocksData, newDate1, newDate2);
+      barData = model.getWeekWiseData(weeklyStocksData, newDate1, newDate2);
+      String data = model.getScaleValue(barData, date1, date2);
+      view.displayThePerformance(data);
 
     } else if (150 <= t && t <= 900) { // month
       HashMap<String, StringBuilder> monthlyStocksData = new HashMap();
@@ -211,53 +249,12 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         monthlyStocksData.put(comp, data);
       }
 
-      barData =  model.getMonthWiseData(monthlyStocksData, newDate1, newDate2);
+      barData = model.getMonthWiseData(monthlyStocksData, newDate1, newDate2);
 
-    } else if (900 <= t && t <= 1825) {
-    } else if (1825 <= t && t <= 10950) {
     } else {
-      append("The given dates are either invalid or exceed the limit of 30 years span!!!");
+      append("The given dates are either invalid or exceeded the limit!!!");
     }
   }
-//
-//  private List getDatesBetweenTwoDates(LocalDate dateLower, LocalDate dateUpper) {
-//    LocalDate startFridayDate = dateLower.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
-//    LocalDate endFridayDate = dateUpper.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
-//    List<LocalDate> listOfDates = new ArrayList<LocalDate>();
-//    listOfDates.add(startFridayDate);
-//    LocalDate startDate = startFridayDate;
-//    LocalDate endDate;
-//    do {
-//      endDate = startDate.plusDays(7);
-//      if (endDate.compareTo(endFridayDate) <= 0) {
-//        listOfDates.add(endDate);
-//      }
-//
-//      startDate = endDate;
-//    } while (startDate.compareTo(endFridayDate) <= 0);
-//    return listOfDates;
-//  }
-//
-//  private HashMap<String, StocksImpl> readTheData(StringBuilder data) {
-//    HashMap<String, StocksImpl> currListStocks = new HashMap();
-//    String line; // Reading header, Ignoring;
-//    String[] entries = data.toString().split("\r\n");
-//    for (int i = 1; i < entries.length; i++) {
-//
-//      String[] fields = entries[i].split(",");
-//      StocksImpl newStock = new StocksImpl(
-//          fields[0],
-//          Float.parseFloat(fields[1]),
-//          Float.parseFloat(fields[2]),
-//          Float.parseFloat(fields[3]),
-//          Float.parseFloat(fields[4]),
-//          Float.parseFloat(fields[6])
-////            Integer.parseInt(fields[6])
-//      );
-//      currListStocks.put(fields[0], newStock);
-//    }
-//    return currListStocks;
-//  }
 
   private void viewDatesByCompany(HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries,
       String company) {
@@ -277,52 +274,28 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     });
   }
 
+  /**
+   * Method used to compute the composition of a desired portfolio.
+   *
+   * @throws IOException    invalid data.
+   * @throws ParseException invalid date.
+   */
   public void getCompositionOfPortfolio() throws IOException, ParseException {
     String input = takeStringInput(
         "Enter the date in YYYY-MM-DD to view the composition on that particular "
             + "date.");
+    HashMap currData = model.getCompostion(getStockList().getLStocksMap(), input);
+
+    ArrayList<StocksImpl> inDateList = (ArrayList<StocksImpl>) currData.get("inDateList");
+    float total_comission_fee = (float) currData.get("total_comission_fee");
+    float total_composition = (float) currData.get("total_composition");
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     Date formattedDate = sdformat.parse(input);
     Date todayDate = new Date();
-//    todayDate = sdformat.parse(todayDate);
-
-    HashMap currMap = getStockList().getLStocksMap();
-    HashMap<String, TreeMap<Date, StocksImpl>> currentPortfolio = model.getPortfolio();
-    AtomicReference<Float> total_composition = new AtomicReference<>((float) 0);
-    AtomicReference<Float> total_comission_fee = new AtomicReference<>((float) 0);
-    ArrayList<StocksImpl> inDateList = new ArrayList();
-    AtomicBoolean foundDate = new AtomicBoolean(false);
-
-    currentPortfolio.forEach((comp, stocks) -> {
-      stocks.forEach((date, stockVal) -> {
-        if (date.compareTo(formattedDate) <= 0) {
-          ArrayList<StocksImpl> values = (ArrayList<StocksImpl>) currMap.get(comp);
-          for (int i = 0; i < values.size(); i++) {
-            StocksImpl currStock = (StocksImpl) values.get(i);
-
-            Date formattedcurrStockDate = null;
-            try {
-              formattedcurrStockDate = sdformat.parse(currStock.getDate());
-              if (formattedcurrStockDate.compareTo(formattedDate) == 0) {
-//                foundDate.set(true);
-                total_composition.set(
-                    total_composition.get() + (currStock.getClose() * stockVal.getShares()));
-                total_comission_fee.set(total_comission_fee.get() + stockVal.getCommisionFee());
-                inDateList.add(stockVal);
-              }
-            } catch (ParseException e) {
-              throw new RuntimeException(e);
-            }
-
-          }
-        }
-      });
-    });
 
     AtomicBoolean displayHeaders = new AtomicBoolean(true);
     float final_total_value = model.getIsCostBasis() ?
-        total_composition.get() + total_comission_fee.get() : total_composition.get();
-    //todo handle incorrect date
+        total_composition + total_comission_fee : total_composition;
     if (formattedDate.compareTo(todayDate) > 0) {
       append("The entered date is greater than current date, so can't evaluate your portfolio"
           + ".\n");

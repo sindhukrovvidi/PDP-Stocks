@@ -1,12 +1,8 @@
 package controller;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 
 import model.StocksImpl;
 import view.StockViewImpl;
@@ -14,6 +10,10 @@ import view.StockViewImpl;
 import static model.Input.takeStringInput;
 import static model.Output.append;
 
+/**
+ * Class that contains all operations that are specific to the inflexible portfolio and extends the
+ * abstract class StockControllerImpl.
+ */
 public class InflexibleStockControllerImpl extends StockControllerImpl {
 
   /**
@@ -26,6 +26,12 @@ public class InflexibleStockControllerImpl extends StockControllerImpl {
     super(stocksImpl, stockViewImpl);
   }
 
+  /**
+   * Method used to obtain the stocks for a specific ticker value.
+   *
+   * @return data of the ticker value.
+   * @throws IOException invalid data.
+   */
   public StocksImpl getTickerValue() throws IOException {
     String tickerValue = takeStringInput("Enter the ticker value:\n");
     tickerValue = tickerValue.toUpperCase();

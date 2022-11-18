@@ -22,7 +22,14 @@ public interface PortfolioView {
    * @throws IOException invalid input.
    */
   void displayPortfolio(boolean displayHeaders, String company, String date,
-                        float open, float high,
-                        float low, float close, float volume, int shares, float fee) throws IOException;
+      float open, float high,
+      float low, float close, float volume, int shares, float fee) throws IOException;
+
+  void viewCompositionOfPortfolio(boolean displayHeaders, String company, String date,
+      float open,
+      float close,
+      int shares, float fee, float total, String dateOfComposition) throws IOException;
+
+  void displayThePerformance(String result) throws IOException;
 
 }

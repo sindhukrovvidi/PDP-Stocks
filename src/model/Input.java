@@ -49,6 +49,13 @@ public class Input {
     }
     return input;
   }
+  /**
+   * Method used to take an input which has a question related to operation to be performed.
+   *
+   * @param question action selection to be performed.
+   * @return input from the user.
+   * @throws IOException invalid or unlisted input.
+   */
 
   public static float takeFloatInput(String question) throws IOException {
     Readable in = new InputStreamReader(System.in);

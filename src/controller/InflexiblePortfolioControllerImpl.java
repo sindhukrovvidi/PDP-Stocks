@@ -23,20 +23,46 @@ import static model.Input.takeStringInput;
 import static model.Output.append;
 import static model.Output.appendNewLine;
 
+/**
+ * Class that contains all operations that are specific to the inflexible portfolio and extends the
+ * abstract class PortfolioControllerImpl.
+ */
 public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
 
+  /**
+   * Constructor that takes the parameters and initialize them.
+   *
+   * @param stocksImpl        list of stocks.
+   * @param portfolioImpl     portfolio name.
+   * @param portfolioViewImpl view of the portfolio.
+   * @throws IOException invalid data.
+   */
   public InflexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-                                           PortfolioViewImpl
-                                                   portfolioViewImpl) throws IOException {
+      PortfolioViewImpl
+          portfolioViewImpl) throws IOException {
     super(stocksImpl, portfolioImpl, portfolioViewImpl);
   }
 
+  /**
+   * Constructor that takes the parameters and initialize them.
+   *
+   * @param portfolioImpl     name of the portfolio.
+   * @param portfolioViewImpl view of the portfolio.
+   * @throws IOException invalid data.
+   */
   public InflexiblePortfolioControllerImpl(Portfolio portfolioImpl,
-                                           PortfolioViewImpl
-                                                   portfolioViewImpl) throws IOException {
+      PortfolioViewImpl
+          portfolioViewImpl) throws IOException {
     super(portfolioImpl, portfolioViewImpl);
   }
 
+  /**
+   * Method used to view and speculate a inflexible portfolio.
+   *
+   * @param input file name.
+   * @return view of the desired portfolio.
+   * @throws IOException invalid data.
+   */
   @Override
   public Portfolio viewSpeculate(String input) throws IOException {
     try {
@@ -46,15 +72,15 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       }
 
       HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(input,
-              "portfolios" +
-                      "/inflexible");
+          "portfolios" +
+              "/inflexible");
       for (String s : portfolios.keySet()) {
         updateListOfStocks(s);
       }
       model.setPortfolio(portfolios);
       controllerToViewHelper(portfolios);
       String currInput = takeStringInput("Would you like to speculate your " +
-              "portfolio?(YES/NO)");
+          "portfolio?(YES/NO)");
       if (currInput.equals("YES")) {
         boolean isValidDate = viewSpeculateHelper(input, getStockList());
         if (!isValidDate) {
@@ -73,18 +99,18 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   }
 
   private boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl)
-          throws IOException {
+      throws IOException {
     Map.Entry<String, ArrayList<StocksImpl>> entry = (Map.Entry<String, ArrayList<StocksImpl>>)
-            listOfStocksImpl.getLStocksMap()
-                    .entrySet().iterator().next();
+        listOfStocksImpl.getLStocksMap()
+            .entrySet().iterator().next();
     AtomicReference<ArrayList<StocksImpl>> currentStock = new AtomicReference<>(
-            (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-                    .get(entry.getKey()));
+        (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
+            .get(entry.getKey()));
     String firstStockDate = currentStock.get().get(0).getDate();
     String lastStockDate = currentStock.get().get(currentStock.get().size() - 1).getDate();
     String input =
-            takeStringInput("Enter the date between " + lastStockDate + " and "
-                    + firstStockDate);
+        takeStringInput("Enter the date between " + lastStockDate + " and "
+            + firstStockDate);
     AtomicReference<Float> total_value = new AtomicReference<>((float) 0);
 
     HashMap<String, TreeMap<Date, StocksImpl>> stocksData = model.getPortfolio();
@@ -94,13 +120,13 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       AtomicBoolean dateExist = new AtomicBoolean(false);
       v.forEach((key, val) -> {
         currentStock.set((ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-                .get(val.getCompany()));
+            .get(val.getCompany()));
 
         for (StocksImpl stock : currentStock.get()) {
           if (stock.getDate().equals(input)) {
             dateExist.set(true);
             total_value.updateAndGet(
-                    v1 -> v1 + stock.getClose() * val.getShares());
+                v1 -> v1 + stock.getClose() * val.getShares());
           }
 
         }
