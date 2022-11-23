@@ -51,6 +51,7 @@ public class PortfolioViewImpl implements PortfolioView {
     this.out.append(fmt.toString());
   }
 
+  @Override
   public void viewCompositionOfPortfolio(boolean displayHeaders, String company, String date,
       float open,
       float close,
@@ -67,6 +68,17 @@ public class PortfolioViewImpl implements PortfolioView {
     fmt.format("%15s %15s %15s %15s %15s %15s \n", company, date, open,
         close, shares, fee);
     this.out.append(fmt.toString());
+
+  }
+
+  /**
+   * Pronts the performance bar.
+   * @param result print.
+   * @throws IOException if invalid.
+   */
+  @Override
+  public void displayThePerformance(String result) throws IOException {
+    this.out.append(result);
 
   }
 }

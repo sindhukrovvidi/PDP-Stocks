@@ -7,7 +7,11 @@ import model.HTTPRequests;
 import model.HTTPRequestsImpl;
 import model.ListOfStocksImpl;
 
+/**
+ * Abstract class that contains common operations for both flexible and inflexible.
+ */
 public abstract class Controller {
+
   private ListOfStocksImpl listOfStocksImpl;
 
   /**
@@ -20,7 +24,9 @@ public abstract class Controller {
   }
 
   /**
-   * @return
+   * Method used to get the list of stocks.
+   *
+   * @return the list of required stocks.
    */
   public ListOfStocksImpl getStockList() {
     return listOfStocksImpl;
@@ -34,7 +40,7 @@ public abstract class Controller {
     HTTPRequests requests = new HTTPRequestsImpl();
     StringBuilder currTickerData = requests.getData(tickerValue);
     listOfStocksImpl.updateStocksList(map,
-            currTickerData, tickerValue);
+        currTickerData, tickerValue);
     setStocksList(listOfStocksImpl);
   }
 

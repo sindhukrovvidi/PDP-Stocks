@@ -2,14 +2,13 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import model.ListOfStocksImpl;
 import model.StocksImpl;
 
 /**
  * Interface that has all the methods responsible for controlling the stocks.
  */
 public interface StockController {
+
   /**
    * Method used to display the options after selecting a stock.
    *
@@ -43,7 +42,7 @@ public interface StockController {
    * @param values      stock trends in the form of a list.
    */
   void controllerToViewHelperForStocks(String companyName,
-                                       ArrayList<StocksImpl> values);
+      ArrayList<StocksImpl> values);
 
 
 }

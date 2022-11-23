@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import java.text.ParseException;
 
-import model.ListOfStocksImpl;
-
 /**
  * This interface contains various methods that are used in the main controller.
  */

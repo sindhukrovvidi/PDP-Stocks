@@ -2,22 +2,12 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import model.HTTPRequests;
-import model.HTTPRequestsImpl;
 import model.StocksImpl;
-import model.ListOfStocksImpl;
 import view.StockViewImpl;
 
-import java.util.Date;
-import java.text.*;
-
 import static model.Input.takeIntegerInput;
-import static model.Input.takeStringInput;
 import static model.Output.append;
 
 /**
@@ -51,8 +41,8 @@ abstract public class StockControllerImpl extends Controller implements StockCon
     StocksImpl currModel = (StocksImpl) model;
     try {
       Integer input = takeIntegerInput("Select from the following options.\n1. Add this to "
-              + "portfolio.\n2. Do not add and search stocks for new company.\n3. Go back. "
-              + "\n 4. Exit\n");
+          + "portfolio.\n2. Do not add and search stocks for new company.\n3. Go back. "
+          + "\n 4. Exit\n");
       switch (input) {
         case 1:
           currModel = this.addStockToPortfolio(currModel);
@@ -89,12 +79,12 @@ abstract public class StockControllerImpl extends Controller implements StockCon
     StocksImpl currModel = (StocksImpl) models;
     try {
       int value =
-              takeIntegerInput(
-                      "Enter the number of shares you want to invest in "
-                              + currModel.getCompany());
+          takeIntegerInput(
+              "Enter the number of shares you want to invest in "
+                  + currModel.getCompany());
       if (value <= 0) {
         append("The number of stocks to be invested should be greater"
-                + " than 0.\n");
+            + " than 0.\n");
         return null;
       } else {
         currModel.updateStockValues(value);
@@ -115,15 +105,15 @@ abstract public class StockControllerImpl extends Controller implements StockCon
    */
   @Override
   public void controllerToViewHelperForStocks(String companyName,
-                                              ArrayList<StocksImpl> values) {
+      ArrayList<StocksImpl> values) {
 
     AtomicBoolean displayHeaders = new AtomicBoolean(true);
     values.forEach((v) -> {
       try {
         view.displayListOfDates(displayHeaders.get(), companyName,
-                v.getDate(),
-                v.getOpen(), v.getHigh(), v.getLow(),
-                v.getClose(), v.getVolume());
+            v.getDate(),
+            v.getOpen(), v.getHigh(), v.getLow(),
+            v.getClose(), v.getVolume());
         displayHeaders.set(false);
       } catch (IOException e) {
         throw new RuntimeException(e);

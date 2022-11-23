@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 import java.nio.file.FileAlreadyExistsException;
@@ -12,7 +11,6 @@ import model.FileAccessorsImpl;
 import model.Portfolio;
 import model.PortfolioImpl;
 import model.StocksImpl;
-import model.ListOfStocksImpl;
 import view.PortfolioViewImpl;
 import view.StockViewImpl;
 
@@ -50,10 +48,10 @@ public class MainControllerImpl implements MainController {
   public void programStartsHere() throws IOException, ParseException {
     try {
       Integer option = takeIntegerInput(
-              "Choose from below options to proceed further. (Type the index number)."
-                      + " \n1. Create a "
-                      + "portfolio.\n2. View & speculate existing portfolio " +
-                      "\n3. Exit\n");
+          "Choose from below options to proceed further. (Type the index number)."
+              + " \n1. Create a "
+              + "portfolio.\n2. View & speculate existing portfolio " +
+              "\n3. Exit\n");
       getInitialController(option);
     } catch (Exception e) {
       throw e;
@@ -73,7 +71,7 @@ public class MainControllerImpl implements MainController {
     switch (option) {
       case 1:
         String input1 = takeStringInput("Do you want the type of portfolio as flexible?" +
-                "(YES/NO)");
+            "(YES/NO)");
         if (input1.equals("YES")) {
           isFlexible = true;
           this.portfolioImpl.setIsFlexible(true);
@@ -85,7 +83,7 @@ public class MainControllerImpl implements MainController {
           input = takeStringInput("Enter the name for your portfolio.");
           FileAccessors fileAccessor = new FileAccessorsImpl();
           String path = this.portfolioImpl.getIsFlexible() ? "portfolios/flexible" : "portfolios" +
-                  "/inflexible";
+              "/inflexible";
           if (!fileAccessor.isFileExists(input, path)) {
             this.portfolioImpl.setPortfolioName(input);
           } else {
@@ -96,20 +94,11 @@ public class MainControllerImpl implements MainController {
           append("Invalid input or the file already exists. Please try again.\n");
           programStartsHere();
         }
-//        String input1 = takeStringInput("Do you want the type of portfolio as flexible?" +
-//                "(YES/NO)");
-//        if (input1.equals("YES")) {
-//          isFlexible = true;
-//          this.portfolioImpl.setIsFlexible(true);
-//        } else {
-//          this.portfolioImpl.setIsFlexible(false);
-//          isFlexible = false;
-//        }
         getInitialController(4);
         break;
       case 2:
         String input2 = takeStringInput("Do you want to view a flexible portfolio?" +
-                "(YES/NO)");
+            "(YES/NO)");
         PortfolioViewImpl portfolioViewImpl = new PortfolioViewImpl();
         PortfolioImpl portfolioImpl = new PortfolioImpl();
         String[] files;
@@ -122,17 +111,17 @@ public class MainControllerImpl implements MainController {
           files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/inflexible");
         }
         input =
-                takeStringInput(
-                        "Enter the name of the portfolio from the below list: " +
-                                "(Just enter the filename without the extension \n" + Arrays.toString(files));
+            takeStringInput(
+                "Enter the name of the portfolio from the below list: " +
+                    "(Just enter the filename without the extension \n" + Arrays.toString(files));
         PortfolioControllerImpl portfolioControllerImpl;
         if (input2.equals("YES")) {
 
           portfolioControllerImpl = new FlexiblePortfolioControllerImpl(portfolioImpl,
-                  portfolioViewImpl);
+              portfolioViewImpl);
         } else {
           portfolioControllerImpl = new InflexiblePortfolioControllerImpl(portfolioImpl,
-                  portfolioViewImpl);
+              portfolioViewImpl);
         }
 
         this.portfolioImpl = portfolioControllerImpl.viewSpeculate(input);
@@ -149,7 +138,8 @@ public class MainControllerImpl implements MainController {
         if (isFlexible) {
           stocksController = new FlexibleStockControllerImpl(new StocksImpl(), new StockViewImpl());
         } else {
-          stocksController = new InflexibleStockControllerImpl(new StocksImpl(), new StockViewImpl());
+          stocksController = new InflexibleStockControllerImpl(new StocksImpl(),
+              new StockViewImpl());
         }
         StocksImpl stocksImpl = stocksController.getTickerValue();
         if (stocksImpl == null) {
@@ -164,14 +154,14 @@ public class MainControllerImpl implements MainController {
         PortfolioControllerImpl portfolioControllersImpl;
         if (isFlexible) {
           portfolioControllersImpl = new FlexiblePortfolioControllerImpl(
-                  this.stocksImpl,
-                  this.portfolioImpl,
-                  portfolioViewsImpl);
+              this.stocksImpl,
+              this.portfolioImpl,
+              portfolioViewsImpl);
         } else {
           portfolioControllersImpl = new InflexiblePortfolioControllerImpl(
-                  this.stocksImpl,
-                  this.portfolioImpl,
-                  portfolioViewsImpl);
+              this.stocksImpl,
+              this.portfolioImpl,
+              portfolioViewsImpl);
         }
         this.portfolioImpl = portfolioControllersImpl.addStock();
         if (this.portfolioImpl == null) {

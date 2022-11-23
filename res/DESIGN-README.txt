@@ -1,3 +1,20 @@
+
+Modifications and additions to the design:
+
+1. The portfolio and stock controllers were split into flexible and inflexible and the common
+methods for the common features of both are kept into a single abstract class to avoid code
+redundancy.
+2. Split up is done to make a clear two streams and put up a sub menu based on the choice.
+3. After the main menu for each choice a question is asked to choose between flexible or inflexible.
+Based on the choice the main controller will decide which type of portfolio or the stock controller
+ should come into action.
+4. Changed the fetching data from a pre-defined csv to fetching data from an API to accommodate a
+wide variety of stocks.
+All other functionalities and design is the same and left intact.
+
+
+
+
 The design of the application is as follows:
 It contains controller, model and view.
 There are individual controllers for the main, portfolio and the stock and these classes are

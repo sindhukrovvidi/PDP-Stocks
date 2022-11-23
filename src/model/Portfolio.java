@@ -1,9 +1,8 @@
 package model;
 
-import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -34,14 +33,7 @@ public interface Portfolio {
    */
   void setPortfolio(HashMap<String, TreeMap<Date, StocksImpl>> portfolio);
 
-  /**
-   * Method used to get company name.
-   *
-   * @return array list of stocks for a company.
-   */
-//  ArrayList<TreeMap<Date, StocksImpl>> getCompanyNames();
 
-  TreeMap getCompanyNames();
   /**
    * Method used to check if file is saved or not.
    *
@@ -54,7 +46,6 @@ public interface Portfolio {
    */
   void save(String path);
 
-//  void saveInflexible();
 
   /**
    * Method used to check if the file is already created.
@@ -65,41 +56,106 @@ public interface Portfolio {
   void setPortfolioName(String name) throws FileAlreadyExistsException;
 
   /**
-   * @param isFlexible
+   * Method used to set if flexible or not.
+   *
+   * @param isFlexible boolean value.
    */
   void setIsFlexible(boolean isFlexible);
 
   /**
-   * @return
+   * Method used to get if flexible or not.
+   *
+   * @return true if flexible else false.
    */
   boolean getIsFlexible();
 
   /**
+   * Method used to set if buying or not.
    *
-   * @param buy
+   * @param buy boolean.
    */
   void setBuy(boolean buy);
 
   /**
+   * Method used to set if buying or not.
    *
-   * @return
+   * @return true if buying.
    */
   boolean getBuy();
 
+  /**
+   * Method used to set the cost basis true or not.
+   *
+   * @param isCostBasis boolean.
+   */
   void setIsCostBasis(boolean isCostBasis);
 
+  /**
+   * Method used to get the cost basis true or not.
+   *
+   * @return true if the cost basis is needed else false.
+   */
   boolean getIsCostBasis();
 
-  HashMap<String , Integer> getCompanyWiseShares();
+  /**
+   * Gets the company wise shares.
+   *
+   * @return returns hashmap.
+   */
 
-//  void performanceOverTime(Date date1, Date date2)  throws IOException, ParseException;
-  TreeMap<String, Integer> getDaysWiseData(HashMap<String, TreeMap<Date, StocksImpl>> entries,
+  HashMap<String, Integer> getCompanyWiseShares();
+
+  /**
+   * Fetches the day wise data for a given time range.
+   *
+   * @param entries  list of stocks.
+   * @param newDate1 initial date.
+   * @param newDate2 final date.
+   * @return a treemap with dates and value on that day.
+   */
+  TreeMap<LocalDate, Integer> getDaysWiseData(HashMap<String, StringBuilder> entries,
       Date newDate1, Date newDate2);
 
-  TreeMap<String, Integer> getWeekWiseData(HashMap<String , StringBuilder> entries,
+  /**
+   * Fetches the week wise data for a given time range.
+   *
+   * @param entries  list of stocks.
+   * @param newDate1 initial date.
+   * @param newDate2 final date.
+   * @return a treemap with dates and value on that day.
+   */
+  TreeMap<LocalDate, Integer> getWeekWiseData(HashMap<String, StringBuilder> entries,
       Date newDate1, Date newDate2);
 
-  TreeMap<String, Integer>  getMonthWiseData(HashMap<String , StringBuilder> entries,
+  /**
+   * Fetches the month wise data for a given time range.
+   *
+   * @param entries  list of stocks.
+   * @param newDate1 initial date.
+   * @param newDate2 final date.
+   * @return a treemap with dates and value on that day.
+   */
+  TreeMap<LocalDate, Integer> getMonthWiseData(HashMap<String, StringBuilder> entries,
       Date newDate1, Date newDate2);
+
+  /**
+   * Retrieves the composition of the portfolio.
+   *
+   * @param currMap map of stocks and their daily data.
+   * @param input   date of the portfolio.
+   * @return compostion stored in an hashmap.
+   * @throws ParseException invalid date.
+   */
+  HashMap getCompostion(HashMap currMap, String input) throws ParseException;
+
+  /**
+   * Scales the performncae of the bar graph.
+   * @param performanceData data after fetching the required data.
+   * @param date1 initial date.
+   * @param date2 end date.
+   * @return String that has the performance data.
+   */
+  String getScaleValue(TreeMap<LocalDate, Integer> performanceData, String date1,
+      String date2);
 
 }

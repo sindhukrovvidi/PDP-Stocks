@@ -38,55 +38,11 @@ public class FileAccessorsImpl implements FileAccessors {
    *
    * @param filename           name of the file to be written into.
    * @param entriesInPortfolio content to be written into the file.
+   * @param path               path of file.
    */
-//  @Override
-//  public void writeIntoCSVFile(String filename, HashMap<String, StocksImpl> entriesInPortfolio,
-//      String path) {
-//    try {
-//      Path currentPath = Paths.get(System.getProperty("user.dir"));
-//      Path fp = Paths.get(currentPath.toString(), path);
-//      File theDir = new File(fp.toString());
-//      if (!theDir.exists()) {
-//        theDir.mkdirs();
-//      }
-//      FileWriter outputFile = new FileWriter(fp.toString() + "/" + filename + ".csv");
-//      BufferedWriter bwr = new BufferedWriter(outputFile);
-//      entriesInPortfolio.forEach((k, v) -> {
-//        StocksImpl currentStock = (StocksImpl) v;
-//        try {
-//          bwr.write(currentStock.getCompany());
-//          bwr.write(",");
-//          bwr.write(currentStock.getDate());
-//          bwr.write(",");
-//          bwr.write(String.valueOf(currentStock.getOpen())); // opening price on that day
-//          bwr.write(",");
-//          bwr.write(String.valueOf(currentStock.getHigh())); // high value
-//          bwr.write(",");
-//          bwr.write(String.valueOf(currentStock.getLow())); // low value
-//          bwr.write(",");
-//          bwr.write(String.valueOf(currentStock.getClose())); // closing price on that day
-//          bwr.write(",");
-//          bwr.write(String.valueOf(currentStock.getVolume())); // no shares invested on that day
-//          bwr.write(",");
-//          bwr.write(String.valueOf(currentStock.getShares())); // no shares invested on that day
-//          bwr.write(",");
-//          bwr.write(String.valueOf(currentStock.getCommisionFee())); // commission fee
-//          bwr.write(",");
-//          bwr.write(String.valueOf(currentStock.getClose() * currentStock.getShares())); // total
-//          // price for that company
-//          bwr.write("\n");
-//        } catch (IOException e) {
-//          throw new RuntimeException(e);
-//        }
-//      });
-//      bwr.close();
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
-//  }
   @Override
   public void writeIntoCSVFile(String filename,
-                               HashMap<String, TreeMap<Date, StocksImpl>> entriesInPortfolio, String path) {
+      HashMap<String, TreeMap<Date, StocksImpl>> entriesInPortfolio, String path) {
 
     try {
       Path currentPath = Paths.get(System.getProperty("user.dir"));
@@ -158,43 +114,9 @@ public class FileAccessorsImpl implements FileAccessors {
    * @return content present in the portfolio in the form of a map.
    * @throws IOException invalid file name.
    */
-//  @Override
-//  public HashMap<String, StocksImpl> viewFileTest(String portfolioName, String path)
-//      throws IOException {
-//    HashMap<String, StocksImpl> portfolio = new HashMap<>();
-//    String line;
-//    Path currentPath = Paths.get(System.getProperty("user.dir"));
-//    Path fp = Paths.get(currentPath.toString(), path);
-//    File theDir = new File(fp.toString());
-//    if (!theDir.exists()) {
-//      theDir.mkdirs();
-//    }
-//    File f = new File(fp.toString() + "/" + portfolioName + ".csv");
-//
-//    BufferedReader reader = readCSV(f.getPath());
-//    while ((line = reader.readLine()) != null && !line.isEmpty()) {
-//      String[] fields = line.split(",");
-//
-//      StocksImpl stocksImpl = new StocksImpl();
-//      stocksImpl.setCurrentStock(
-//          fields[0],
-//          fields[1],
-//          Float.parseFloat(fields[2]),
-//          Float.parseFloat(fields[3]),
-//          Float.parseFloat(fields[4]),
-//          Float.parseFloat(fields[5]),
-//          Float.parseFloat(fields[6]),
-//          Integer.parseInt(fields[7]),
-//          Float.parseFloat(fields[8])
-//      );
-//      portfolio.put(fields[0], stocksImpl);
-//    }
-//    reader.close();
-//    return portfolio;
-//  }
   @Override
   public HashMap<String, TreeMap<Date, StocksImpl>> viewFile(String portfolioName, String path)
-          throws IOException, ParseException {
+      throws IOException, ParseException {
     HashMap<String, TreeMap<Date, StocksImpl>> portfolio = new HashMap<>();
     String line;
     Path currentPath = Paths.get(System.getProperty("user.dir"));
@@ -211,15 +133,15 @@ public class FileAccessorsImpl implements FileAccessors {
 
       StocksImpl stocksImpl = new StocksImpl();
       stocksImpl.setCurrentStock(
-              fields[0],
-              fields[1],
-              Float.parseFloat(fields[2]),
-              Float.parseFloat(fields[3]),
-              Float.parseFloat(fields[4]),
-              Float.parseFloat(fields[5]),
-              Float.parseFloat(fields[6]),
-              Integer.parseInt(fields[7]),
-              Float.parseFloat(fields[8])
+          fields[0],
+          fields[1],
+          Float.parseFloat(fields[2]),
+          Float.parseFloat(fields[3]),
+          Float.parseFloat(fields[4]),
+          Float.parseFloat(fields[5]),
+          Float.parseFloat(fields[6]),
+          Integer.parseInt(fields[7]),
+          Float.parseFloat(fields[8])
       );
 
       SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");

@@ -17,7 +17,8 @@ import static model.Input.takeStringInput;
 import static model.Output.append;
 
 /**
- *
+ * Class that contains all operations that are specific to the inflexible portfolio and extends the
+ * abstract class StockControllerImpl.
  */
 public class FlexibleStockControllerImpl extends StockControllerImpl {
 
@@ -31,6 +32,12 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
     super(stocksImpl, stockViewImpl);
   }
 
+  /**
+   * Method used to obtain the stocks for a specific ticker value.
+   *
+   * @return the stocks of the desired ticker value.
+   * @throws IOException invalid data.
+   */
   public StocksImpl getTickerValue() throws IOException {
     String tickerValue = takeStringInput("Enter the ticker value:\n");
     tickerValue = tickerValue.toUpperCase();
@@ -42,7 +49,8 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
       return null;
     } else {
       SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-      Date d1, d2;
+      Date d1;
+      Date d2;
       try {
         d1 = sdformat.parse(((StocksImpl) values.get(values.size() - 1)).getDate());
         d2 = sdformat.parse(((StocksImpl) values.get(0)).getDate());
@@ -80,6 +88,13 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
     }
   }
 
+  /**
+   * Method used to add a stock to a portfolio.
+   *
+   * @param models model to which the stocks to be added.
+   * @return stocks added to portfolio.
+   * @throws IOException invalid data.
+   */
   public StocksImpl addStockToPortfolio(Object models) throws IOException {
     StocksImpl currModel = (StocksImpl) models;
     try {

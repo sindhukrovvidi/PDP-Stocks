@@ -9,7 +9,6 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import model.Portfolio;
-import model.PortfolioImpl;
 import model.StocksImpl;
 import view.PortfolioViewImpl;
 
@@ -37,7 +36,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException invalid input of model or view.
    */
   public PortfolioControllerImpl(Portfolio portfolioImpl, PortfolioViewImpl portfolioViewImpl)
-          throws IOException {
+      throws IOException {
     super();
     this.model = portfolioImpl;
     this.view = portfolioViewImpl;
@@ -52,8 +51,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException if the parameters given are invalid.
    */
   public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
-                                 PortfolioViewImpl view)
-          throws IOException {
+      PortfolioViewImpl view)
+      throws IOException {
     super();
     this.stocksImplModel = model;
     this.model = portfolioImpl;
@@ -92,8 +91,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     int input = 0;
     try {
       input = takeIntegerInput("Choose from below options.\n 1."
-              + " Add another stock\n2. Save this portfolio.\n3. "
-              + "Back to main menu.\n4. Exit.");
+          + " Add another stock\n2. Save this portfolio.\n3. "
+          + "Back to main menu.\n4. Exit.");
     } catch (Exception e) {
       append("Please enter a valid input.\n");
       afterAddingStock(model);
@@ -134,10 +133,10 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
       v.forEach((key, value) -> {
         try {
           view.displayPortfolio(displayHeaders.get(), value.getCompany(),
-                  value.getDate(),
-                  value.getOpen(), value.getHigh(), value.getLow(),
-                  value.getClose(), value.getVolume(), value.getShares(),
-                  value.getCommisionFee());
+              value.getDate(),
+              value.getOpen(), value.getHigh(), value.getLow(),
+              value.getClose(), value.getVolume(), value.getShares(),
+              value.getCommisionFee());
           displayHeaders.set(false);
         } catch (IOException e) {
           throw new RuntimeException(e);
