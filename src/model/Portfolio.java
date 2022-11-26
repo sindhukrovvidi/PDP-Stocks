@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -158,4 +159,14 @@ public interface Portfolio {
   String getScaleValue(TreeMap<LocalDate, Integer> performanceData, String date1,
       String date2);
 
+  String calculatePerformaceOverTime(String date1, String date2) throws IOException, ParseException;
+
+  void addMultipleStocksInPortfolio(HashMap map, String lowerDate, String upperDate,
+      int frequency, String[] stocksInput, float valueInvested, String weightage, float fee)
+      throws ParseException;
+
+
+  boolean validateInputForMultiStocks(float investedAmount, String weightage, int fee,
+      String lowerDate, String upperDate, int frequency)
+      throws ParseException;
 }

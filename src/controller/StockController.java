@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import model.StocksImpl;
 
@@ -43,6 +44,7 @@ public interface StockController {
    */
   void controllerToViewHelperForStocks(String companyName,
       ArrayList<StocksImpl> values);
+
 
 
 }

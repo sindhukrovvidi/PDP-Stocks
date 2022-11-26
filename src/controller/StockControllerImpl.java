@@ -1,13 +1,19 @@
 package controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import model.Stocks;
 import model.StocksImpl;
+import view.StockView;
 import view.StockViewImpl;
 
+import static model.Input.takeFloatInput;
 import static model.Input.takeIntegerInput;
+import static model.Input.takeStringInput;
 import static model.Output.append;
 
 /**
@@ -16,7 +22,7 @@ import static model.Output.append;
 abstract public class StockControllerImpl extends Controller implements StockController {
 
   protected StocksImpl model;
-  protected StockViewImpl view;
+  protected StockView view;
 
   /**
    * Constructor that takes stocks model and view as parameters and initializes them.
@@ -24,8 +30,8 @@ abstract public class StockControllerImpl extends Controller implements StockCon
    * @param stocksImpl    model of stockImpl type.
    * @param stockViewImpl view of stockViewImpl type.
    */
-  public StockControllerImpl(StocksImpl stocksImpl, StockViewImpl stockViewImpl) {
-    this.model = stocksImpl;
+  public StockControllerImpl(Stocks stocksImpl, StockView stockViewImpl) {
+    this.model = (StocksImpl) stocksImpl;
     this.view = stockViewImpl;
   }
 
@@ -120,5 +126,61 @@ abstract public class StockControllerImpl extends Controller implements StockCon
       }
     });
   }
+
+//  @Override
+//  public StocksImpl isBulkStockAddition() throws IOException, ParseException {
+//    StocksImpl stocksImpl = null;
+//    int input = takeIntegerInput("Choose from the below options.\n"
+//        + "1. Add a single stock to the portfolio.\n"
+//        + "2. Add multiple stocks at once.\n");
+//    switch (input) {
+//      case 1:
+//        stocksImpl = getTickerValue();
+//        break;
+//      case 2:
+//        investMultipleStocksAtOnce();
+//        break;
+//      default:
+//        System.exit(0);
+//    }
+//    if (stocksImpl == null) {
+//      isBulkStockAddition();
+//    } else {
+////      this.model = stocksImpl;
+////      getInitialController(5);
+//    }
+//    return stocksImpl;
+//  }
+//
+//  public void investMultipleStocksAtOnce() throws IOException, ParseException {
+//    String stocksInput = takeStringInput("Enter the list of stocks with coma (,) separated.");
+//    float valueInvested = takeFloatInput("Enter the amount to be invested.");
+//    String weightage = takeStringInput("Enter the weightage for each stock. Keep in mind that it "
+//        + "should add up to 100!!!");
+//    int fee = takeIntegerInput("Enter the commission fee");
+//    String lowerDate = takeStringInput("Enter the lower limit of the timerange in yyyy-mm-dd");
+//    String upperDate = takeStringInput("Enter the upper limit of the timerange in yyyy-mm-dd");
+//    int frequency = takeIntegerInput("Enter the frequency in days.");
+//    String[] tickerValuesList = stocksInput.split(",");
+//    for (String s : tickerValuesList) {
+//      updateListOfStocks(s.trim().toUpperCase());
+//      HashMap map = getStockList().getLStocksMap();
+//      ArrayList values = (ArrayList) map.get(s.trim().toUpperCase());
+//      if(values == null) {
+//        investMultipleStocksAtOnce();
+////        return null;
+//      }
+//    }
+//
+//    boolean areValid = model.validateInputForMultiStocks(valueInvested, weightage, fee, lowerDate,
+//        upperDate, frequency);
+//    if(!areValid) {
+//      investMultipleStocksAtOnce();
+//    } else {
+//      // has to be in model
+//      model.addMultipleStocksInPortfolio(getStockList().getLStocksMap(), lowerDate, upperDate,
+//          frequency);
+//    }
+//  }
 
 }

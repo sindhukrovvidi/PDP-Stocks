@@ -49,4 +49,6 @@ public interface PortfolioController {
    */
   void controllerToViewHelper(HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries);
 
+  StocksImpl isBulkStockAddition() throws IOException, ParseException;
+
 }

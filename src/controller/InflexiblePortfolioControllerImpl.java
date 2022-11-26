@@ -18,6 +18,7 @@ import model.ListOfStocksImpl;
 import model.Portfolio;
 import model.StocksImpl;
 import view.PortfolioViewImpl;
+import view.StockView;
 
 import static model.Input.takeStringInput;
 import static model.Output.append;
@@ -38,9 +39,8 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @throws IOException invalid data.
    */
   public InflexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-      PortfolioViewImpl
-          portfolioViewImpl) throws IOException {
-    super(stocksImpl, portfolioImpl, portfolioViewImpl);
+      StockView view) throws IOException {
+    super(stocksImpl, portfolioImpl, view);
   }
 
   /**
@@ -51,9 +51,8 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @throws IOException invalid data.
    */
   public InflexiblePortfolioControllerImpl(Portfolio portfolioImpl,
-      PortfolioViewImpl
-          portfolioViewImpl) throws IOException {
-    super(portfolioImpl, portfolioViewImpl);
+      StockView view) throws IOException {
+    super(portfolioImpl, view);
   }
 
   /**

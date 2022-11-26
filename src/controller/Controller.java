@@ -37,11 +37,14 @@ public abstract class Controller {
       listOfStocksImpl = new ListOfStocksImpl();
     }
     HashMap map = listOfStocksImpl.getLStocksMap();
-    HTTPRequests requests = new HTTPRequestsImpl();
-    StringBuilder currTickerData = requests.getData(tickerValue);
-    listOfStocksImpl.updateStocksList(map,
-        currTickerData, tickerValue);
-    setStocksList(listOfStocksImpl);
+    if (!map.containsKey(tickerValue)) {
+      HTTPRequests requests = new HTTPRequestsImpl();
+      StringBuilder currTickerData = requests.getData(tickerValue);
+      listOfStocksImpl.updateStocksList(map,
+          currTickerData, tickerValue);
+      setStocksList(listOfStocksImpl);
+    }
+
   }
 
 }
