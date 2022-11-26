@@ -74,7 +74,8 @@ public class FileAccessorsImpl implements FileAccessors {
             bwr.write(",");
             bwr.write(String.valueOf(value.getCommisionFee())); // commission fee
             bwr.write(",");
-            bwr.write(String.valueOf(value.getClose() * value.getShares())); // total price for that company
+            bwr.write(String.valueOf(
+                value.getClose() * value.getShares())); // total price for that company
 
             bwr.write(",");
             bwr.write(String.valueOf(value.getPercentage())); // percentage invested
@@ -161,8 +162,6 @@ public class FileAccessorsImpl implements FileAccessors {
         currStockData.put(newDate, stocksImpl);
         portfolio.put(fields[0], currStockData);
       }
-
-//      portfolio.put(fields[0], stocksImpl);
     }
     reader.close();
     return portfolio;

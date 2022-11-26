@@ -167,7 +167,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         model.setBuy(true);
         break;
       case 2:
-        sellingHelper();
+        sellTheStocks();
         break;
       case 3:
         model.setIsCostBasis(true);
@@ -187,56 +187,37 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     }
     return model;
   }
-
-  private Portfolio sellingHelper() throws IOException, ParseException {
+  public Portfolio sellTheStocks() throws IOException, ParseException {
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     String tickerValue = takeStringInput("Enter the ticker value:\n");
     HashMap<String, TreeMap<Date, StocksImpl>> checklist = model.getPortfolio();
-    if (checklist.containsKey(tickerValue)) {
-      SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-      TreeMap<Date, StocksImpl> validDatesList = checklist.get(tickerValue);
+    if(checklist.containsKey(tickerValue)) {
       viewDatesByCompany(checklist, tickerValue);
       String date = takeStringInput("Please enter a valid date as per the above list");
-      Date newDate = sdformat.parse(date);
-      //TODO while invalid date
-      validatingSellStocks(validDatesList, newDate);
-      viewDatesByCompany(checklist, tickerValue);
+
+      int numberOfSellingStocks = takeIntegerInput("Please enter the number of stocks you "
+          + "want to sell");
+      float fee = takeFloatInput("Enter the commission fee and it has to greater than zero");
+
+      if (numberOfSellingStocks <= 0 || fee <= 0) {
+        append("The entered values (shares & fee) should be greater"
+            + " than 0.\n");
+        speculateMenu();
+      }
+
+      int stocksSold = model.sellTheStocks(checklist.get(tickerValue), sdformat.parse(date),
+          numberOfSellingStocks, fee);
+
+      if (stocksSold != 0) {
+        append("Your portfolio lacks " + stocksSold + " they are not sold!\n");
+      }
       model.save("portfolios/flexible");
     } else {
       append("The ticker symbol entered is invalid.\n");
-      sellingHelper();
+      sellTheStocks();
     }
+
     return model;
-  }
-
-  private void validatingSellStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate)
-      throws IOException {
-    int numberOfSellingStocks = takeIntegerInput("Please enter the number of stocks you "
-        + "want to sell");
-    float fee = takeFloatInput("Enter the commission fee and it has to greater than zero");
-
-    if (numberOfSellingStocks <= 0 || fee <= 0) {
-      append("The entered values (shares & fee) should be greater"
-          + " than 0.\n");
-      validatingSellStocks(validDatesList, newDate);
-    }
-    for (Map.Entry<Date, StocksImpl>
-        entry : validDatesList.entrySet()) {
-      if ((numberOfSellingStocks == 0) || entry.getKey().compareTo(newDate) > 0) {
-        break;
-      }
-      if (numberOfSellingStocks >= entry.getValue().getShares()) {
-        numberOfSellingStocks -= entry.getValue().getShares();
-        entry.getValue().updateCommisionValue(fee + entry.getValue().getCommisionFee());
-        entry.getValue().setShares(0);
-      } else {
-        entry.getValue().setShares(entry.getValue().getShares() - numberOfSellingStocks);
-        entry.getValue().updateCommisionValue(fee + entry.getValue().getCommisionFee());
-        numberOfSellingStocks = 0;
-      }
-    }
-    if (numberOfSellingStocks != 0) {
-      append("Your portfolio lacks " + numberOfSellingStocks + " they are not sold!\n");
-    }
   }
 
   private void performanceOverTime() throws IOException, ParseException {

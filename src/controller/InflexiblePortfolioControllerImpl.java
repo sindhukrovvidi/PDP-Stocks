@@ -8,16 +8,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import model.FileAccessorsImpl;
 import model.ListOfStocksImpl;
 import model.Portfolio;
 import model.StocksImpl;
-import view.PortfolioViewImpl;
 import view.StockView;
 
 import static model.Input.takeStringInput;
@@ -35,7 +32,7 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    *
    * @param stocksImpl        list of stocks.
    * @param portfolioImpl     portfolio name.
-   * @param portfolioViewImpl view of the portfolio.
+   * @param view view of the portfolio.
    * @throws IOException invalid data.
    */
   public InflexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
@@ -47,7 +44,7 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * Constructor that takes the parameters and initialize them.
    *
    * @param portfolioImpl     name of the portfolio.
-   * @param portfolioViewImpl view of the portfolio.
+   * @param view view of the portfolio.
    * @throws IOException invalid data.
    */
   public InflexiblePortfolioControllerImpl(Portfolio portfolioImpl,
@@ -98,7 +95,7 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   }
 
   private boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl)
-      throws IOException {
+      throws IOException, ParseException {
     Map.Entry<String, ArrayList<StocksImpl>> entry = (Map.Entry<String, ArrayList<StocksImpl>>)
         listOfStocksImpl.getLStocksMap()
             .entrySet().iterator().next();
@@ -110,32 +107,10 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     String input =
         takeStringInput("Enter the date between " + lastStockDate + " and "
             + firstStockDate);
-    AtomicReference<Float> total_value = new AtomicReference<>((float) 0);
 
-    HashMap<String, TreeMap<Date, StocksImpl>> stocksData = model.getPortfolio();
-    for (Entry<String, TreeMap<Date, StocksImpl>> e : stocksData.entrySet()) {
-      String k = e.getKey();
-      TreeMap<Date, StocksImpl> v = e.getValue();
-      AtomicBoolean dateExist = new AtomicBoolean(false);
-      v.forEach((key, val) -> {
-        currentStock.set((ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-            .get(val.getCompany()));
+    HashMap portfolioData = model.getCompostion(getStockList().getLStocksMap(), input);
 
-        for (StocksImpl stock : currentStock.get()) {
-          if (stock.getDate().equals(input)) {
-            dateExist.set(true);
-            total_value.updateAndGet(
-                v1 -> v1 + stock.getClose() * val.getShares());
-          }
-
-        }
-      });
-      if (!dateExist.get()) {
-        append("The entered date does not exist, please enter a valid date.\n");
-        return false;
-      }
-    }
-    append("Total price of portfolio is " + String.valueOf(total_value.get()) + ".\n");
+    append("Total price of portfolio is " + portfolioData.get("final_total_value") + ".\n");
     return true;
   }
 

@@ -158,17 +158,6 @@ public class MainControllerImpl implements MainController {
             getInitialController(7);
           }
         }
-//        StocksImpl stocksImpl = stocksController.getTickerValue();
-//        if (stocksImpl == null) {
-//          if(isFlexible) {
-//            getInitialController(11);
-//          } else {
-//            getInitialController(6);
-//          }
-//        } else {
-//          this.stocksImpl = stocksImpl;
-//          getInitialController(7);
-//        }
         break;
       case 7:
         PortfolioViewImpl portfolioViewsImpl = new PortfolioViewImpl();

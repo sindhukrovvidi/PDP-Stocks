@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import model.StocksImpl;
 import view.StockView;
-import view.StockViewImpl;
 
 import static model.Input.takeStringInput;
 import static model.Output.append;

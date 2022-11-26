@@ -169,4 +169,9 @@ public interface Portfolio {
   boolean validateInputForMultiStocks(float investedAmount, String weightage, int fee,
       String lowerDate, String upperDate, int frequency)
       throws ParseException;
+
+  HashMap<String, TreeMap<Date, StocksImpl>> sellingHelper() throws IOException, ParseException;
+
+  int sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
+      int numberOfSellingStocks, float fee);
 }

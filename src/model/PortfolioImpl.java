@@ -1,5 +1,6 @@
 package model;
 
+import static model.Input.takeStringInput;
 import static model.Output.append;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -636,5 +638,48 @@ public class PortfolioImpl implements Portfolio {
       areValidInputs = false;
     }
     return areValidInputs;
+  }
+
+  @Override
+  public HashMap<String, TreeMap<Date, StocksImpl>> sellingHelper() throws IOException {
+    String tickerValue = takeStringInput("Enter the ticker value:\n");
+    HashMap<String, TreeMap<Date, StocksImpl>> checklist = this.getPortfolio();
+    if (checklist.containsKey(tickerValue)) {
+      SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+      TreeMap<Date, StocksImpl> validDatesList = checklist.get(tickerValue);
+      return checklist;
+//      viewDatesByCompany(checklist, tickerValue);
+//      String date = takeStringInput("Please enter a valid date as per the above list");
+//      Date newDate = sdformat.parse(date);
+//      //TODO while invalid date
+//      validatingSellStocks(validDatesList, newDate);
+//      viewDatesByCompany(checklist, tickerValue);
+//      model.save("portfolios/flexible");
+    }
+//    else {
+//      append("The ticker symbol entered is invalid.\n");
+//      sellingHelper();
+//    }
+    return null;
+  }
+
+  public int sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
+      int numberOfSellingStocks, float fee) {
+    for (Map.Entry<Date, StocksImpl>
+        entry : validDatesList.entrySet()) {
+      if ((numberOfSellingStocks == 0) || entry.getKey().compareTo(newDate) > 0) {
+        break;
+      }
+      if (numberOfSellingStocks >= entry.getValue().getShares()) {
+        numberOfSellingStocks -= entry.getValue().getShares();
+        entry.getValue().updateCommisionValue(fee + entry.getValue().getCommisionFee());
+        entry.getValue().setShares(0);
+      } else {
+        entry.getValue().setShares(entry.getValue().getShares() - numberOfSellingStocks);
+        entry.getValue().updateCommisionValue(fee + entry.getValue().getCommisionFee());
+        numberOfSellingStocks = 0;
+      }
+    }
+    return numberOfSellingStocks;
   }
 }

@@ -52,19 +52,6 @@ public class StockViewImpl implements StockView {
   }
 
   @Override
-  public void displayStarterMenu(MainController main) throws IOException {
-    this.out.append("Choose from below options to proceed further. (Type the index number)."
-        + " \n1. Create a "
-        + "portfolio.\n2. View & speculate existing portfolio " +
-        "\n3. Exit\n");
-  }
-
-  @Override
-  public void addFeature(MainController main) throws IOException, ParseException {
-    main.renderMainMenu();
-  }
-
-  @Override
   public void displayPortfolio(boolean displayHeaders, String company, String date,
       float open, float high,
       float low, float close, float volume, int shares, float fee) throws IOException {
@@ -112,6 +99,22 @@ public class StockViewImpl implements StockView {
     this.out.append(result);
 
   }
+
+
+
+  @Override
+  public void displayStarterMenu(MainController main) throws IOException {
+    this.out.append("Choose from below options to proceed further. (Type the index number)."
+        + " \n1. Create a "
+        + "portfolio.\n2. View & speculate existing portfolio " +
+        "\n3. Exit\n");
+  }
+
+  @Override
+  public void addFeature(MainController main) throws IOException, ParseException {
+    main.renderMainMenu();
+  }
+
 }
 
 
