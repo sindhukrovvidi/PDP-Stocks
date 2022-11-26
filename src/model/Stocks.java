@@ -1,5 +1,7 @@
 package model;
 
+import java.text.ParseException;
+
 /**
  * Interface that contains all the operations related to the stocks.
  */
@@ -19,7 +21,7 @@ public interface Stocks {
    */
   void setCurrentStock(String company, String date, float open, float high, float low,
                        float close, float volume,
-                       int shares, float commissionFee);
+                       int shares, float commissionFee, float percentage, boolean isFuture);
 
   /**
    * Method used to update the quantity of the stocks.

@@ -45,9 +45,9 @@ public class PortfolioTest {
   @Test
   public void testCreateInFlexiblePortfolio() throws ParseException, FileAlreadyExistsException {
     s.setCurrentStock("GOOGGLE INC", "2022-11-16", 121, 23, 23, 34,
-        45, 2, 0);
+        45, 2, 0, 0, false);
     s1.setCurrentStock("Kaggle", "2022-11-16", 121, 23, 23, 34,
-        45, 4, 0);
+        45, 4, 0, 0, false);
     treeMaps.put(new Date(), s);
     entriesInPortfolio.put(portfolioName, treeMaps);
     portfolio.addStockInPortfolio(s);
@@ -98,9 +98,9 @@ public class PortfolioTest {
   @Test
   public void testCreateFlexiblePortfolio() throws ParseException, FileAlreadyExistsException {
     s2.setCurrentStock("GOOGGLE INC", "2022-11-16", 121, 23, 23, 34,
-        45, 2, 0);
+        45, 2, 0, 0, false);
     s3.setCurrentStock("GOOGGLE INC", "2022-11-12", 121, 23, 23, 34,
-        45, 4, 0);
+        45, 4, 0, 0, false);
     treeMaps.put(new Date(), s2);
     entriesInPortfolio.put(portfolioName, treeMaps);
     portfolio.addStockInPortfolio(s2);
@@ -150,9 +150,9 @@ public class PortfolioTest {
   @Test(expected = IllegalArgumentException.class)
   public void testNegativeCommission() throws ParseException, FileAlreadyExistsException {
     s2.setCurrentStock("GOOGGLE INC", "2022-11-16", 121, 23, 23, 34,
-        45, 2, -23);
+        45, 2, -23, 0 , false);
     s3.setCurrentStock("GOOGGLE INC", "2022-11-12", 121, 23, 23, 34,
-        45, 4, 0);
+        45, 4, 0, 0,false);
     treeMaps.put(new Date(), s2);
     entriesInPortfolio.put(portfolioName, treeMaps);
     portfolio.addStockInPortfolio(s2);
@@ -169,9 +169,9 @@ public class PortfolioTest {
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidDateFormat() throws ParseException, FileAlreadyExistsException {
     s2.setCurrentStock("GOOGGLE INC", "11-2022-16", 121, 23, 23, 34,
-        45, 2, -23);
+        45, 2, -23, 0, false);
     s3.setCurrentStock("GOOGGLE INC", "2022-11-12", 121, 23, 23, 34,
-        45, 4, 0);
+        45, 4, 0, 0, false);
     treeMaps.put(new Date(), s2);
     entriesInPortfolio.put(portfolioName, treeMaps);
     portfolio.addStockInPortfolio(s2);

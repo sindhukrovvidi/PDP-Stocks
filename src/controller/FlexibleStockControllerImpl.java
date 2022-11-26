@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
+import model.Stocks;
 import model.StocksImpl;
+import view.StockView;
 import view.StockViewImpl;
 
 import static model.Input.takeFloatInput;
@@ -28,7 +30,7 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
    * @param stocksImpl    model of stockImpl type.
    * @param stockViewImpl view of stockViewImpl type.
    */
-  public FlexibleStockControllerImpl(StocksImpl stocksImpl, StockViewImpl stockViewImpl) {
+  public FlexibleStockControllerImpl(Stocks stocksImpl, StockView stockViewImpl) {
     super(stocksImpl, stockViewImpl);
   }
 
@@ -71,14 +73,14 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
           if (Objects.equals(currentStock.getDate(), formattedDateInput)) {
             model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
                 currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-                currentStock.getVolume(), 0, 0);
+                currentStock.getVolume(), 0, 0,0,false);
             foundDate = true;
             break;
           }
         }
         if (!foundDate) {
           append("There is not stock data for the entered date as it could be an holiday.\n");
-          model.setCurrentStock(tickerValue, dateInput, 0, 0, 0, 0, 0, 0, 0);
+          model.setCurrentStock(tickerValue, dateInput, 0, 0, 0, 0, 0, 0, 0, 0, false);
         }
       } catch (ParseException e) {
         append("RuntimeException, entered bad date format " + e + "\n");
@@ -119,5 +121,6 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
       return null;
     }
   }
+
 
 }

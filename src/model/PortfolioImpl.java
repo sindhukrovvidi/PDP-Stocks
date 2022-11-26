@@ -1,18 +1,24 @@
 package model;
 
+import static model.Output.append;
+
+import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * Class that implements the portfolio interface and is responsible for portfolio actions.
@@ -422,10 +428,19 @@ public class PortfolioImpl implements Portfolio {
       });
     });
 
+    float final_total_value = this.getIsCostBasis() ?
+        total_composition.get() + total_comission_fee.get() : total_composition.get();
+
     HashMap returnObj = new HashMap();
     returnObj.put("inDateList", inDateList);
-    returnObj.put("total_composition", total_composition.get());
+    returnObj.put("final_total_value", final_total_value);
     returnObj.put("total_comission_fee", total_comission_fee.get());
+
+    Date currFormattedDate = sdformat.parse(input);
+    Date todayDate = new Date();
+    if (currFormattedDate.compareTo(todayDate) > 0) {
+      return null;
+    }
     return returnObj;
   }
 
@@ -460,4 +475,166 @@ public class PortfolioImpl implements Portfolio {
     return sb.toString();
   }
 
+  @Override
+  public String calculatePerformaceOverTime(String date1, String date2)
+      throws IOException, ParseException {
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+    Date newDate1 = sdformat.parse(date1);
+    Date newDate2 = sdformat.parse(date2);
+    LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    long t = ChronoUnit.DAYS.between(dateLower, dateUpper);
+
+    HashMap<String, Integer> companyShares = this.getCompanyWiseShares();
+
+    HTTPRequests requests = new HTTPRequestsImpl();
+    TreeMap<LocalDate, Integer> barData = new TreeMap();
+
+    if (t < 5) {
+      return null;
+    } else if (t >= 5 && t <= 30) {
+
+      HashMap<String, StringBuilder> dailyStocksData = new HashMap();
+
+      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+        String comp = entry.getKey();
+        StringBuilder data = requests.getDailyData(comp);
+        dailyStocksData.put(comp, data);
+      }
+
+      barData = this.getDaysWiseData(dailyStocksData, newDate1, newDate2);
+      String data = this.getScaleValue(barData, date1, date2);
+      return data;
+
+
+    } else if (31 <= t && t < 150) { // weekly data
+      HashMap<String, StringBuilder> weeklyStocksData = new HashMap();
+
+      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+        String comp = entry.getKey();
+        StringBuilder data = requests.getWeeklyData(comp);
+        weeklyStocksData.put(comp, data);
+      }
+
+      barData = this.getWeekWiseData(weeklyStocksData, newDate1, newDate2);
+      String data = this.getScaleValue(barData, date1, date2);
+      return data;
+
+    } else if (150 <= t && t <= 900) { // month
+      HashMap<String, StringBuilder> monthlyStocksData = new HashMap();
+
+      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+        String comp = entry.getKey();
+        StringBuilder data = requests.getMonthlyData(comp);
+        monthlyStocksData.put(comp, data);
+      }
+
+      barData = this.getMonthWiseData(monthlyStocksData, newDate1, newDate2);
+      String data = this.getScaleValue(barData, date1, date2);
+      return data;
+
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public void addMultipleStocksInPortfolio(HashMap map, String lowerDate, String upperDate,
+      int frequency, String[] stocksInput, float valueInvested, String weightage, float fee)
+      throws ParseException {
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+
+    List<LocalDate> listOfDates = getDatesForFrequency(lowerDate, upperDate, frequency);
+    String[] percentages = weightage.split(",");
+    int index  =0;
+
+    List<LocalDate> futureDates =
+        listOfDates.stream().filter(ele -> ele.compareTo(LocalDate.now()) > 0).collect(
+            Collectors.toList());
+
+    for (String stock : stocksInput) {
+      ArrayList<StocksImpl> currentStockData = (ArrayList<StocksImpl>) map.get(stock.toUpperCase());
+
+      for (LocalDate futureDate : futureDates) {
+        addStockInPortfolio(new StocksImpl(
+            stock.toUpperCase(),
+            futureDate.toString(), 0, 0, 0, 0, 0, 0, 0,
+            valueInvested * ( Float.parseFloat(percentages[0])/100 ), true
+        ));
+      }
+
+      for (StocksImpl currentStockDatum : currentStockData) {
+        String stockDate = currentStockDatum.getDate();
+        Date newDate = sdformat.parse(stockDate);
+        LocalDate formattedStockData =
+            newDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        boolean isFuture = formattedStockData.compareTo(LocalDate.now()) > 1 ? true : false;
+        if(listOfDates.contains(formattedStockData)) {
+          addStockInPortfolio(new StocksImpl(
+              stock.toUpperCase(),
+              currentStockDatum.getDate(),
+              currentStockDatum.getOpen(),
+              currentStockDatum.getHigh(),
+              currentStockDatum.getLow(),
+              currentStockDatum.getClose(),
+              currentStockDatum.getVolume(),
+              Math.round((valueInvested * ( Float.parseFloat(percentages[0])/100 )) / currentStockDatum.getClose()),
+              fee,
+              Float.parseFloat(percentages[0])/100,
+              false
+              ));
+        }
+      }
+
+      index++;
+    }
+  }
+
+  private List<LocalDate> getDatesForFrequency(String startDate, String endDate, int frequency)
+      throws ParseException {
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+    Date newDate1 = sdformat.parse(startDate);
+    Date newDate2 = sdformat.parse(endDate);
+    LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+    List<LocalDate> listOfDates = new ArrayList<LocalDate>();
+    listOfDates.add(dateLower);
+    LocalDate firstDate = dateLower;
+    LocalDate lastDate;
+    do {
+      lastDate = firstDate.plusDays(frequency);
+      if (lastDate.compareTo(dateUpper) <= 0) {
+        listOfDates.add(lastDate);
+      }
+
+      firstDate = lastDate;
+    } while (firstDate.compareTo(dateUpper) <= 0);
+    return listOfDates;
+  }
+
+  @Override
+  public boolean validateInputForMultiStocks(float investedAmount, String weightage, int fee,
+      String lowerDate, String upperDate, int frequency)
+      throws ParseException {
+    boolean areValidInputs = true;
+
+    String[] percentages = weightage.split(",");
+    float totalWeightage = 0;
+    for (String percentage : percentages) {
+      totalWeightage += Float.parseFloat(percentage.trim());
+    }
+
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+    Date newDate1 = sdformat.parse(lowerDate);
+    Date newDate2 = sdformat.parse(upperDate);
+    LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+    if (investedAmount <= 0 || fee <= 0 || totalWeightage < 100 || (dateLower.compareTo(dateUpper)
+        >= 0) || frequency < 0) {
+      areValidInputs = false;
+    }
+    return areValidInputs;
+  }
 }

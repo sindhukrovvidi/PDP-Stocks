@@ -6,24 +6,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import model.FileAccessorsImpl;
-import model.HTTPRequests;
-import model.HTTPRequestsImpl;
 import model.Portfolio;
 import model.PortfolioImpl;
 import model.StocksImpl;
 import view.PortfolioViewImpl;
+import view.StockView;
 
 import static model.Input.takeFloatInput;
 import static model.Input.takeIntegerInput;
@@ -42,13 +39,13 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    *
    * @param stocksImpl        list of stocks.
    * @param portfolioImpl     portfolio.
-   * @param portfolioViewImpl view of the portfolio.
+   * @param view view of the portfolio.
    * @throws IOException
    */
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-      PortfolioViewImpl
-          portfolioViewImpl) throws IOException {
-    super(stocksImpl, portfolioImpl, portfolioViewImpl);
+      StockView
+          view) throws IOException {
+    super(stocksImpl, portfolioImpl, view);
   }
 
   /**
@@ -58,9 +55,14 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @param portfolioViewImpl view for portfolio.
    * @throws IOException given invalid data.
    */
-  public FlexiblePortfolioControllerImpl(PortfolioImpl portfolioImpl, PortfolioViewImpl
+  public FlexiblePortfolioControllerImpl(PortfolioImpl portfolioImpl, StockView
       portfolioViewImpl) throws IOException {
     super(portfolioImpl, portfolioViewImpl);
+  }
+
+  public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
+      StockView portfolioViewImpl, StockController controller) throws IOException {
+    super(stocksImpl, portfolioImpl, portfolioViewImpl, controller);
   }
 
   /**
@@ -84,6 +86,51 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       for (String s : portfolios.keySet()) {
         updateListOfStocks(s);
       }
+
+      SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+
+      HashMap stockMap = getStockList().getLStocksMap();
+
+      portfolios.forEach((tickerValue, data) -> {
+        TreeMap<Date, StocksImpl> currData = data;
+        data.forEach((date, stock) -> {
+          boolean isFuture = stock.getIsFuture();
+          String stockDate = stock.getDate();
+          Date newDate1 = null;
+
+          try {
+            newDate1 = sdformat.parse(stockDate);
+          } catch (ParseException e) {
+            throw new RuntimeException(e);
+          }
+
+          LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          if (isFuture && dateLower.compareTo(LocalDate.now()) <= 0) {
+            ArrayList currentTickerData = (ArrayList) stockMap.get(tickerValue);
+            for (Object currentTickerDatum : currentTickerData) {
+              StocksImpl curStock = (StocksImpl) currentTickerDatum;
+              String curStockDate = curStock.getDate();
+              if (curStockDate == dateLower.toString()) {
+                currData.put(newDate1, new StocksImpl(
+                    tickerValue,
+                    curStockDate,
+                    curStock.getOpen(),
+                    curStock.getHigh(),
+                    curStock.getLow(),
+                    curStock.getClose(),
+                    curStock.getVolume(),
+                    Math.round(stock.getPercentage() / curStock.getClose()),
+                    curStock.getCommisionFee(),
+                    stock.getPercentage(),
+                    false
+                ));
+              }
+
+            }
+          }
+        });
+      });
+
       model.setPortfolio(portfolios);
       model.setPortfolioName(input);
       controllerToViewHelper(portfolios);
@@ -195,64 +242,12 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   private void performanceOverTime() throws IOException, ParseException {
     String date1 = takeStringInput("Enter the lower limit of the time range in the format of");
     String date2 = takeStringInput("Enter the upper limit of the time range");
-
-    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-    Date newDate1 = sdformat.parse(date1);
-    Date newDate2 = sdformat.parse(date2);
-    LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    long t = ChronoUnit.DAYS.between(dateLower, dateUpper);
-
-    HashMap entries = getStockList().getLStocksMap();
-    HashMap<String, Integer> companyShares = model.getCompanyWiseShares();
-
-    HTTPRequests requests = new HTTPRequestsImpl();
-    TreeMap<LocalDate, Integer> barData = new TreeMap();
-
-    if (t < 5) {
-      append("Enter the time range which has at least 5 days");
-      performanceOverTime();
-    } else if (t >= 5 && t <= 30) {
-
-      HashMap<String, StringBuilder> dailyStocksData = new HashMap();
-
-      for (Entry<String, Integer> entry : companyShares.entrySet()) {
-        String comp = entry.getKey();
-        StringBuilder data = requests.getDailyData(comp);
-        dailyStocksData.put(comp, data);
-      }
-
-      barData = model.getDaysWiseData(dailyStocksData, newDate1, newDate2);
-      String data = model.getScaleValue(barData, date1, date2);
-      view.displayThePerformance(data);
-
-
-    } else if (31 <= t && t < 150) { // weekly data
-      HashMap<String, StringBuilder> weeklyStocksData = new HashMap();
-
-      for (Entry<String, Integer> entry : companyShares.entrySet()) {
-        String comp = entry.getKey();
-        StringBuilder data = requests.getWeeklyData(comp);
-        weeklyStocksData.put(comp, data);
-      }
-
-      barData = model.getWeekWiseData(weeklyStocksData, newDate1, newDate2);
-      String data = model.getScaleValue(barData, date1, date2);
-      view.displayThePerformance(data);
-
-    } else if (150 <= t && t <= 900) { // month
-      HashMap<String, StringBuilder> monthlyStocksData = new HashMap();
-
-      for (Entry<String, Integer> entry : companyShares.entrySet()) {
-        String comp = entry.getKey();
-        StringBuilder data = requests.getMonthlyData(comp);
-        monthlyStocksData.put(comp, data);
-      }
-
-      barData = model.getMonthWiseData(monthlyStocksData, newDate1, newDate2);
-
-    } else {
+    String performanceData = model.calculatePerformaceOverTime(date1, date2);
+    if (performanceData == null) {
       append("The given dates are either invalid or exceeded the limit!!!");
+      performanceOverTime();
+    } else {
+      view.displayThePerformance(performanceData);
     }
   }
 
@@ -286,35 +281,29 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
             + "date.");
     HashMap currData = model.getCompostion(getStockList().getLStocksMap(), input);
 
-    ArrayList<StocksImpl> inDateList = (ArrayList<StocksImpl>) currData.get("inDateList");
-    float total_comission_fee = (float) currData.get("total_comission_fee");
-    float total_composition = (float) currData.get("total_composition");
-    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-    Date formattedDate = sdformat.parse(input);
-    Date todayDate = new Date();
-
-    AtomicBoolean displayHeaders = new AtomicBoolean(true);
-    float final_total_value = model.getIsCostBasis() ?
-        total_composition + total_comission_fee : total_composition;
-    if (formattedDate.compareTo(todayDate) > 0) {
+    if (currData == null) {
       append("The entered date is greater than current date, so can't evaluate your portfolio"
           + ".\n");
-    } else if (inDateList.size() == 0) {
-      append("Total composition of the portfolio is 0 as you do not have any stocks purchased by "
-          + "then.\n");
     } else {
-      inDateList.forEach(val -> {
-        try {
-          view.viewCompositionOfPortfolio(displayHeaders.get(), val.getCompany(), val.getDate(),
-              val.getOpen(),
-              val.getClose(), val.getShares(), val.getCommisionFee(), final_total_value, input);
-          displayHeaders.set(false);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-
-      });
+      AtomicBoolean displayHeaders = new AtomicBoolean(true);
+      ArrayList<StocksImpl> inDateList = (ArrayList<StocksImpl>) currData.get("inDateList");
+      float final_total_value = (float) currData.get("final_total_value");
+      if (inDateList.size() == 0) {
+        append("Total composition of the portfolio is 0 as you do not have any stocks purchased by "
+            + "then.\n");
+      } else {
+        inDateList.forEach(val -> {
+          try {
+            view.viewCompositionOfPortfolio(displayHeaders.get(), val.getCompany(), val.getDate(),
+                val.getOpen(),
+                val.getClose(), val.getShares(), val.getCommisionFee(), final_total_value, input);
+            displayHeaders.set(false);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        });
+      }
     }
-
   }
 }
+

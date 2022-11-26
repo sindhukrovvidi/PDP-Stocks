@@ -1,5 +1,11 @@
 package model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 /**
  * Class that contains all the operations required for retrieving data of a stock and implements the
  * methods of stocks interface.
@@ -17,6 +23,10 @@ public class StocksImpl implements Stocks {
 
   private float volume;
   private float commisionFee;
+
+  private float percentage;
+
+  private boolean isFuture;
 
   /**
    * Constructor that initializes the company, open,close,high,low,date,shares and the volume.
@@ -87,8 +97,10 @@ public class StocksImpl implements Stocks {
    * @param volume volume of shares of the company.
    * @param shares number of shares.
    */
-  public StocksImpl(String date, float open, float high, float low, float close, float volume,
+  public StocksImpl(String company, String date, float open, float high, float low, float close,
+      float volume,
       int shares, float fee) {
+    this.company = company;
     this.date = date;
     this.open = open;
     this.high = high;
@@ -97,6 +109,22 @@ public class StocksImpl implements Stocks {
     this.volume = volume;
     this.shares = shares;
     this.commisionFee = fee;
+  }
+
+  public StocksImpl(String name, String date, float open, float high, float low,
+      float close, float volume,
+      int shares, float fee, float percentage, boolean isFuture) {
+    this.company = name;
+    this.date = date;
+    this.open = open;
+    this.high = high;
+    this.low = low;
+    this.close = close;
+    this.volume = volume;
+    this.shares = shares;
+    this.commisionFee = fee;
+    this.percentage = percentage;
+    this.isFuture = isFuture;
   }
 
   /**
@@ -114,7 +142,7 @@ public class StocksImpl implements Stocks {
   @Override
   public void setCurrentStock(String name, String date, float open, float high, float low,
       float close, float volume,
-      int shares, float fee) {
+      int shares, float fee, float percentage, boolean isFuture) {
     this.company = name;
     this.date = date;
     this.open = open;
@@ -124,6 +152,8 @@ public class StocksImpl implements Stocks {
     this.volume = volume;
     this.shares = shares;
     this.commisionFee = fee;
+    this.percentage = percentage;
+    this.isFuture = isFuture;
   }
 
 
@@ -242,6 +272,14 @@ public class StocksImpl implements Stocks {
 
   public void setShares(int shares) {
     this.shares = shares;
+  }
+
+  public float getPercentage() {
+    return this.percentage;
+  }
+
+  public boolean getIsFuture() {
+    return this.isFuture;
   }
 
 }

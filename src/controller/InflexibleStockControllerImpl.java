@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import model.StocksImpl;
+import view.StockView;
 import view.StockViewImpl;
 
 import static model.Input.takeStringInput;
@@ -22,7 +23,7 @@ public class InflexibleStockControllerImpl extends StockControllerImpl {
    * @param stocksImpl    model of stockImpl type.
    * @param stockViewImpl view of stockViewImpl type.
    */
-  public InflexibleStockControllerImpl(StocksImpl stocksImpl, StockViewImpl stockViewImpl) {
+  public InflexibleStockControllerImpl(StocksImpl stocksImpl, StockView stockViewImpl) {
     super(stocksImpl, stockViewImpl);
   }
 
@@ -45,7 +46,7 @@ public class InflexibleStockControllerImpl extends StockControllerImpl {
       StocksImpl currentStock = (StocksImpl) values.get(0);
       model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
           currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-          currentStock.getVolume(), 0, 0);
+          currentStock.getVolume(), 0, 0, 0, false);
       controllerToViewHelperForStocks(tickerValue, values);
       return afterStocksDisplay(model);
     }

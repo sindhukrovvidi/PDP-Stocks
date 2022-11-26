@@ -11,7 +11,9 @@ import model.FileAccessorsImpl;
 import model.Portfolio;
 import model.PortfolioImpl;
 import model.StocksImpl;
+//import view.JFrameStocksView;
 import view.PortfolioViewImpl;
+import view.StockView;
 import view.StockViewImpl;
 
 import static model.Input.takeIntegerInput;
@@ -27,6 +29,7 @@ public class MainControllerImpl implements MainController {
   Portfolio portfolioImpl;
   private boolean isFlexible;
 
+  StockView view;
   private FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
 
   /**
@@ -36,6 +39,7 @@ public class MainControllerImpl implements MainController {
    */
   public MainControllerImpl() throws IOException {
     this.portfolioImpl = new PortfolioImpl();
+    this.view = new StockViewImpl();
   }
 
 
@@ -47,16 +51,35 @@ public class MainControllerImpl implements MainController {
   @Override
   public void programStartsHere() throws IOException, ParseException {
     try {
+//      StockView view = new StockViewImpl();
+      view.displayStarterMenu(this);
+      view.addFeature(this);
+//      Integer option = takeIntegerInput(
+//          "Checkiinhhh Choose from below options to proceed further. (Type the index number)."
+//              + " \n1. Create a "
+//              + "portfolio.\n2. View & speculate existing portfolio " +
+//              "\n3. Exit\n");
+//      getInitialController(option);
+    } catch (Exception e) {
+      throw e;
+    }
+  }
+
+  public void renderMainMenu() throws IOException, ParseException {
+    try {
+
       Integer option = takeIntegerInput(
-          "Choose from below options to proceed further. (Type the index number)."
-              + " \n1. Create a "
-              + "portfolio.\n2. View & speculate existing portfolio " +
-              "\n3. Exit\n");
+          "Choose from below options to proceed further. (Type the index number).\n"
+              + "1. Create a inflexible portfolio.\n"
+              + "2. Create a flexible portfolio.\n"
+              + "3. View inflexible portfolio.\n"
+              + "4. View/Edit/Sell flexible portfolio.\n"
+              + "5. Exit\n"
+      );
       getInitialController(option);
     } catch (Exception e) {
       throw e;
     }
-
   }
 
   /**
@@ -68,109 +91,125 @@ public class MainControllerImpl implements MainController {
   @Override
   public void getInitialController(int option) throws IOException, ParseException {
     String input;
+    PortfolioViewImpl portfolioViewImpl = new PortfolioViewImpl();
+    PortfolioImpl portfolioImpl = new PortfolioImpl();
+    String[] files;
+    PortfolioControllerImpl portfolioControllerImpl;
+    StockControllerImpl stocksController;
+
     switch (option) {
       case 1:
-        String input1 = takeStringInput("Do you want the type of portfolio as flexible?" +
-            "(YES/NO)");
-        if (input1.equals("YES")) {
-          isFlexible = true;
-          this.portfolioImpl.setIsFlexible(true);
-        } else {
-          this.portfolioImpl.setIsFlexible(false);
-          isFlexible = false;
-        }
-        try {
-          input = takeStringInput("Enter the name for your portfolio.");
-          FileAccessors fileAccessor = new FileAccessorsImpl();
-          String path = this.portfolioImpl.getIsFlexible() ? "portfolios/flexible" : "portfolios" +
-              "/inflexible";
-          if (!fileAccessor.isFileExists(input, path)) {
-            this.portfolioImpl.setPortfolioName(input);
-          } else {
-            throw new FileAlreadyExistsException(input);
-          }
-          this.portfolioImpl.setPortfolioName(input);
-        } catch (Exception e) {
-          append("Invalid input or the file already exists. Please try again.\n");
-          programStartsHere();
-        }
-        getInitialController(4);
+        this.portfolioImpl.setIsFlexible(false);
+        isFlexible = false;
+        getFileNameInput();
+        getInitialController(6);
         break;
       case 2:
-        String input2 = takeStringInput("Do you want to view a flexible portfolio?" +
-            "(YES/NO)");
-        PortfolioViewImpl portfolioViewImpl = new PortfolioViewImpl();
-        PortfolioImpl portfolioImpl = new PortfolioImpl();
-        String[] files;
-        if (input2.equals("YES")) {
-          portfolioImpl.setIsFlexible(true);
-          isFlexible = true;
-          files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/flexible");
-        } else {
-          isFlexible = false;
-          files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/inflexible");
-        }
+        isFlexible = true;
+        this.portfolioImpl.setIsFlexible(true);
+        getFileNameInput();
+        getInitialController(11);
+
+        break;
+      case 3: // view inflexible portfolio
+        isFlexible = false;
+        files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/inflexible");
         input =
             takeStringInput(
                 "Enter the name of the portfolio from the below list: " +
                     "(Just enter the filename without the extension \n" + Arrays.toString(files));
-        PortfolioControllerImpl portfolioControllerImpl;
-        if (input2.equals("YES")) {
-
-          portfolioControllerImpl = new FlexiblePortfolioControllerImpl(portfolioImpl,
-              portfolioViewImpl);
-        } else {
-          portfolioControllerImpl = new InflexiblePortfolioControllerImpl(portfolioImpl,
-              portfolioViewImpl);
-        }
-
+        portfolioControllerImpl = new InflexiblePortfolioControllerImpl(portfolioImpl,
+            view);
+        this.portfolioImpl = portfolioControllerImpl.viewSpeculate(input);
+        programStartsHere();
+        break;
+      case 4: // view flexible portfolio
+        portfolioImpl.setIsFlexible(true);
+        isFlexible = true;
+        files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/flexible");
+        input =
+            takeStringInput(
+                "Enter the name of the portfolio from the below list: " +
+                    "(Just enter the filename without the extension \n" + Arrays.toString(files));
+        portfolioControllerImpl = new FlexiblePortfolioControllerImpl(portfolioImpl,
+            view);
         this.portfolioImpl = portfolioControllerImpl.viewSpeculate(input);
         if (portfolioImpl.getIsFlexible() && portfolioImpl.getBuy()) {
-          getInitialController(4);
+          getInitialController(11);
         }
         programStartsHere();
         break;
-      case 3:
+      case 5:
         System.exit(0);
         break;
-      case 4:
-        StockControllerImpl stocksController;
+
+      case 6:
+
         if (isFlexible) {
-          stocksController = new FlexibleStockControllerImpl(new StocksImpl(), new StockViewImpl());
+//          stocksController = new FlexibleStockControllerImpl(new StocksImpl(), view);
+          getInitialController(11);
         } else {
-          stocksController = new InflexibleStockControllerImpl(new StocksImpl(),
-              new StockViewImpl());
+          stocksController = new InflexibleStockControllerImpl(new StocksImpl(), view);
+          StocksImpl stocksImpl = stocksController.getTickerValue();
+          if(stocksImpl == null) {
+            getInitialController(6);
+          } else {
+            this.stocksImpl = stocksImpl;
+            getInitialController(7);
+          }
         }
-        StocksImpl stocksImpl = stocksController.getTickerValue();
-        if (stocksImpl == null) {
-          getInitialController(4);
-        } else {
-          this.stocksImpl = stocksImpl;
-          getInitialController(5);
-        }
+//        StocksImpl stocksImpl = stocksController.getTickerValue();
+//        if (stocksImpl == null) {
+//          if(isFlexible) {
+//            getInitialController(11);
+//          } else {
+//            getInitialController(6);
+//          }
+//        } else {
+//          this.stocksImpl = stocksImpl;
+//          getInitialController(7);
+//        }
         break;
-      case 5:
+      case 7:
         PortfolioViewImpl portfolioViewsImpl = new PortfolioViewImpl();
         PortfolioControllerImpl portfolioControllersImpl;
         if (isFlexible) {
           portfolioControllersImpl = new FlexiblePortfolioControllerImpl(
               this.stocksImpl,
               this.portfolioImpl,
-              portfolioViewsImpl);
+              view);
         } else {
           portfolioControllersImpl = new InflexiblePortfolioControllerImpl(
               this.stocksImpl,
               this.portfolioImpl,
-              portfolioViewsImpl);
+              view);
         }
         this.portfolioImpl = portfolioControllersImpl.addStock();
         if (this.portfolioImpl == null) {
           this.portfolioImpl = new PortfolioImpl();
           programStartsHere();
         } else if (!this.portfolioImpl.isSaved()) {
-          getInitialController(4);
+          getInitialController(6);
         }
         break;
+
+      case 11:
+//        stocksController = new FlexibleStockControllerImpl(new StocksImpl(), view);
+
+        portfolioControllersImpl = new FlexiblePortfolioControllerImpl(
+            this.stocksImpl,
+            this.portfolioImpl,
+            view,
+            new FlexibleStockControllerImpl(new StocksImpl(), view));
+
+        StocksImpl stocksImpls = portfolioControllersImpl.isBulkStockAddition();
+        if(stocksImpls == null) {
+            getInitialController(11);
+        } else {
+          this.stocksImpl = stocksImpls;
+          getInitialController(7); // or 11
+        }
+
       default:
         System.exit(0);
         break;
@@ -178,5 +217,22 @@ public class MainControllerImpl implements MainController {
 
   }
 
+  public void getFileNameInput() throws IOException, ParseException {
+    try {
+      String input = takeStringInput("Enter the name for your portfolio.");
+      FileAccessors fileAccessor = new FileAccessorsImpl();
+      String path = this.portfolioImpl.getIsFlexible() ? "portfolios/flexible" : "portfolios" +
+          "/inflexible";
+      if (!fileAccessor.isFileExists(input, path)) {
+        this.portfolioImpl.setPortfolioName(input);
+      } else {
+        throw new FileAlreadyExistsException(input);
+      }
+      this.portfolioImpl.setPortfolioName(input);
 
+    } catch (Exception e) {
+      append("Invalid input or the file already exists. Please try again.\n");
+      programStartsHere();
+    }
+  }
 }

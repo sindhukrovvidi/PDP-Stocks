@@ -74,8 +74,13 @@ public class FileAccessorsImpl implements FileAccessors {
             bwr.write(",");
             bwr.write(String.valueOf(value.getCommisionFee())); // commission fee
             bwr.write(",");
-            bwr.write(String.valueOf(value.getClose() * value.getShares())); // total
-            // price for that company
+            bwr.write(String.valueOf(value.getClose() * value.getShares())); // total price for that company
+
+            bwr.write(",");
+            bwr.write(String.valueOf(value.getPercentage())); // percentage invested
+            bwr.write(",");
+            bwr.write(String.valueOf(value.getIsFuture())); // isFuture
+            //
             bwr.write("\n");
           } catch (IOException e) {
             throw new RuntimeException(e);
@@ -141,7 +146,9 @@ public class FileAccessorsImpl implements FileAccessors {
           Float.parseFloat(fields[5]),
           Float.parseFloat(fields[6]),
           Integer.parseInt(fields[7]),
-          Float.parseFloat(fields[8])
+          Float.parseFloat(fields[8]),
+          Float.parseFloat(fields[10]),
+          Boolean.parseBoolean(fields[11])
       );
 
       SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
