@@ -1,8 +1,5 @@
 package model;
 
-import static model.Input.takeStringInput;
-import static model.Output.append;
-
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
@@ -18,9 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Class that implements the portfolio interface and is responsible for portfolio actions.
@@ -616,7 +615,7 @@ public class PortfolioImpl implements Portfolio {
   }
 
   @Override
-  public boolean validateInputForMultiStocks(float investedAmount, String weightage, int fee,
+  public boolean validateInputForMultiStocks(float investedAmount, String weightage, float fee,
       String lowerDate, String upperDate, int frequency)
       throws ParseException {
     boolean areValidInputs = true;
@@ -640,29 +639,29 @@ public class PortfolioImpl implements Portfolio {
     return areValidInputs;
   }
 
-  @Override
-  public HashMap<String, TreeMap<Date, StocksImpl>> sellingHelper() throws IOException {
-    String tickerValue = takeStringInput("Enter the ticker value:\n");
-    HashMap<String, TreeMap<Date, StocksImpl>> checklist = this.getPortfolio();
-    if (checklist.containsKey(tickerValue)) {
-      SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-      TreeMap<Date, StocksImpl> validDatesList = checklist.get(tickerValue);
-      return checklist;
-//      viewDatesByCompany(checklist, tickerValue);
-//      String date = takeStringInput("Please enter a valid date as per the above list");
-//      Date newDate = sdformat.parse(date);
-//      //TODO while invalid date
-//      validatingSellStocks(validDatesList, newDate);
-//      viewDatesByCompany(checklist, tickerValue);
-//      model.save("portfolios/flexible");
-    }
-//    else {
-//      append("The ticker symbol entered is invalid.\n");
-//      sellingHelper();
+//  @Override
+//  public HashMap<String, TreeMap<Date, StocksImpl>> sellingHelper() throws IOException {
+//    String tickerValue = takeStringInput("Enter the ticker value:\n");
+//    HashMap<String, TreeMap<Date, StocksImpl>> checklist = this.getPortfolio();
+//    if (checklist.containsKey(tickerValue)) {
+//      SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+//      TreeMap<Date, StocksImpl> validDatesList = checklist.get(tickerValue);
+//      return checklist;
+////      viewDatesByCompany(checklist, tickerValue);
+////      String date = takeStringInput("Please enter a valid date as per the above list");
+////      Date newDate = sdformat.parse(date);
+////      //TODO while invalid date
+////      validatingSellStocks(validDatesList, newDate);
+////      viewDatesByCompany(checklist, tickerValue);
+////      model.save("portfolios/flexible");
 //    }
-    return null;
-  }
-
+////    else {
+////      append("The ticker symbol entered is invalid.\n");
+////      sellingHelper();
+////    }
+//    return null;
+//  }
+  @Override
   public int sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
       int numberOfSellingStocks, float fee) {
     for (Map.Entry<Date, StocksImpl>
@@ -682,4 +681,23 @@ public class PortfolioImpl implements Portfolio {
     }
     return numberOfSellingStocks;
   }
+
+//  public Object viewPortfolioHelper() {
+//    Object[][] data = {};
+////    DefaultTableModel model =(DefaultTableModel) this.table.getModel();
+//    entriesInPortfolio.forEach((comp, stockList) -> {
+//      stockList.forEach((date, stock) -> {
+//          Object[] row = new Object[5];
+//          row[0]=stock.getCompany();
+//          row[1]=stock.getShares();
+//          model.
+//      });
+//
+//    });
+//    return data;
+//  }
+//  public void saveGUIStocks() {
+//    this.save("",getPortfolio(),"portfolios/flexible");
+//  }
+
 }

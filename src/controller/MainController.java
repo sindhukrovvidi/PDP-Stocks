@@ -24,6 +24,6 @@ public interface MainController {
    */
   void getInitialController(int option) throws IOException, ParseException;
 
-  void renderMainMenu() throws IOException, ParseException;
+//  void renderMainMenu() throws IOException, ParseException;
 
 }

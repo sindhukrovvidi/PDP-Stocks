@@ -9,7 +9,6 @@ import model.StocksImpl;
 import view.StockView;
 
 import static model.Input.takeIntegerInput;
-import static model.Output.append;
 
 /**
  * Class that controls all the stock functions and implements the stock controller.
@@ -41,9 +40,8 @@ abstract public class StockControllerImpl extends Controller implements StockCon
   public StocksImpl afterStocksDisplay(Object model) throws IOException {
     StocksImpl currModel = (StocksImpl) model;
     try {
-      Integer input = takeIntegerInput("Select from the following options.\n1. Add this to "
-          + "portfolio.\n2. Do not add and search stocks for new company.\n3. Go back. "
-          + "\n 4. Exit\n");
+      view.stocksAfterStocksDisplay();
+      Integer input = takeIntegerInput();
       switch (input) {
         case 1:
           currModel = this.addStockToPortfolio(currModel);
@@ -58,11 +56,11 @@ abstract public class StockControllerImpl extends Controller implements StockCon
           System.exit(0);
           break;
         default:
-          System.out.println("Invalid input");
+          view.inValidInput();
           afterStocksDisplay(model);
       }
     } catch (Exception e) {
-      append("Entered invalid input, try again.");
+      view.inValidInput();
       afterStocksDisplay(model);
     }
     return currModel;
@@ -79,13 +77,11 @@ abstract public class StockControllerImpl extends Controller implements StockCon
   public StocksImpl addStockToPortfolio(Object models) throws IOException {
     StocksImpl currModel = (StocksImpl) models;
     try {
-      int value =
-          takeIntegerInput(
-              "Enter the number of shares you want to invest in "
-                  + currModel.getCompany());
+      view.enterSharesToInvest();
+      int value = takeIntegerInput();
+
       if (value <= 0) {
-        append("The number of stocks to be invested should be greater"
-            + " than 0.\n");
+        view.printSellErrorMessage();
         return null;
       } else {
         currModel.updateStockValues(value);
@@ -93,7 +89,7 @@ abstract public class StockControllerImpl extends Controller implements StockCon
       }
 
     } catch (Exception e) {
-      append("Please enter a valid number.\n");
+      view.inValidInput();
       return null;
     }
   }

@@ -8,7 +8,6 @@ import model.StocksImpl;
 import view.StockView;
 
 import static model.Input.takeStringInput;
-import static model.Output.append;
 
 /**
  * Class that contains all operations that are specific to the inflexible portfolio and extends the
@@ -33,13 +32,15 @@ public class InflexibleStockControllerImpl extends StockControllerImpl {
    * @throws IOException invalid data.
    */
   public StocksImpl getTickerValue() throws IOException {
-    String tickerValue = takeStringInput("Enter the ticker value:\n");
+    view.enterTheTickerValue();
+    String tickerValue = takeStringInput();
+
     tickerValue = tickerValue.toUpperCase();
     updateListOfStocks(tickerValue);
     HashMap map = getStockList().getLStocksMap();
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
-      append("You entered an invalid ticker symbol. Please try again\n");
+      view.printInvalidTicker();
       return null;
     } else {
       StocksImpl currentStock = (StocksImpl) values.get(0);

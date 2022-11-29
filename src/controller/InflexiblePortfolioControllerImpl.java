@@ -75,8 +75,9 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       }
       model.setPortfolio(portfolios);
       controllerToViewHelper(portfolios);
-      String currInput = takeStringInput("Would you like to speculate your " +
-          "portfolio?(YES/NO)");
+
+      view.isSpeculateMenu();
+      String currInput = takeStringInput();
       if (currInput.equals("YES")) {
         boolean isValidDate = viewSpeculateHelper(input, getStockList());
         if (!isValidDate) {
@@ -104,13 +105,14 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
             .get(entry.getKey()));
     String firstStockDate = currentStock.get().get(0).getDate();
     String lastStockDate = currentStock.get().get(currentStock.get().size() - 1).getDate();
-    String input =
-        takeStringInput("Enter the date between " + lastStockDate + " and "
-            + firstStockDate);
+
+    view.displayDatesTimerange(lastStockDate, firstStockDate);
+    String input = takeStringInput();
 
     HashMap portfolioData = model.getCompostion(getStockList().getLStocksMap(), input);
 
-    append("Total price of portfolio is " + portfolioData.get("final_total_value") + ".\n");
+    view.totalPortfolioPrice((Float) portfolioData.get("final_total_value"));
+//    append("Total price of portfolio is " + portfolioData.get("final_total_value") + ".\n");
     return true;
   }
 

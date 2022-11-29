@@ -16,13 +16,11 @@ public class Input {
   /**
    * Method used to take an option input which has a question related to operation to be performed.
    *
-   * @param question action selection to be performed.
    * @return input from the user.
    * @throws IOException invalid or unlisted input.
    */
-  public static Integer takeIntegerInput(String question) throws IOException {
+  public static Integer takeIntegerInput() throws IOException {
     Readable in = new InputStreamReader(System.in);
-    append(question);
     appendNewLine();
     Scanner scan = new Scanner(in);
     Integer input = scan.nextInt();
@@ -32,15 +30,13 @@ public class Input {
   /**
    * Method used to take an input which has a question related to operation to be performed.
    *
-   * @param question action selection to be performed.
    * @return input from the user.
    * @throws IOException invalid or unlisted input.
    */
-  public static String takeStringInput(String question) throws IOException {
+  public static String takeStringInput() throws IOException {
     String input = "";
     try {
       Readable in = new InputStreamReader(System.in);
-      append(question);
       appendNewLine();
       Scanner scan = new Scanner(in);
       input = scan.next();
@@ -52,14 +48,12 @@ public class Input {
   /**
    * Method used to take an input which has a question related to operation to be performed.
    *
-   * @param question action selection to be performed.
    * @return input from the user.
    * @throws IOException invalid or unlisted input.
    */
 
-  public static float takeFloatInput(String question) throws IOException {
+  public static float takeFloatInput() throws IOException {
     Readable in = new InputStreamReader(System.in);
-    append(question);
     appendNewLine();
     Scanner scan = new Scanner(in);
     Float input = scan.nextFloat();

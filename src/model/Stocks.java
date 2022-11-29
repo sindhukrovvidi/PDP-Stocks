@@ -1,6 +1,7 @@
 package model;
 
 import java.text.ParseException;
+import java.util.HashMap;
 
 /**
  * Interface that contains all the operations related to the stocks.
@@ -86,5 +87,7 @@ public interface Stocks {
    */
   int getShares();
 
+  StocksImpl createAndAddStockInPortfolio(HashMap map, String ticker, String date,
+      int stocks,  float fee) throws ParseException;
 
 }

@@ -9,17 +9,15 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
-
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import model.FileAccessorsImpl;
 import model.Portfolio;
 import model.PortfolioImpl;
+import model.Stocks;
 import model.StocksImpl;
-import view.PortfolioViewImpl;
+import view.GUIInterface;
 import view.StockView;
 
 import static model.Input.takeFloatInput;
@@ -37,14 +35,18 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   /**
    * Constructor that takes the parameters and initialize them.
    *
-   * @param stocksImpl        list of stocks.
-   * @param portfolioImpl     portfolio.
-   * @param view view of the portfolio.
+   * @param stocksImpl    list of stocks.
+   * @param portfolioImpl portfolio.
+   * @param view          view of the portfolio.
    * @throws IOException
    */
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-      StockView
-          view) throws IOException {
+      StockView view) throws IOException {
+    super(stocksImpl, portfolioImpl, view);
+  }
+
+  public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
+      GUIInterface view) throws IOException {
     super(stocksImpl, portfolioImpl, view);
   }
 
@@ -60,6 +62,14 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     super(portfolioImpl, portfolioViewImpl);
   }
 
+  /**
+   * COntructor to initialise the view and stock, portfolio models.
+   * @param stocksImpl stock modal.
+   * @param portfolioImpl portfolio modal.
+   * @param portfolioViewImpl portfolio view modal.
+   * @param controller stock controller.
+   * @throws IOException
+   */
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
       StockView portfolioViewImpl, StockController controller) throws IOException {
     super(stocksImpl, portfolioImpl, portfolioViewImpl, controller);
@@ -134,8 +144,9 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       model.setPortfolio(portfolios);
       model.setPortfolioName(input);
       controllerToViewHelper(portfolios);
-      String currInput = takeStringInput("Would you like to speculate your "
-          + "portfolio?(YES/NO)");
+
+      view.isSpeculateMenu();
+      String currInput = takeStringInput();
       if (currInput.equals("YES")) {
         model = speculateMenu();
       }
@@ -159,9 +170,8 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @throws ParseException invalid date.
    */
   public Portfolio speculateMenu() throws IOException, ParseException {
-    int input = takeIntegerInput("Choose from the below options:\n 1.Buy stocks.\n "
-        + "2.Sell the stocks.\n 3.Get the total cost basis for the portfolio.\n 4.Get the "
-        + "composition of the portfolio.\n 5.Get the portfolio performance over time.\n 6.Exit");
+    view.displayFlexibleViewMenu();
+    int input = takeIntegerInput();
     switch (input) {
       case 1:
         model.setBuy(true);
@@ -187,21 +197,28 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     }
     return model;
   }
+
   public Portfolio sellTheStocks() throws IOException, ParseException {
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-    String tickerValue = takeStringInput("Enter the ticker value:\n");
-    HashMap<String, TreeMap<Date, StocksImpl>> checklist = model.getPortfolio();
-    if(checklist.containsKey(tickerValue)) {
-      viewDatesByCompany(checklist, tickerValue);
-      String date = takeStringInput("Please enter a valid date as per the above list");
 
-      int numberOfSellingStocks = takeIntegerInput("Please enter the number of stocks you "
-          + "want to sell");
-      float fee = takeFloatInput("Enter the commission fee and it has to greater than zero");
+    view.enterTheTickerValue();
+    String tickerValue = takeStringInput();
+
+    HashMap<String, TreeMap<Date, StocksImpl>> checklist = model.getPortfolio();
+    if (checklist.containsKey(tickerValue)) {
+      viewDatesByCompany(checklist, tickerValue);
+
+      view.enterTheDate();
+      String date = takeStringInput();
+
+      view.enterTheStocksToSell();
+      int numberOfSellingStocks = takeIntegerInput();
+
+      view.enterTheCommissionFee();
+      float fee = takeFloatInput();
 
       if (numberOfSellingStocks <= 0 || fee <= 0) {
-        append("The entered values (shares & fee) should be greater"
-            + " than 0.\n");
+        view.printSellErrorMessage();
         speculateMenu();
       }
 
@@ -209,11 +226,11 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
           numberOfSellingStocks, fee);
 
       if (stocksSold != 0) {
-        append("Your portfolio lacks " + stocksSold + " they are not sold!\n");
+        view.printLackStocks(stocksSold);
       }
       model.save("portfolios/flexible");
     } else {
-      append("The ticker symbol entered is invalid.\n");
+      view.printInvalidTicker();
       sellTheStocks();
     }
 
@@ -221,11 +238,15 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   }
 
   private void performanceOverTime() throws IOException, ParseException {
-    String date1 = takeStringInput("Enter the lower limit of the time range in the format of");
-    String date2 = takeStringInput("Enter the upper limit of the time range");
+    view.enterLowerLimitDate();
+    String date1 = takeStringInput();
+
+    view.enterUpperLimitDate();
+    String date2 = takeStringInput();
+
     String performanceData = model.calculatePerformaceOverTime(date1, date2);
     if (performanceData == null) {
-      append("The given dates are either invalid or exceeded the limit!!!");
+      view.performanceDateErrorMessage();
       performanceOverTime();
     } else {
       view.displayThePerformance(performanceData);
@@ -257,21 +278,19 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @throws ParseException invalid date.
    */
   public void getCompositionOfPortfolio() throws IOException, ParseException {
-    String input = takeStringInput(
-        "Enter the date in YYYY-MM-DD to view the composition on that particular "
-            + "date.");
+    view.enterDateforComposition();
+    String input = takeStringInput();
+
     HashMap currData = model.getCompostion(getStockList().getLStocksMap(), input);
 
     if (currData == null) {
-      append("The entered date is greater than current date, so can't evaluate your portfolio"
-          + ".\n");
+      view.greaterDateMessage();
     } else {
       AtomicBoolean displayHeaders = new AtomicBoolean(true);
       ArrayList<StocksImpl> inDateList = (ArrayList<StocksImpl>) currData.get("inDateList");
       float final_total_value = (float) currData.get("final_total_value");
       if (inDateList.size() == 0) {
-        append("Total composition of the portfolio is 0 as you do not have any stocks purchased by "
-            + "then.\n");
+        view.zeroComposition();
       } else {
         inDateList.forEach(val -> {
           try {

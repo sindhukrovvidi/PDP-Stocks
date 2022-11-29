@@ -10,8 +10,8 @@ import java.util.Objects;
 
 import model.Stocks;
 import model.StocksImpl;
+import view.JFrameStocksView;
 import view.StockView;
-import view.StockViewImpl;
 
 import static model.Input.takeFloatInput;
 import static model.Input.takeIntegerInput;
@@ -30,9 +30,10 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
    * @param stocksImpl    model of stockImpl type.
    * @param stockViewImpl view of stockViewImpl type.
    */
-  public FlexibleStockControllerImpl(Stocks stocksImpl, StockView stockViewImpl) {
+  public FlexibleStockControllerImpl(StocksImpl stocksImpl, StockView stockViewImpl) {
     super(stocksImpl, stockViewImpl);
   }
+
 
   /**
    * Method used to obtain the stocks for a specific ticker value.
@@ -41,13 +42,16 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
    * @throws IOException invalid data.
    */
   public StocksImpl getTickerValue() throws IOException {
-    String tickerValue = takeStringInput("Enter the ticker value:\n");
+
+    view.enterTheTickerValue();
+    String tickerValue = takeStringInput();
+
     tickerValue = tickerValue.toUpperCase();
     updateListOfStocks(tickerValue);
     HashMap map = getStockList().getLStocksMap();
     ArrayList values = (ArrayList) map.get(tickerValue);
     if (values == null) {
-      append("You entered an invalid ticker symbol. Please try again");
+      view.printInvalidTicker();
       return null;
     } else {
       SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
@@ -57,12 +61,12 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
         d1 = sdformat.parse(((StocksImpl) values.get(values.size() - 1)).getDate());
         d2 = sdformat.parse(((StocksImpl) values.get(0)).getDate());
 
-        String dateInput =
-            takeStringInput("Enter the dates between " + sdformat.format(d1) + " and "
-                + sdformat.format(d2));
+        view.displayDatesTimerange(sdformat.format(d1), sdformat.format(d2));
+        String dateInput = takeStringInput();
+
         Date newDate = sdformat.parse(dateInput);
         if (newDate.compareTo(d1) < 0 || newDate.compareTo(d2) > 0) {
-          append("Entered an invalid date. Please enter the date within the given time range.\n");
+          view.inValidDateMessage();
           getTickerValue();
         }
 
@@ -73,17 +77,17 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
           if (Objects.equals(currentStock.getDate(), formattedDateInput)) {
             model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
                 currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-                currentStock.getVolume(), 0, 0,0,false);
+                currentStock.getVolume(), 0, 0, 0, false);
             foundDate = true;
             break;
           }
         }
         if (!foundDate) {
-          append("There is not stock data for the entered date as it could be an holiday.\n");
+          view.noStockDataForDate();
           model.setCurrentStock(tickerValue, dateInput, 0, 0, 0, 0, 0, 0, 0, 0, false);
         }
       } catch (ParseException e) {
-        append("RuntimeException, entered bad date format " + e + "\n");
+        view.inValidDateMessage();
         getTickerValue();
       }
       return afterStocksDisplay(model);
@@ -100,15 +104,15 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
   public StocksImpl addStockToPortfolio(Object models) throws IOException {
     StocksImpl currModel = (StocksImpl) models;
     try {
-      int value =
-          takeIntegerInput(
-              "Enter the number of shares you want to invest in "
-                  + currModel.getCompany());
-      float fee = takeFloatInput("Enter the commission fee and it has to greater than zero");
+
+      view.enterSharesToInvest();
+      int value = takeIntegerInput();
+
+      view.enterTheCommissionFee();
+      float fee = takeFloatInput();
 
       if (value <= 0 || fee <= 0) {
-        append("The entered values (shares & fee) should be greater"
-            + " than 0.\n");
+        view.printSellErrorMessage();
         return null;
       } else {
         currModel.updateStockValues(value);
