@@ -1,5 +1,10 @@
 package model;
 
+import static model.Input.takeStringInput;
+import static model.Output.append;
+import static model.Output.appendNewLine;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
@@ -127,7 +132,8 @@ public class PortfolioImpl implements Portfolio {
    */
   @Override
   public void save(String path) {
-    fileAccessor.writeIntoCSVFile(portfolioName, entriesInPortfolio, path);
+    String name = portfolioName.contains(".csv") ? portfolioName.split(".csv")[0] : portfolioName;
+    fileAccessor.writeIntoCSVFile(name, entriesInPortfolio, path);
     this.saved = true;
   }
 
@@ -547,7 +553,7 @@ public class PortfolioImpl implements Portfolio {
 
     List<LocalDate> listOfDates = getDatesForFrequency(lowerDate, upperDate, frequency);
     String[] percentages = weightage.split(",");
-    int index  =0;
+    int index = 0;
 
     List<LocalDate> futureDates =
         listOfDates.stream().filter(ele -> ele.compareTo(LocalDate.now()) > 0).collect(
@@ -560,7 +566,7 @@ public class PortfolioImpl implements Portfolio {
         addStockInPortfolio(new StocksImpl(
             stock.toUpperCase(),
             futureDate.toString(), 0, 0, 0, 0, 0, 0, 0,
-            valueInvested * ( Float.parseFloat(percentages[0])/100 ), true
+            valueInvested * (Float.parseFloat(percentages[0]) / 100), true
         ));
       }
 
@@ -570,7 +576,7 @@ public class PortfolioImpl implements Portfolio {
         LocalDate formattedStockData =
             newDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 //        boolean isFuture = formattedStockData.compareTo(LocalDate.now()) > 1 ? true : false;
-        if(listOfDates.contains(formattedStockData)) {
+        if (listOfDates.contains(formattedStockData)) {
           addStockInPortfolio(new StocksImpl(
               stock.toUpperCase(),
               currentStockDatum.getDate(),
@@ -579,11 +585,12 @@ public class PortfolioImpl implements Portfolio {
               currentStockDatum.getLow(),
               currentStockDatum.getClose(),
               currentStockDatum.getVolume(),
-              Math.round((valueInvested * ( Float.parseFloat(percentages[0])/100 )) / currentStockDatum.getClose()),
+              Math.round((valueInvested * (Float.parseFloat(percentages[0]) / 100))
+                  / currentStockDatum.getClose()),
               fee,
-              Float.parseFloat(percentages[0])/100,
+              Float.parseFloat(percentages[0]) / 100,
               false
-              ));
+          ));
         }
       }
 
@@ -639,7 +646,7 @@ public class PortfolioImpl implements Portfolio {
     return areValidInputs;
   }
 
-//  @Override
+  //  @Override
 //  public HashMap<String, TreeMap<Date, StocksImpl>> sellingHelper() throws IOException {
 //    String tickerValue = takeStringInput("Enter the ticker value:\n");
 //    HashMap<String, TreeMap<Date, StocksImpl>> checklist = this.getPortfolio();
@@ -700,4 +707,71 @@ public class PortfolioImpl implements Portfolio {
 //    this.save("",getPortfolio(),"portfolios/flexible");
 //  }
 
+  @Override
+  public String[] getPortfolioNames() {
+    FileAccessors fileAccessors = new FileAccessorsImpl();
+    String[] files = fileAccessors.listOfPortfolioFiles("portfolios/flexible");
+    return files;
+  }
+
+
+  public HashMap<String, TreeMap<Date, StocksImpl>> fetchSelectedPortfolio(String input,
+      HashMap stockMap)
+      throws FileAlreadyExistsException {
+
+    HashMap<String, TreeMap<Date, StocksImpl>> portfolios = entriesInPortfolio;
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+
+    portfolios.forEach((tickerValue, data) -> {
+      TreeMap<Date, StocksImpl> currData = data;
+      data.forEach((date, stock) -> {
+        boolean isFuture = stock.getIsFuture();
+        String stockDate = stock.getDate();
+        Date newDate1 = null;
+
+        try {
+          newDate1 = sdformat.parse(stockDate);
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+
+        LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (isFuture && dateLower.compareTo(LocalDate.now()) <= 0) {
+          ArrayList currentTickerData = (ArrayList) stockMap.get(tickerValue);
+          for (Object currentTickerDatum : currentTickerData) {
+            StocksImpl curStock = (StocksImpl) currentTickerDatum;
+            String curStockDate = curStock.getDate();
+            if (curStockDate == dateLower.toString()) {
+              currData.put(newDate1, new StocksImpl(
+                  tickerValue,
+                  curStockDate,
+                  curStock.getOpen(),
+                  curStock.getHigh(),
+                  curStock.getLow(),
+                  curStock.getClose(),
+                  curStock.getVolume(),
+                  Math.round(stock.getPercentage() / curStock.getClose()),
+                  curStock.getCommisionFee(),
+                  stock.getPercentage(),
+                  false
+              ));
+            }
+
+          }
+        }
+      });
+    });
+
+    this.setPortfolio(portfolios);
+    this.setPortfolioName(input);
+//      controllerToViewHelper(portfolios);
+
+//      view.isSpeculateMenu();
+//      String currInput = takeStringInput();
+//      if (currInput.equals("YES")) {
+//        model = speculateMenu();
+//      }
+
+    return this.entriesInPortfolio;
+  }
 }

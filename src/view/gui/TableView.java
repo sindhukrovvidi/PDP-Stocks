@@ -1,7 +1,6 @@
 package view.gui;
 
 import javax.swing.ScrollPaneConstants;
-import javax.swing.table.DefaultTableModel;
 
 public class TableView extends javax.swing.JFrame {
 

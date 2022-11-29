@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
@@ -25,11 +26,19 @@ public class GUIMainController extends Controller implements Features {
 
   public GUIMainController() throws IOException {
 //    super();
+    initialiseModel();
+//    portfolioModel = new PortfolioImpl();
+//    stockModel = new StocksImpl();
+//    view = new JFrameStocksView(this);
+//    portfolioController = new FlexiblePortfolioControllerImpl(stockModel, portfolioModel, view);
+
+  }
+
+  private void initialiseModel() throws IOException {
     portfolioModel = new PortfolioImpl();
     stockModel = new StocksImpl();
     view = new JFrameStocksView(this);
     portfolioController = new FlexiblePortfolioControllerImpl(stockModel, portfolioModel, view);
-
   }
 
   public void setView(JFrameStocksView v) {
@@ -52,7 +61,8 @@ public class GUIMainController extends Controller implements Features {
     }
   }
 
-  public boolean createPortfolio(String filename) throws FileAlreadyExistsException {
+  public boolean createPortfolio(String filename) throws IOException {
+    initialiseModel();
     boolean checkFile = checkIfFileExists(filename);
     return checkFile;
   }
@@ -126,9 +136,80 @@ public class GUIMainController extends Controller implements Features {
         upperDate, frequency, tickerList, valueInvested, weightage, fee);
   }
 
+  @Override
+  public String[] getPortfolioNames() {
+    return portfolioModel.getPortfolioNames();
+  }
+
+  @Override
+  public HashMap<String, TreeMap<Date, StocksImpl>> renderTheSelectedPortfolio(String fileName)
+      throws IOException, ParseException {
+//    FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
+//    if (!fileAccessorsImpl.isFileExists(fileName, "portfolios/flexible")) {
+//      throw new FileNotFoundException(fileName);
+//    }
+//
+//    HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(fileName,
+//        "portfolios"
+//            + "/flexible");
+//    for (String s : portfolios.keySet()) {
+//      updateListOfStocks(s);
+//    }
+    upDateListOfStocksHelper(fileName);
+
+    return portfolioModel.fetchSelectedPortfolio(fileName, getStockList().getLStocksMap());
+  }
+
+  @Override
+  public HashMap getCompositionOfThePortfolio(String fileName, String date, boolean isCostBasis)
+      throws ParseException, IOException {
+
+    upDateListOfStocksHelper(fileName);
+//
+//    FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
+//    if (!fileAccessorsImpl.isFileExists(fileName, "portfolios/flexible")) {
+//      throw new FileNotFoundException(fileName);
+//    }
+//
+//    HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(fileName,
+//        "portfolios"
+//            + "/flexible");
+//    for (String s : portfolios.keySet()) {
+//      updateListOfStocks(s);
+//    }
+    portfolioModel.setIsCostBasis(isCostBasis);
+//    portfolioModel.setPortfolioName(fileName);
+//    portfolioModel.setPortfolio(portfolios);
+    System.out.println("GUI controller getCompositionOfThePortfolio returning");
+    return portfolioModel.getCompostion(getStockList().getLStocksMap(), date);
+
+
+  }
+
+//  /**
+//   * @param filename
+//   */
 //  @Override
-//  public HashMap<String, TreeMap<Date, StocksImpl>> viewPortfolio() {
-//      return portfolioModel.getPortfolio();
+//  public HashMap<String, TreeMap<Date, StocksImpl>> updateTheCurrentPortfolio(String filename)
+//      throws IOException, ParseException {
+//    upDateListOfStocksHelper(filename);
+//    return portfolioModel.getPortfolio();
 //  }
 
+  private void upDateListOfStocksHelper(String filename) throws IOException, ParseException {
+    FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
+    if (!fileAccessorsImpl.isFileExists(filename, "portfolios/flexible")) {
+      throw new FileNotFoundException(filename);
+    }
+
+    HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(filename,
+        "portfolios"
+            + "/flexible");
+    for (String s : portfolios.keySet()) {
+      updateListOfStocks(s);
+    }
+
+    portfolioModel.setPortfolioName(filename);
+    portfolioModel.setPortfolio(portfolios);
+  }
 }

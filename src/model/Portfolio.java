@@ -218,5 +218,9 @@ public interface Portfolio {
   int sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
       int numberOfSellingStocks, float fee);
 
+  String[] getPortfolioNames();
+
+  HashMap<String, TreeMap<Date, StocksImpl>> fetchSelectedPortfolio(String input, HashMap stockMap)
+      throws FileAlreadyExistsException;
 //  void saveGUIStocks();
 }
