@@ -4,7 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Class that contains all the operations required for retrieving data of a stock and implements the
@@ -12,7 +15,7 @@ import java.util.Date;
  */
 public class StocksImpl implements Stocks {
 
-  private int shares;
+  private float shares;
 
   private float open;
   private float close;
@@ -75,7 +78,7 @@ public class StocksImpl implements Stocks {
    * @param shares number of shares.
    */
   public StocksImpl(String date, float open, float high, float low, float close, float volume,
-      int shares) {
+      float shares) {
     this.date = date;
     this.open = open;
     this.high = high;
@@ -99,7 +102,7 @@ public class StocksImpl implements Stocks {
    */
   public StocksImpl(String company, String date, float open, float high, float low, float close,
       float volume,
-      int shares, float fee) {
+      float shares, float fee) {
     this.company = company;
     this.date = date;
     this.open = open;
@@ -113,7 +116,7 @@ public class StocksImpl implements Stocks {
 
   public StocksImpl(String name, String date, float open, float high, float low,
       float close, float volume,
-      int shares, float fee, float percentage, boolean isFuture) {
+      float shares, float fee, float percentage, boolean isFuture) {
     this.company = name;
     this.date = date;
     this.open = open;
@@ -142,7 +145,7 @@ public class StocksImpl implements Stocks {
   @Override
   public void setCurrentStock(String name, String date, float open, float high, float low,
       float close, float volume,
-      int shares, float fee, float percentage, boolean isFuture) {
+      float shares, float fee, float percentage, boolean isFuture) {
     this.company = name;
     this.date = date;
     this.open = open;
@@ -156,20 +159,19 @@ public class StocksImpl implements Stocks {
     this.isFuture = isFuture;
   }
 
-
-  public void setCurrentStockWithFee(String company, String date, float open, float high, float low,
-      float close, float volume,
-      int shares, float fee) {
-    this.company = company;
-    this.date = date;
-    this.open = open;
-    this.high = high;
-    this.low = low;
-    this.close = close;
-    this.volume = volume;
-    this.shares = shares;
-    this.commisionFee = fee;
-  }
+//  public StocksImpl(String name, String date, float open, float high, float low,
+//      float close, float volume,
+//      int shares, float fee, float percentage, boolean isFuture) {
+//    this.company = company;
+//    this.date = date;
+//    this.open = open;
+//    this.high = high;
+//    this.low = low;
+//    this.close = close;
+//    this.volume = volume;
+//    this.shares = shares;
+//    this.commisionFee = fee;
+//  }
 
   /**
    * Method used to update the quantity of the stocks.
@@ -177,7 +179,7 @@ public class StocksImpl implements Stocks {
    * @param values value to be updated.
    */
   @Override
-  public void updateStockValues(int values) {
+  public void updateStockValues(float values) {
     this.shares = values;
   }
 
@@ -266,11 +268,11 @@ public class StocksImpl implements Stocks {
    * @return number of shares.
    */
   @Override
-  public int getShares() {
+  public float getShares() {
     return this.shares;
   }
 
-  public void setShares(int shares) {
+  public void setShares(float shares) {
     this.shares = shares;
   }
 
@@ -280,6 +282,49 @@ public class StocksImpl implements Stocks {
 
   public boolean getIsFuture() {
     return this.isFuture;
+  }
+
+  public boolean isValidDate(String date) {
+    try {
+      LocalDate lt = LocalDate.parse(date);
+      if (lt.compareTo(LocalDate.now()) < 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  @Override
+  public StocksImpl createAndAddStockInPortfolio(HashMap map, String ticker, String date,
+      int stocks, float fee) throws ParseException {
+    String tickerValue = ticker.toUpperCase();
+    StocksImpl currStock = null;
+//    updateListOfStocks(tickerValue);
+//    HashMap map = getStockList().getLStocksMap();
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+    Date newDate = sdformat.parse(date);
+    String formattedDateInput = sdformat.format(newDate);
+    ArrayList values = (ArrayList) map.get(tickerValue);
+    boolean foundDate = false;
+    for (Object value : values) {
+      StocksImpl currentStock = (StocksImpl) value;
+      if (Objects.equals(currentStock.getDate(), formattedDateInput)) {
+        currStock = new StocksImpl(tickerValue, currentStock.getDate(),
+            currentStock.getOpen(),
+            currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+            currentStock.getVolume(), stocks, fee, 0, false);
+        foundDate = true;
+        break;
+      }
+    }
+    if (!foundDate) {
+//      noStockDataForDate();
+      currStock = new StocksImpl(tickerValue, date, 0, 0, 0, 0, 0, 0, 0, 0, false);
+    }
+    return currStock;
   }
 
 }

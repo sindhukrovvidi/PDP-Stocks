@@ -1,7 +1,5 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,7 +10,7 @@ public class ListOfStocksImpl implements ListOfStocks {
 
   HashMap<String, ArrayList<StocksImpl>> listOfStocks;
 
-  public ListOfStocksImpl() throws IOException {
+  public ListOfStocksImpl() {
     listOfStocks = new HashMap<>();
   }
 

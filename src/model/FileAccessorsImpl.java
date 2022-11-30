@@ -74,7 +74,8 @@ public class FileAccessorsImpl implements FileAccessors {
             bwr.write(",");
             bwr.write(String.valueOf(value.getCommisionFee())); // commission fee
             bwr.write(",");
-            bwr.write(String.valueOf(value.getClose() * value.getShares())); // total price for that company
+            bwr.write(String.valueOf(
+                value.getClose() * value.getShares())); // total price for that company
 
             bwr.write(",");
             bwr.write(String.valueOf(value.getPercentage())); // percentage invested
@@ -108,7 +109,10 @@ public class FileAccessorsImpl implements FileAccessors {
     if (!theDir.exists()) {
       theDir.mkdirs();
     }
-    File f = new File(fp.toString() + "/" + filename + ".csv");
+    File f = filename.contains(".csv") ?  new File(fp.toString() + "/" + filename) : new File(fp.toString() + "/" + filename +
+        ".csv");
+
+//    File f = new File(fp.toString() + "/" + filename + ".csv");
     return f.exists() && !f.isDirectory();
   }
 
@@ -130,7 +134,8 @@ public class FileAccessorsImpl implements FileAccessors {
     if (!theDir.exists()) {
       theDir.mkdirs();
     }
-    File f = new File(fp.toString() + "/" + portfolioName + ".csv");
+    File f = portfolioName.contains(".csv") ?  new File(fp.toString() + "/" + portfolioName) : new File(fp.toString() + "/" + portfolioName +
+        ".csv");
 
     BufferedReader reader = readCSV(f.getPath());
     while ((line = reader.readLine()) != null && !line.isEmpty()) {
@@ -145,7 +150,7 @@ public class FileAccessorsImpl implements FileAccessors {
           Float.parseFloat(fields[4]),
           Float.parseFloat(fields[5]),
           Float.parseFloat(fields[6]),
-          Integer.parseInt(fields[7]),
+          Float.parseFloat(fields[7]),
           Float.parseFloat(fields[8]),
           Float.parseFloat(fields[10]),
           Boolean.parseBoolean(fields[11])
@@ -161,8 +166,6 @@ public class FileAccessorsImpl implements FileAccessors {
         currStockData.put(newDate, stocksImpl);
         portfolio.put(fields[0], currStockData);
       }
-
-//      portfolio.put(fields[0], stocksImpl);
     }
     reader.close();
     return portfolio;

@@ -10,15 +10,14 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import model.Portfolio;
+import model.Stocks;
 import model.StocksImpl;
-import view.PortfolioViewImpl;
+import view.GUIInterface;
 import view.StockView;
 
 import static model.Input.takeFloatInput;
 import static model.Input.takeIntegerInput;
 import static model.Input.takeStringInput;
-import static model.Output.append;
-import static model.Output.appendNewLine;
 
 /**
  * Class that controls the portfolios and that implements the functions in  portfolio controller.
@@ -28,7 +27,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
 
   protected Portfolio model;
   protected StockView view;
-
+  protected GUIInterface view1;
   protected StocksImpl stocksImplModel;
 
   protected StockController stocksController;
@@ -65,6 +64,15 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     this.view = view;
   }
 
+  public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
+      GUIInterface view)
+      throws IOException {
+    super();
+    this.stocksImplModel = model;
+    this.model = portfolioImpl;
+    this.view1 = view;
+  }
+
   public PortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
       StockView view, StockController controller) throws IOException {
     super();
@@ -84,8 +92,6 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
   @Override
   public Portfolio addStock() throws IOException, ParseException {
     model.addStockInPortfolio(stocksImplModel);
-    append("Successfully added the stock in draft portfolio");
-    appendNewLine();
     HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries = model.getPortfolio();
     controllerToViewHelper(portfolioEntries);
     return afterAddingStock(model);
@@ -101,15 +107,12 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    */
   @Override
   public Portfolio afterAddingStock(Portfolio model) throws IOException {
-    append("Successfully added the stock in portfolio");
-    appendNewLine();
     int input = 0;
     try {
-      input = takeIntegerInput("Choose from below options.\n 1."
-          + " Add another stock\n2. Save this portfolio.\n3. "
-          + "Back to main menu.\n4. Exit.");
+      view.afterAddingStocksMenu();
+      input = takeIntegerInput();
     } catch (Exception e) {
-      append("Please enter a valid input.\n");
+      view.inValidInput();
       afterAddingStock(model);
     }
     switch (input) {
@@ -130,7 +133,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
         System.exit(0);
         break;
       default:
-        append("Invalid input");
+        view.inValidInput();
         System.exit(0);
     }
     return model;
@@ -164,10 +167,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
   @Override
   public StocksImpl isBulkStockAddition() throws IOException, ParseException {
     StocksImpl stocksImpl = null;
-    int input = takeIntegerInput("Choose from the below options.\n"
-        + "1. Add a single stock to the portfolio.\n"
-        + "2. Add multiple stocks at once.\n"
-        + "3. Save the current portfolio.\n");
+    view.displayBulkAdditionMenu();
+    int input = takeIntegerInput();
     switch (input) {
       case 1:
         stocksImpl = stocksController.getTickerValue();
@@ -185,14 +186,27 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
   }
 
   public void investMultipleStocksAtOnce() throws IOException, ParseException {
-    String stocksInput = takeStringInput("Enter the list of stocks with coma (,) separated.");
-    float valueInvested = takeFloatInput("Enter the amount to be invested.");
-    String weightage = takeStringInput("Enter the weightage for each stock. Keep in mind that it "
-        + "should add up to 100!!!");
-    int fee = takeIntegerInput("Enter the commission fee");
-    String lowerDate = takeStringInput("Enter the lower limit of the timerange in yyyy-mm-dd");
-    String upperDate = takeStringInput("Enter the upper limit of the timerange in yyyy-mm-dd");
-    int frequency = takeIntegerInput("Enter the frequency in days.");
+    view.enterListOfStocks();
+    String stocksInput = takeStringInput();
+
+    view.enterAmountToInvest();
+    float valueInvested = takeFloatInput();
+
+    view.enterTheWeightage();
+    String weightage = takeStringInput();
+
+    view.enterTheCommissionFee();
+    int fee = takeIntegerInput();
+
+    view.enterLowerLimitDate();
+    String lowerDate = takeStringInput();
+
+    view.enterUpperLimitDate();
+    String upperDate = takeStringInput();
+
+    view.enterFrequency();
+    int frequency = takeIntegerInput();
+
     String[] tickerValuesList = stocksInput.split(",");
     for (String s : tickerValuesList) {
       updateListOfStocks(s.trim().toUpperCase());
@@ -200,7 +214,6 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
       ArrayList values = (ArrayList) map.get(s.trim().toUpperCase());
       if (values == null) {
         investMultipleStocksAtOnce();
-//        return null;
       }
     }
 
@@ -211,12 +224,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     } else {
       model.addMultipleStocksInPortfolio(getStockList().getLStocksMap(), lowerDate, upperDate,
           frequency, tickerValuesList, valueInvested, weightage, fee);
-//      view.displayPortfolio();
-      System.out.println("Updated in portfolio");
-//      stocksController.afterStocksDisplay();
-      // Should show more options
-//      isBulkStockAddition();
     }
   }
+
 }
 

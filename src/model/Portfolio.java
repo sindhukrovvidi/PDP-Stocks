@@ -104,7 +104,7 @@ public interface Portfolio {
    * @return returns hashmap.
    */
 
-  HashMap<String, Integer> getCompanyWiseShares();
+  HashMap<String, Float> getCompanyWiseShares();
 
   /**
    * Fetches the day wise data for a given time range.
@@ -151,22 +151,76 @@ public interface Portfolio {
 
   /**
    * Scales the performncae of the bar graph.
+   *
    * @param performanceData data after fetching the required data.
-   * @param date1 initial date.
-   * @param date2 end date.
+   * @param date1           initial date.
+   * @param date2           end date.
    * @return String that has the performance data.
    */
   String getScaleValue(TreeMap<LocalDate, Integer> performanceData, String date1,
       String date2);
 
+  /**
+   * Calculates the performance of the portfolio in given timerange.
+   *
+   * @param date1 lower limit of the date.
+   * @param date2 upped limit of the date.
+   * @return a string with the details of bar chart.
+   * @throws IOException    for invalid input.
+   * @throws ParseException while parsing invalid date.
+   */
   String calculatePerformaceOverTime(String date1, String date2) throws IOException, ParseException;
 
+  /**
+   * Adds multiple stocks at ince in a portfolio.
+   *
+   * @param map           contains the entire ticker data.
+   * @param lowerDate     lower limit of the timerange.
+   * @param upperDate     upper limit of the timerange.
+   * @param frequency     no of days the stocks need to be added periodically.
+   * @param stocksInput   list of stocks to be added.
+   * @param valueInvested amount to be invested.
+   * @param weightage     percentage to be invested on each stock.
+   * @param fee           commission fee for the purchase of stocks.
+   * @throws ParseException while parsing an invalid date.
+   */
   void addMultipleStocksInPortfolio(HashMap map, String lowerDate, String upperDate,
       int frequency, String[] stocksInput, float valueInvested, String weightage, float fee)
       throws ParseException;
 
-
-  boolean validateInputForMultiStocks(float investedAmount, String weightage, int fee,
+  /**
+   * Validates all the inputs for addition of multiple stocks.
+   *
+   * @param investedAmount amount to be invested.
+   * @param weightage      percentage to be invested on each stock.
+   * @param fee            commission fee for the purchase of stocks.
+   * @param lowerDate      lower limit of the timerange.
+   * @param upperDate      upper limit of the timerange.
+   * @param frequency      no of days the stocks need to be added periodically.
+   * @return boolean, true if all are valid inputs else false.
+   * @throws ParseException while parsing incvalid date.
+   */
+  boolean validateInputForMultiStocks(float investedAmount, String weightage, float fee,
       String lowerDate, String upperDate, int frequency)
       throws ParseException;
+
+//  HashMap<String, TreeMap<Date, StocksImpl>> sellingHelper() throws IOException, ParseException;
+
+  /**
+   * Method to sell the stocks in portfolio.
+   *
+   * @param validDatesList        list of stocks tha are selected to be sold.
+   * @param newDate               date on which the stocks are to be sold.
+   * @param numberOfSellingStocks no of stocks to be sold.
+   * @param fee                   commission fee for selling the stocks.
+   * @return remaining stocks after selling.
+   */
+  float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
+      float numberOfSellingStocks, float fee);
+
+  String[] getPortfolioNames();
+
+  HashMap<String, TreeMap<Date, StocksImpl>> fetchSelectedPortfolio(String input, HashMap stockMap)
+      throws FileAlreadyExistsException;
+//  void saveGUIStocks();
 }
