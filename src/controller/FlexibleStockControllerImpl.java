@@ -8,9 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
-import model.Stocks;
 import model.StocksImpl;
-import view.JFrameStocksView;
 import view.StockView;
 
 import static model.Input.takeFloatInput;
@@ -76,8 +74,8 @@ public class FlexibleStockControllerImpl extends StockControllerImpl {
           StocksImpl currentStock = (StocksImpl) value;
           if (Objects.equals(currentStock.getDate(), formattedDateInput)) {
             model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
-                currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-                currentStock.getVolume(), 0, 0, 0, false);
+                    currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+                    currentStock.getVolume(), 0, 0, 0, false);
             foundDate = true;
             break;
           }

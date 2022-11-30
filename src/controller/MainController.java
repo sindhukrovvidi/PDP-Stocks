@@ -23,7 +23,4 @@ public interface MainController {
    * @throws IOException when the user chooses an invalid or unlisted option.
    */
   void getInitialController(int option) throws IOException, ParseException;
-
-//  void renderMainMenu() throws IOException, ParseException;
-
 }

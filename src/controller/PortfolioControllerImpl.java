@@ -10,7 +10,6 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import model.Portfolio;
-import model.Stocks;
 import model.StocksImpl;
 import view.GUIInterface;
 import view.StockView;
@@ -41,7 +40,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException invalid input of model or view.
    */
   public PortfolioControllerImpl(Portfolio portfolioImpl, StockView view)
-      throws IOException {
+          throws IOException {
     super();
     this.model = portfolioImpl;
     this.view = view;
@@ -56,25 +55,42 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException if the parameters given are invalid.
    */
   public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
-      StockView view)
-      throws IOException {
+                                 StockView view)
+          throws IOException {
     super();
     this.stocksImplModel = model;
     this.model = portfolioImpl;
     this.view = view;
   }
 
+  /**
+   * Constructor that initializes the model and view.
+   *
+   * @param model         the model input.
+   * @param portfolioImpl portfolio implementation.
+   * @param view          view input.
+   * @throws IOException if the parameters given are invalid.
+   */
   public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
-      GUIInterface view)
-      throws IOException {
+                                 GUIInterface view)
+          throws IOException {
     super();
     this.stocksImplModel = model;
     this.model = portfolioImpl;
     this.view1 = view;
   }
 
+  /**
+   * Constructor that initializes the stocks,portfolio,view and controller.
+   *
+   * @param stocksImpl    stock controller implementation.
+   * @param portfolioImpl portfolio implementation.
+   * @param view          view input.
+   * @param controller    initializes the controller.
+   * @throws IOException if the parameters given are invalid.
+   */
   public PortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-      StockView view, StockController controller) throws IOException {
+                                 StockView view, StockController controller) throws IOException {
     super();
     this.stocksImplModel = stocksImpl;
     this.model = portfolioImpl;
@@ -151,10 +167,10 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
       v.forEach((key, value) -> {
         try {
           view.displayPortfolio(displayHeaders.get(), value.getCompany(),
-              value.getDate(),
-              value.getOpen(), value.getHigh(), value.getLow(),
-              value.getClose(), value.getVolume(), value.getShares(),
-              value.getCommisionFee());
+                  value.getDate(),
+                  value.getOpen(), value.getHigh(), value.getLow(),
+                  value.getClose(), value.getVolume(), value.getShares(),
+                  value.getCommisionFee());
           displayHeaders.set(false);
         } catch (IOException e) {
           throw new RuntimeException(e);
@@ -179,12 +195,19 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
         break;
       case 3:
         model.save("portfolios/flexible");
+        break;
       default:
-        System.exit(0);
+        // there is no default for this case.
     }
     return stocksImpl;
   }
 
+  /**
+   * The method that supports to invest in more than one stock at a time.
+   *
+   * @throws IOException    when the input is invalid.
+   * @throws ParseException when the data is not parsable.
+   */
   public void investMultipleStocksAtOnce() throws IOException, ParseException {
     view.enterListOfStocks();
     String stocksInput = takeStringInput();
@@ -218,12 +241,12 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     }
 
     boolean areValid = model.validateInputForMultiStocks(valueInvested, weightage, fee, lowerDate,
-        upperDate, frequency);
+            upperDate, frequency);
     if (!areValid) {
       investMultipleStocksAtOnce();
     } else {
       model.addMultipleStocksInPortfolio(getStockList().getLStocksMap(), lowerDate, upperDate,
-          frequency, tickerValuesList, valueInvested, weightage, fee);
+              frequency, tickerValuesList, valueInvested, weightage, fee);
     }
   }
 

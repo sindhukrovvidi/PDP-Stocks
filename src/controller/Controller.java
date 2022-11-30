@@ -41,7 +41,7 @@ public abstract class Controller {
       HTTPRequests requests = new HTTPRequestsImpl();
       StringBuilder currTickerData = requests.getData(tickerValue);
       listOfStocksImpl.updateStocksList(map,
-          currTickerData, tickerValue);
+              currTickerData, tickerValue);
       setStocksList(listOfStocksImpl);
     }
 

@@ -45,6 +45,7 @@ public class Input {
     }
     return input;
   }
+
   /**
    * Method used to take an input which has a question related to operation to be performed.
    *
