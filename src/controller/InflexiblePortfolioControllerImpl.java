@@ -30,25 +30,25 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   /**
    * Constructor that takes the parameters and initialize them.
    *
-   * @param stocksImpl        list of stocks.
-   * @param portfolioImpl     portfolio name.
-   * @param view view of the portfolio.
+   * @param stocksImpl    list of stocks.
+   * @param portfolioImpl portfolio name.
+   * @param view          view of the portfolio.
    * @throws IOException invalid data.
    */
   public InflexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-      StockView view) throws IOException {
+                                           StockView view) throws IOException {
     super(stocksImpl, portfolioImpl, view);
   }
 
   /**
    * Constructor that takes the parameters and initialize them.
    *
-   * @param portfolioImpl     name of the portfolio.
-   * @param view view of the portfolio.
+   * @param portfolioImpl name of the portfolio.
+   * @param view          view of the portfolio.
    * @throws IOException invalid data.
    */
   public InflexiblePortfolioControllerImpl(Portfolio portfolioImpl,
-      StockView view) throws IOException {
+                                           StockView view) throws IOException {
     super(portfolioImpl, view);
   }
 
@@ -68,8 +68,8 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       }
 
       HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(input,
-          "portfolios" +
-              "/inflexible");
+              "portfolios" +
+                      "/inflexible");
       for (String s : portfolios.keySet()) {
         updateListOfStocks(s);
       }
@@ -96,13 +96,13 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   }
 
   private boolean viewSpeculateHelper(String fileName, ListOfStocksImpl listOfStocksImpl)
-      throws IOException, ParseException {
+          throws IOException, ParseException {
     Map.Entry<String, ArrayList<StocksImpl>> entry = (Map.Entry<String, ArrayList<StocksImpl>>)
-        listOfStocksImpl.getLStocksMap()
-            .entrySet().iterator().next();
+            listOfStocksImpl.getLStocksMap()
+                    .entrySet().iterator().next();
     AtomicReference<ArrayList<StocksImpl>> currentStock = new AtomicReference<>(
-        (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
-            .get(entry.getKey()));
+            (ArrayList<StocksImpl>) listOfStocksImpl.getLStocksMap()
+                    .get(entry.getKey()));
     String firstStockDate = currentStock.get().get(0).getDate();
     String lastStockDate = currentStock.get().get(currentStock.get().size() - 1).getDate();
 

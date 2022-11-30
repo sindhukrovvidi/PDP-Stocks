@@ -41,7 +41,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException invalid input of model or view.
    */
   public PortfolioControllerImpl(Portfolio portfolioImpl, StockView view)
-      throws IOException {
+          throws IOException {
     super();
     this.model = portfolioImpl;
     this.view = view;
@@ -56,8 +56,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
    * @throws IOException if the parameters given are invalid.
    */
   public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
-      StockView view)
-      throws IOException {
+                                 StockView view)
+          throws IOException {
     super();
     this.stocksImplModel = model;
     this.model = portfolioImpl;
@@ -65,8 +65,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
   }
 
   public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
-      GUIInterface view)
-      throws IOException {
+                                 GUIInterface view)
+          throws IOException {
     super();
     this.stocksImplModel = model;
     this.model = portfolioImpl;
@@ -74,7 +74,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
   }
 
   public PortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-      StockView view, StockController controller) throws IOException {
+                                 StockView view, StockController controller) throws IOException {
     super();
     this.stocksImplModel = stocksImpl;
     this.model = portfolioImpl;
@@ -151,10 +151,10 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
       v.forEach((key, value) -> {
         try {
           view.displayPortfolio(displayHeaders.get(), value.getCompany(),
-              value.getDate(),
-              value.getOpen(), value.getHigh(), value.getLow(),
-              value.getClose(), value.getVolume(), value.getShares(),
-              value.getCommisionFee());
+                  value.getDate(),
+                  value.getOpen(), value.getHigh(), value.getLow(),
+                  value.getClose(), value.getVolume(), value.getShares(),
+                  value.getCommisionFee());
           displayHeaders.set(false);
         } catch (IOException e) {
           throw new RuntimeException(e);
@@ -218,12 +218,12 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     }
 
     boolean areValid = model.validateInputForMultiStocks(valueInvested, weightage, fee, lowerDate,
-        upperDate, frequency);
+            upperDate, frequency);
     if (!areValid) {
       investMultipleStocksAtOnce();
     } else {
       model.addMultipleStocksInPortfolio(getStockList().getLStocksMap(), lowerDate, upperDate,
-          frequency, tickerValuesList, valueInvested, weightage, fee);
+              frequency, tickerValuesList, valueInvested, weightage, fee);
     }
   }
 
