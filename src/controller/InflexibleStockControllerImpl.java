@@ -45,8 +45,8 @@ public class InflexibleStockControllerImpl extends StockControllerImpl {
     } else {
       StocksImpl currentStock = (StocksImpl) values.get(0);
       model.setCurrentStock(tickerValue, currentStock.getDate(), currentStock.getOpen(),
-          currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-          currentStock.getVolume(), 0, 0, 0, false);
+              currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+              currentStock.getVolume(), 0, 0, 0, false);
       controllerToViewHelperForStocks(tickerValue, values);
       return afterStocksDisplay(model);
     }

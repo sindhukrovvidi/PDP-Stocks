@@ -1,6 +1,7 @@
 package view;
 
 import controller.MainController;
+
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -23,8 +24,8 @@ public interface StockView {
    * @throws IOException invalid input.
    */
   void displayListOfDates(boolean displayHeaders, String company, String date,
-      float open, float high,
-      float low, float close, float volume) throws IOException;
+                          float open, float high,
+                          float low, float close, float volume) throws IOException;
 
   /**
    * Renders the starter menu of the program.
@@ -44,7 +45,7 @@ public interface StockView {
   void addFeature(MainController features) throws IOException, ParseException;
 
   /**
-   * Renders the portfolio
+   * Renders the portfolio.
    *
    * @param displayHeaders boolean to display headers or not.
    * @param company        company name.
@@ -59,8 +60,9 @@ public interface StockView {
    * @throws IOException with invalid input/output.
    */
   void displayPortfolio(boolean displayHeaders, String company, String date,
-      float open, float high,
-      float low, float close, float volume, float shares, float fee) throws IOException;
+                        float open, float high,
+                        float low, float close, float volume, float shares, float fee)
+          throws IOException;
 
   /**
    * Renders the composition of the stock.
@@ -77,9 +79,10 @@ public interface StockView {
    * @throws IOException with invalid input/output.
    */
   void viewCompositionOfPortfolio(boolean displayHeaders, String company, String date,
-      float open,
-      float close,
-      float shares, float fee, float total, String dateOfComposition) throws IOException;
+                                  float open,
+                                  float close,
+                                  float shares, float fee, float total, String dateOfComposition)
+          throws IOException;
 
   /**
    * Render the performance of the portfolio for a giben time.
@@ -161,7 +164,7 @@ public interface StockView {
   void enterUpperLimitDate() throws IOException;
 
   /**
-   * Displays an error message while calculating the error meessage/
+   * Displays an error message while calculating the error message.
    *
    * @throws IOException with invalid input/output.
    */

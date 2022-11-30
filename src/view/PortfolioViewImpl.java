@@ -35,44 +35,47 @@ public class PortfolioViewImpl implements PortfolioView {
    */
   @Override
   public void displayPortfolio(boolean displayHeaders, String company, String date,
-      float open, float high,
-      float low, float close, float volume, int shares, float fee) throws IOException {
+                               float open, float high,
+                               float low, float close, float volume, int shares, float fee)
+          throws IOException {
 
     Formatter fmt = new Formatter();
     if (displayHeaders) {
       fmt.format("%15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n", "Company", "Date", "Open",
-          "High", "Low",
-          "Close", "Volume", "Shares Invested", "Total Value", "Commission fee"
-              + "\n");
+              "High", "Low",
+              "Close", "Volume", "Shares Invested", "Total Value", "Commission fee"
+                      + "\n");
     }
     fmt.format("%15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n", company, date, open, high,
-        low,
-        close, volume, shares, (shares * close), fee);
+            low,
+            close, volume, shares, (shares * close), fee);
     this.out.append(fmt.toString());
   }
 
   @Override
   public void viewCompositionOfPortfolio(boolean displayHeaders, String company, String date,
-      float open,
-      float close,
-      int shares, float fee, float total, String dateOfComposition) throws IOException {
+                                         float open,
+                                         float close,
+                                         int shares, float fee, float total,
+                                         String dateOfComposition) throws IOException {
     Formatter fmt = new Formatter();
     if (displayHeaders) {
       this.out.append("Total value till " + dateOfComposition + " is: " + total + "\n");
       this.out.append(
-          "Following is the list of stocks till date: " + dateOfComposition + "\n");
+              "Following is the list of stocks till date: " + dateOfComposition + "\n");
       fmt.format("%15s %15s %15s %15s %15s %15s\n", "Company", "Date", "Open",
-          "Close", "Shares Invested", "Commission fee"
-              + "\n");
+              "Close", "Shares Invested", "Commission fee"
+                      + "\n");
     }
     fmt.format("%15s %15s %15s %15s %15s %15s \n", company, date, open,
-        close, shares, fee);
+            close, shares, fee);
     this.out.append(fmt.toString());
 
   }
 
   /**
    * Pronts the performance bar.
+   *
    * @param result print.
    * @throws IOException if invalid.
    */

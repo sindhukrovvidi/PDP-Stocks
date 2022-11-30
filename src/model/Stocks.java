@@ -88,6 +88,6 @@ public interface Stocks {
   float getShares();
 
   StocksImpl createAndAddStockInPortfolio(HashMap map, String ticker, String date,
-      int stocks,  float fee) throws ParseException;
+                                          int stocks, float fee) throws ParseException;
 
 }

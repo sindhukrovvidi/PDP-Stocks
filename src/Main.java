@@ -24,7 +24,7 @@ public class Main {
     System.out.println("2. Select GUI");
     Scanner scan = new Scanner(System.in);
     int option = scan.nextInt();
-    if(option == 1) {
+    if (option == 1) {
       MainControllerImpl helperController = new MainControllerImpl();
       helperController.programStartsHere();
     } else {
