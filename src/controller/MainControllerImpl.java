@@ -52,7 +52,6 @@ public class MainControllerImpl implements MainController {
       view.displayStarterMenu(this);
       Integer option = takeIntegerInput();
 
-      view.addFeature(this);
       getInitialController(option);
     } catch (Exception e) {
       throw e;

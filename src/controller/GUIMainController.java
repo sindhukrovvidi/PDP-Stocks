@@ -63,7 +63,7 @@ public class GUIMainController extends Controller implements Features {
   }
 
   public boolean validateSingleStocksData(String tickerName, String date, int stocks, float fee)
-          throws IOException {
+      throws IOException {
 
     String tickerValue = tickerName.toUpperCase();
     updateListOfStocks(tickerValue);
@@ -76,10 +76,10 @@ public class GUIMainController extends Controller implements Features {
   }
 
   public void addStockToPortfolio(String tickerName, String date, int stocks, float fee)
-          throws ParseException {
+      throws ParseException {
     StocksImpl currStock = stockModel.createAndAddStockInPortfolio(getStockList().getLStocksMap(),
-            tickerName, date,
-            stocks, fee);
+        tickerName, date,
+        stocks, fee);
     portfolioModel.addStockInPortfolio(currStock);
 //    System.out.println(portfolioModel.getPortfolio());
 //    portfolioModel.addStockInPortfolio();
@@ -88,7 +88,6 @@ public class GUIMainController extends Controller implements Features {
 
   @Override
   public void saveCurrentPortfolio() {
-//    portfolioModel.saveGUIStocks();
     portfolioModel.save("portfolios/flexible");
   }
 
@@ -99,8 +98,8 @@ public class GUIMainController extends Controller implements Features {
 
   @Override
   public boolean isValidateInputForMultiStocks(String stocksInput, float investedAmount,
-                                               String weightage, float fee,
-                                               String lowerDate, String upperDate, int frequency) throws ParseException, IOException {
+      String weightage, float fee,
+      String lowerDate, String upperDate, int frequency) throws ParseException, IOException {
     String[] tickerValuesList = stocksInput.split(",");
     for (String s : tickerValuesList) {
       updateListOfStocks(s.trim().toUpperCase());
@@ -111,16 +110,16 @@ public class GUIMainController extends Controller implements Features {
       }
     }
     return portfolioModel.validateInputForMultiStocks(investedAmount, weightage, fee, lowerDate,
-            upperDate,
-            frequency,
+        upperDate,
+        frequency,
         tickerValuesList);
 //    return false;
   }
 
   @Override
   public void addDollarCostAveragingStocks(String lowerDate, String upperDate, int frequency,
-                                           String tickerValuesList, float valueInvested, String weightage, float fee)
-          throws ParseException {
+      String tickerValuesList, float valueInvested, String weightage, float fee)
+      throws ParseException {
 //    if(tickerValuesList not null)
     String[] tickerList;
     if (tickerValuesList.length() > 0) {
@@ -129,7 +128,7 @@ public class GUIMainController extends Controller implements Features {
       tickerList = null;
     }
     portfolioModel.addMultipleStocksInPortfolio(getStockList().getLStocksMap(), lowerDate,
-            upperDate, frequency, tickerList, valueInvested, weightage, fee);
+        upperDate, frequency, tickerList, valueInvested, weightage, fee);
   }
 
   @Override
@@ -139,7 +138,7 @@ public class GUIMainController extends Controller implements Features {
 
   @Override
   public HashMap<String, TreeMap<Date, StocksImpl>> renderTheSelectedPortfolio(String fileName)
-          throws IOException, ParseException {
+      throws IOException, ParseException {
 //    FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
 //    if (!fileAccessorsImpl.isFileExists(fileName, "portfolios/flexible")) {
 //      throw new FileNotFoundException(fileName);
@@ -158,7 +157,7 @@ public class GUIMainController extends Controller implements Features {
 
   @Override
   public HashMap getCompositionOfThePortfolio(String fileName, String date, boolean isCostBasis)
-          throws ParseException, IOException {
+      throws ParseException, IOException {
 
     upDateListOfStocksHelper(fileName);
 //
@@ -191,11 +190,11 @@ public class GUIMainController extends Controller implements Features {
    */
   @Override
   public float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, String newDate,
-                             float numberOfSellingStocks, float fee) throws ParseException {
+      float numberOfSellingStocks, float fee) throws ParseException {
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     float stocksSold = portfolioModel.sellTheStocks(validDatesList, sdformat.parse(newDate),
-            numberOfSellingStocks,
-            fee);
+        numberOfSellingStocks,
+        fee);
     portfolioModel.save("portfolios/flexible");
     System.out.println(portfolioModel.getPortfolio());
     return stocksSold;
@@ -229,8 +228,8 @@ public class GUIMainController extends Controller implements Features {
     }
 
     HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(filename,
-            "portfolios"
-                    + "/flexible");
+        "portfolios"
+            + "/flexible");
     for (String s : portfolios.keySet()) {
       updateListOfStocks(s);
     }
