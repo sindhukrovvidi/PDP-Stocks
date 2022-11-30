@@ -8,6 +8,9 @@ import java.util.TreeMap;
 
 import model.StocksImpl;
 
+/**
+ * The interface that contains all the methods for the required features.
+ */
 public interface Features {
 
   boolean createPortfolio(String filename) throws IOException;
@@ -24,10 +27,12 @@ public interface Features {
 
   boolean isValidateInputForMultiStocks(String stocksInput, float investedAmount, String weightage
           , float fee,
-                                        String lowerDate, String upperDate, int frequency) throws ParseException, IOException;
+                                        String lowerDate, String upperDate, int frequency)
+          throws ParseException, IOException;
 
   void addDollarCostAveragingStocks(String lowerDate, String upperDate, int frequency,
-                                    String tickerValuesList, float valueInvested, String weightage, float fee)
+                                    String tickerValuesList, float valueInvested, String weightage,
+                                    float fee)
           throws ParseException;
 
   String[] getPortfolioNames();
@@ -35,11 +40,11 @@ public interface Features {
   HashMap<String, TreeMap<Date, StocksImpl>> renderTheSelectedPortfolio(String fileName)
           throws IOException, ParseException;
 
-//  void addKeyListeners();
 
-  HashMap getCompositionOfThePortfolio(String fileName, String date, boolean isCostBasis) throws ParseException, IOException;
+  HashMap getCompositionOfThePortfolio(String fileName, String date, boolean isCostBasis)
+          throws ParseException, IOException;
 
-  //  HashMap<String, TreeMap<Date, StocksImpl>> updateTheCurrentPortfolio(String filename) throws IOException, ParseException;
+
   float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, String newDate,
                       float numberOfSellingStocks, float fee) throws ParseException;
 }

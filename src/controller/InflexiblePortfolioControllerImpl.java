@@ -112,7 +112,6 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     HashMap portfolioData = model.getCompostion(getStockList().getLStocksMap(), input);
 
     view.totalPortfolioPrice((Float) portfolioData.get("final_total_value"));
-//    append("Total price of portfolio is " + portfolioData.get("final_total_value") + ".\n");
     return true;
   }
 

@@ -42,7 +42,8 @@ public class FileAccessorsImpl implements FileAccessors {
    */
   @Override
   public void writeIntoCSVFile(String filename,
-      HashMap<String, TreeMap<Date, StocksImpl>> entriesInPortfolio, String path) {
+                               HashMap<String, TreeMap<Date, StocksImpl>> entriesInPortfolio,
+                               String path) {
 
     try {
       Path currentPath = Paths.get(System.getProperty("user.dir"));
@@ -75,7 +76,7 @@ public class FileAccessorsImpl implements FileAccessors {
             bwr.write(String.valueOf(value.getCommisionFee())); // commission fee
             bwr.write(",");
             bwr.write(String.valueOf(
-                value.getClose() * value.getShares())); // total price for that company
+                    value.getClose() * value.getShares())); // total price for that company
 
             bwr.write(",");
             bwr.write(String.valueOf(value.getPercentage())); // percentage invested
@@ -109,10 +110,10 @@ public class FileAccessorsImpl implements FileAccessors {
     if (!theDir.exists()) {
       theDir.mkdirs();
     }
-    File f = filename.contains(".csv") ?  new File(fp.toString() + "/" + filename) : new File(fp.toString() + "/" + filename +
-        ".csv");
+    File f = filename.contains(".csv") ? new File(fp.toString() + "/" + filename) :
+            new File(fp.toString() + "/" + filename +
+                    ".csv");
 
-//    File f = new File(fp.toString() + "/" + filename + ".csv");
     return f.exists() && !f.isDirectory();
   }
 
@@ -125,7 +126,7 @@ public class FileAccessorsImpl implements FileAccessors {
    */
   @Override
   public HashMap<String, TreeMap<Date, StocksImpl>> viewFile(String portfolioName, String path)
-      throws IOException, ParseException {
+          throws IOException, ParseException {
     HashMap<String, TreeMap<Date, StocksImpl>> portfolio = new HashMap<>();
     String line;
     Path currentPath = Paths.get(System.getProperty("user.dir"));
@@ -134,8 +135,9 @@ public class FileAccessorsImpl implements FileAccessors {
     if (!theDir.exists()) {
       theDir.mkdirs();
     }
-    File f = portfolioName.contains(".csv") ?  new File(fp.toString() + "/" + portfolioName) : new File(fp.toString() + "/" + portfolioName +
-        ".csv");
+    File f = portfolioName.contains(".csv") ? new File(fp.toString() + "/" + portfolioName)
+            : new File(fp.toString() + "/" + portfolioName +
+            ".csv");
 
     BufferedReader reader = readCSV(f.getPath());
     while ((line = reader.readLine()) != null && !line.isEmpty()) {
@@ -143,17 +145,17 @@ public class FileAccessorsImpl implements FileAccessors {
 
       StocksImpl stocksImpl = new StocksImpl();
       stocksImpl.setCurrentStock(
-          fields[0],
-          fields[1],
-          Float.parseFloat(fields[2]),
-          Float.parseFloat(fields[3]),
-          Float.parseFloat(fields[4]),
-          Float.parseFloat(fields[5]),
-          Float.parseFloat(fields[6]),
-          Float.parseFloat(fields[7]),
-          Float.parseFloat(fields[8]),
-          Float.parseFloat(fields[10]),
-          Boolean.parseBoolean(fields[11])
+              fields[0],
+              fields[1],
+              Float.parseFloat(fields[2]),
+              Float.parseFloat(fields[3]),
+              Float.parseFloat(fields[4]),
+              Float.parseFloat(fields[5]),
+              Float.parseFloat(fields[6]),
+              Float.parseFloat(fields[7]),
+              Float.parseFloat(fields[8]),
+              Float.parseFloat(fields[10]),
+              Boolean.parseBoolean(fields[11])
       );
 
       SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");

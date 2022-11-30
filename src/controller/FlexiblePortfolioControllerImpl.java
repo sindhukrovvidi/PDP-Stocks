@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import model.FileAccessorsImpl;
 import model.Portfolio;
 import model.PortfolioImpl;
-import model.Stocks;
 import model.StocksImpl;
 import view.GUIInterface;
 import view.StockView;
@@ -39,7 +38,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @param stocksImpl    list of stocks.
    * @param portfolioImpl portfolio.
    * @param view          view of the portfolio.
-   * @throws IOException
+   * @throws IOException when the data is invalid.
    */
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
                                          StockView view) throws IOException {
@@ -70,10 +69,11 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @param portfolioImpl     portfolio modal.
    * @param portfolioViewImpl portfolio view modal.
    * @param controller        stock controller.
-   * @throws IOException
+   * @throws IOException when the data is invalid.
    */
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-                                         StockView portfolioViewImpl, StockController controller) throws IOException {
+                                         StockView portfolioViewImpl, StockController controller)
+          throws IOException {
     super(stocksImpl, portfolioImpl, portfolioViewImpl, controller);
   }
 
@@ -196,12 +196,20 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         break;
       case 6:
         System.exit(0);
-      default:
         break;
+      default:
+        /* no default case. */
     }
     return model;
   }
 
+  /**
+   * Method that is responsible to perform the sell operations on the stocks.
+   *
+   * @return model that has updated stocks after selling the stocks.
+   * @throws IOException    when the data is invalid.
+   * @throws ParseException when the data is not parsable.
+   */
   public Portfolio sellTheStocks() throws IOException, ParseException {
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -300,7 +308,8 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
           try {
             view.viewCompositionOfPortfolio(displayHeaders.get(), val.getCompany(), val.getDate(),
                     val.getOpen(),
-                    val.getClose(), val.getShares(), val.getCommisionFee(), final_total_value, input);
+                    val.getClose(), val.getShares(), val.getCommisionFee(), final_total_value,
+                    input);
             displayHeaders.set(false);
           } catch (IOException e) {
             throw new RuntimeException(e);

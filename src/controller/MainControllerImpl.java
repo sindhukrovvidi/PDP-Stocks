@@ -26,7 +26,6 @@ public class MainControllerImpl implements MainController {
 
   StocksImpl stocksImpl;
   Portfolio portfolioImpl;
-  private boolean isFlexible;
 
   StockView view;
   private FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
@@ -50,7 +49,6 @@ public class MainControllerImpl implements MainController {
   @Override
   public void programStartsHere() throws IOException, ParseException {
     try {
-//      StockView view = new StockViewImpl();
       view.displayStarterMenu(this);
       Integer option = takeIntegerInput();
 
@@ -70,6 +68,7 @@ public class MainControllerImpl implements MainController {
   @Override
   public void getInitialController(int option) throws IOException, ParseException {
     String input;
+    boolean isFlexible = false;
     PortfolioViewImpl portfolioViewImpl = new PortfolioViewImpl();
     PortfolioImpl portfolioImpl = new PortfolioImpl();
     String[] files;
@@ -90,7 +89,7 @@ public class MainControllerImpl implements MainController {
         getInitialController(11);
 
         break;
-      case 3: // view inflexible portfolio
+      case 3:
         isFlexible = false;
         files = fileAccessorsImpl.listOfPortfolioFiles("portfolios/inflexible");
 
@@ -125,7 +124,6 @@ public class MainControllerImpl implements MainController {
       case 6:
 
         if (isFlexible) {
-//          stocksController = new FlexibleStockControllerImpl(new StocksImpl(), view);
           getInitialController(11);
         } else {
           stocksController = new InflexibleStockControllerImpl(new StocksImpl(), view);
@@ -176,14 +174,20 @@ public class MainControllerImpl implements MainController {
           this.stocksImpl = stocksImpls;
           getInitialController(7); // or 11
         }
-
+        break;
       default:
-        System.exit(0);
+        // there is no default for this.
         break;
     }
 
   }
 
+  /**
+   * The method that is used to take the filename input from the user which he wants to view.
+   *
+   * @throws IOException    when the input is invalid.
+   * @throws ParseException when the data is not parsable.
+   */
   public void getFileNameInput() throws IOException, ParseException {
     try {
       view.enterPortfolioName();

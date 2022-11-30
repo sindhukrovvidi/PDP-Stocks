@@ -10,7 +10,6 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import model.Portfolio;
-import model.Stocks;
 import model.StocksImpl;
 import view.GUIInterface;
 import view.StockView;
@@ -64,6 +63,14 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     this.view = view;
   }
 
+  /**
+   * Constructor that initializes the model and view.
+   *
+   * @param model         the model input.
+   * @param portfolioImpl portfolio implementation.
+   * @param view          view input.
+   * @throws IOException if the parameters given are invalid.
+   */
   public PortfolioControllerImpl(StocksImpl model, Portfolio portfolioImpl,
                                  GUIInterface view)
           throws IOException {
@@ -73,6 +80,15 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     this.view1 = view;
   }
 
+  /**
+   * Constructor that initializes the stocks,portfolio,view and controller.
+   *
+   * @param stocksImpl    stock controller implementation.
+   * @param portfolioImpl portfolio implementation.
+   * @param view          view input.
+   * @param controller    initializes the controller.
+   * @throws IOException if the parameters given are invalid.
+   */
   public PortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
                                  StockView view, StockController controller) throws IOException {
     super();
@@ -179,12 +195,19 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
         break;
       case 3:
         model.save("portfolios/flexible");
+        break;
       default:
-        System.exit(0);
+        // there is no default for this case.
     }
     return stocksImpl;
   }
 
+  /**
+   * The method that supports to invest in more than one stock at a time.
+   *
+   * @throws IOException    when the input is invalid.
+   * @throws ParseException when the data is not parsable.
+   */
   public void investMultipleStocksAtOnce() throws IOException, ParseException {
     view.enterListOfStocks();
     String stocksInput = takeStringInput();

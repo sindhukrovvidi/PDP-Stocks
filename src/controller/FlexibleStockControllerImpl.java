@@ -8,9 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
-import model.Stocks;
 import model.StocksImpl;
-import view.JFrameStocksView;
 import view.StockView;
 
 import static model.Input.takeFloatInput;
