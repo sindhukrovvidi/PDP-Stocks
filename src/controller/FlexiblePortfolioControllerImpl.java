@@ -41,12 +41,12 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @throws IOException when the data is invalid.
    */
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-                                         StockView view) throws IOException {
+      StockView view) throws IOException {
     super(stocksImpl, portfolioImpl, view);
   }
 
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-                                         GUIInterface view) throws IOException {
+      GUIInterface view) throws IOException {
     super(stocksImpl, portfolioImpl, view);
   }
 
@@ -58,7 +58,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @throws IOException given invalid data.
    */
   public FlexiblePortfolioControllerImpl(PortfolioImpl portfolioImpl, StockView
-          portfolioViewImpl) throws IOException {
+      portfolioViewImpl) throws IOException {
     super(portfolioImpl, portfolioViewImpl);
   }
 
@@ -72,8 +72,8 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
    * @throws IOException when the data is invalid.
    */
   public FlexiblePortfolioControllerImpl(StocksImpl stocksImpl, Portfolio portfolioImpl,
-                                         StockView portfolioViewImpl, StockController controller)
-          throws IOException {
+      StockView portfolioViewImpl, StockController controller)
+      throws IOException {
     super(stocksImpl, portfolioImpl, portfolioViewImpl, controller);
   }
 
@@ -93,8 +93,8 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       }
 
       HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(input,
-              "portfolios"
-                      + "/flexible");
+          "portfolios"
+              + "/flexible");
       for (String s : portfolios.keySet()) {
         updateListOfStocks(s);
       }
@@ -124,17 +124,17 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
               String curStockDate = curStock.getDate();
               if (Objects.equals(curStockDate, dateLower.toString())) {
                 currData.put(newDate1, new StocksImpl(
-                        tickerValue,
-                        curStockDate,
-                        curStock.getOpen(),
-                        curStock.getHigh(),
-                        curStock.getLow(),
-                        curStock.getClose(),
-                        curStock.getVolume(),
-                        stock.getPercentage() / curStock.getClose(),
-                        curStock.getCommisionFee(),
-                        stock.getPercentage(),
-                        false
+                    tickerValue,
+                    curStockDate,
+                    curStock.getOpen(),
+                    curStock.getHigh(),
+                    curStock.getLow(),
+                    curStock.getClose(),
+                    curStock.getVolume(),
+                    stock.getPercentage() / curStock.getClose(),
+                    curStock.getCommisionFee(),
+                    stock.getPercentage(),
+                    false
                 ));
               }
             }
@@ -235,7 +235,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       }
 
       float stocksSold = model.sellTheStocks(checklist.get(tickerValue), sdformat.parse(date),
-              numberOfSellingStocks, fee);
+          numberOfSellingStocks, fee);
 
       if (stocksSold != 0) {
         view.printLackStocks(stocksSold);
@@ -266,16 +266,16 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
   }
 
   private void viewDatesByCompany(HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries,
-                                  String company) {
+      String company) {
     AtomicBoolean displayHeaders = new AtomicBoolean(true);
     TreeMap<Date, StocksImpl> v = portfolioEntries.get(company);
     v.forEach((key, value) -> {
       try {
         view.displayPortfolio(displayHeaders.get(), value.getCompany(),
-                value.getDate(),
-                value.getOpen(), value.getHigh(), value.getLow(),
-                value.getClose(), value.getVolume(), value.getShares(),
-                value.getCommisionFee());
+            value.getDate(),
+            value.getOpen(), value.getHigh(), value.getLow(),
+            value.getClose(), value.getVolume(), value.getShares(),
+            value.getCommisionFee());
         displayHeaders.set(false);
       } catch (IOException e) {
         throw new RuntimeException(e);
@@ -307,9 +307,9 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         inDateList.forEach(val -> {
           try {
             view.viewCompositionOfPortfolio(displayHeaders.get(), val.getCompany(), val.getDate(),
-                    val.getOpen(),
-                    val.getClose(), val.getShares(), val.getCommisionFee(), final_total_value,
-                    input);
+                val.getOpen(),
+                val.getClose(), val.getShares(), val.getCommisionFee(), final_total_value,
+                input);
             displayHeaders.set(false);
           } catch (IOException e) {
             throw new RuntimeException(e);

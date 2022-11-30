@@ -125,7 +125,7 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
           System.out.println("Got the portfolio name from dropdown...." + portfolio);
           try {
             populateTable(features.renderTheSelectedPortfolio(portfolio),
-                    (DefaultTableModel) viewPortfolioFrame.viewPortfolioTable.getModel());
+                (DefaultTableModel) viewPortfolioFrame.viewPortfolioTable.getModel());
           } catch (IOException er) {
             throw new RuntimeException(er);
           } catch (ParseException er) {
@@ -139,15 +139,15 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
     mainFrame.buyStocksButton.addActionListener(e -> {
       initialLiseFrames();
       generateDropDown(
-              (DefaultComboBoxModel) buyStocksFrame.portfolioFilesDropDown.getModel(),
-              features.getPortfolioNames());
+          (DefaultComboBoxModel) buyStocksFrame.portfolioFilesDropDown.getModel(),
+          features.getPortfolioNames());
       mainFrame.jSplitPane1.setRightComponent(buyStocksFrame.jPanel1);
       buyStocksFrame.portfolioFilesDropDown.addActionListener(selected -> {
         String portfolio = (String) buyStocksFrame.portfolioFilesDropDown.getSelectedItem();
         try {
           System.out.println("Rendering view for portfolio...." + portfolio);
           populateTable(features.renderTheSelectedPortfolio(portfolio),
-                  (DefaultTableModel) buyStocksFrame.viewPortfolioTable.getModel());
+              (DefaultTableModel) buyStocksFrame.viewPortfolioTable.getModel());
           buyStocksFrame.addStocks.addActionListener(cliked -> {
             enterTheTickerValue();
           });
@@ -181,61 +181,88 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
   public void sellStocks() {
     initialLiseFrames();
     generateDropDown(
-            (DefaultComboBoxModel) sellStocksFrame.portfolioFilesDropDown.getModel(),
-            features.getPortfolioNames());
+        (DefaultComboBoxModel) sellStocksFrame.portfolioFilesDropDown.getModel(),
+        features.getPortfolioNames());
     mainFrame.jSplitPane1.setRightComponent(sellStocksFrame.jPanel1);
     sellStocksFrame.portfolioFilesDropDown.addActionListener(file -> {
       String portfolio = (String) sellStocksFrame.portfolioFilesDropDown.getSelectedItem();
 
       HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries = null;
       try {
+        AtomicReference<String> tickerSelected = new AtomicReference<>("");
         portfolioEntries = features.renderTheSelectedPortfolio(portfolio);
         String[] dropdownValues = portfolioEntries.keySet().toArray(new String[0]);
 
         // get ticker symbol values using portfolioEntries.keySet();
         generateDropDown((DefaultComboBoxModel) sellStocksFrame.jComboBox1.getModel(),
-                dropdownValues);
+            dropdownValues);
         populateTable(features.getPortfolio(),
-                (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
+            (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
 
         sellStocksFrame.jComboBox1.addActionListener(ticker -> {
-          String tickerSelected = (String) sellStocksFrame.jComboBox1.getSelectedItem();
-          sellStocksFrame.jLabel3.setText("Below is the data for " + tickerSelected + " from "
-                  + "your current portfolio");
-          populateTableFromTreeMap((features.getPortfolio()).get(tickerSelected),
-                  (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
+          tickerSelected.set((String) sellStocksFrame.jComboBox1.getSelectedItem());
+          sellStocksFrame.jLabel3.setText("Below is the data for " + tickerSelected.get() + " from "
+              + "your current portfolio");
 
-          // now sell the stocks
-          sellStocksFrame.sellStocks.addActionListener(selling -> {
+          populateTableFromTreeMap((features.getPortfolio()).get(tickerSelected.get()),
+              (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
 
-            String date = sellStocksFrame.dateTextField.getText();
-            String shares = sellStocksFrame.stocksTextField.getText();
-            String fee = sellStocksFrame.feeTextField.getText();
-            try {
-              float stocksSold =
-                      features.sellTheStocks((features.getPortfolio()).get(tickerSelected), date,
-                              Float.parseFloat(shares), Float.parseFloat(fee));
-              if (stocksSold != 0) {
-                sellStocksFrame.jLabel3.setText("Your portfolio lacks " + stocksSold + " they "
-                        + "are not sold! The updated portfolio is: ");
-              } else {
-                sellStocksFrame.jLabel3.setText("Stocks have been successfully sold. The "
-                        + "updated portfolio is: ");
-              }
-              System.out.println("Successfully sold stocks..." + stocksSold);
-              populateTable(features.getPortfolio(),
-                      (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
-            } catch (ParseException ex) {
-              throw new RuntimeException(ex);
+
+        });
+        sellStocksFrame.sellStocks.addActionListener(selling -> {
+
+          String date = sellStocksFrame.dateTextField.getText();
+          String shares = sellStocksFrame.stocksTextField.getText().length() > 0 ?
+              (String) sellStocksFrame.stocksTextField.getText() : "0";
+          String fee = sellStocksFrame.feeTextField.getText().length() > 0 ?
+              (String) sellStocksFrame.feeTextField.getText() : "0";
+          try {
+            int validInputs = features.validateSellStocks(date, Float.parseFloat(shares),
+                Float.parseFloat(fee));
+            System.out.println("validating sell inpustsssss..." + validInputs);
+            switch (validInputs) {
+              case 1:
+                JOptionPane.showMessageDialog(null, "Shares should be greater than zero.",
+                    "Invalid shares", JOptionPane.ERROR_MESSAGE);
+                break;
+              case 2:
+                JOptionPane.showMessageDialog(null, "Fee should be greater than zero.",
+                    "Invalid fee", JOptionPane.ERROR_MESSAGE);
+                break;
+              case 3:
+                JOptionPane.showMessageDialog(null, "Entered invalid date, please check.",
+                    "Invalid date", JOptionPane.ERROR_MESSAGE);
+                break;
+              default:
+                System.out.println("Printing in GUI");
+                System.out.println((features.getPortfolio()).get(tickerSelected.get()));
+                float stocksSold =
+                    features.sellTheStocks((features.getPortfolio()).get(tickerSelected.get()),
+                        date,
+                        Float.parseFloat(shares), Float.parseFloat(fee));
+                if (stocksSold != 0) {
+                  sellStocksFrame.jLabel3.setText("Your portfolio lacks " + stocksSold + " they "
+                      + "are not sold! The updated portfolio is: ");
+                } else {
+                  sellStocksFrame.jLabel3.setText("Stocks have been successfully sold. The "
+                      + "updated portfolio is: ");
+                }
+                System.out.println("Successfully sold stocks..." + stocksSold);
+                populateTable(features.getPortfolio(),
+                    (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
+                break;
+
             }
-          });
+
+          } catch (ParseException ex) {
+            throw new RuntimeException(ex);
+          }
         });
       } catch (IOException ex) {
         throw new RuntimeException(ex);
       } catch (ParseException ex) {
         throw new RuntimeException(ex);
       }
-
 
     });
   }
@@ -244,45 +271,50 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
   public void calculateComposition(boolean isCostBasis) {
     initialLiseFrames();
     generateDropDown(
-            (DefaultComboBoxModel) totalCompositionFrame.portfolioFilesDropDown.getModel(),
-            features.getPortfolioNames());
+        (DefaultComboBoxModel) totalCompositionFrame.portfolioFilesDropDown.getModel(),
+        features.getPortfolioNames());
     mainFrame.jSplitPane1.setRightComponent(totalCompositionFrame.jPanel1);
     AtomicReference<String> portfolio = new AtomicReference<>("");
 
     totalCompositionFrame.calculateCompositionButton.addActionListener(cal -> {
       String date = totalCompositionFrame.dateTextField.getText();
       portfolio.set((String) totalCompositionFrame.portfolioFilesDropDown.getSelectedItem());
-      try {
-        HashMap map = features.getCompositionOfThePortfolio(portfolio.get(), date, isCostBasis);
-        if (map == null) {
-          totalCompositionFrame.displayText.setText("The entered date is greater than the "
-                  + "current date. So the composition can not be calculated.");
-          DefaultTableModel model =
-                  (DefaultTableModel) totalCompositionFrame.viewPortfolioTable.getModel();
-          model.setRowCount(0);
-        } else {
-          ArrayList<StocksImpl> inDateList = (ArrayList<StocksImpl>) map.get("inDateList");
-          if (inDateList.size() == 0) {
-            totalCompositionFrame.displayText.setText(
-                    "Total composition of the portfolio is 0 as you do not have any stocks " +
-                            "purchased by "
-                            + "then.");
+      boolean isValid = features.isValidDate(date);
+      if (isValid) {
+        try {
+          HashMap map = features.getCompositionOfThePortfolio(portfolio.get(), date, isCostBasis);
+          if (map == null) {
+            totalCompositionFrame.displayText.setText("The entered date is greater than the "
+                + "current date. So the composition can not be calculated.");
             DefaultTableModel model =
-                    (DefaultTableModel) totalCompositionFrame.viewPortfolioTable.getModel();
+                (DefaultTableModel) totalCompositionFrame.viewPortfolioTable.getModel();
             model.setRowCount(0);
           } else {
-            totalCompositionFrame.displayText.setText(
-                    "Total value till " + date + " is: " + map.get("final_total_value") + "\n" +
-                            ". Following is the list of stocks till date: " + date + "\n");
+            ArrayList<StocksImpl> inDateList = (ArrayList<StocksImpl>) map.get("inDateList");
+            if (inDateList.size() == 0) {
+              totalCompositionFrame.displayText.setText(
+                  "Total composition of the portfolio is 0 as the given date is either a "
+                      + "holiday or you do not have any stocks purchased by then or .");
+              DefaultTableModel model =
+                  (DefaultTableModel) totalCompositionFrame.viewPortfolioTable.getModel();
+              model.setRowCount(0);
+            } else {
+              totalCompositionFrame.displayText.setText(
+                  "Total value till " + date + " is: " + map.get("final_total_value") + "\n" +
+                      ". Following is the list of stocks till date: " + date + "\n");
 
-            populateTableFromArrayList((ArrayList<StocksImpl>) map.get("inDateList"),
-                    (DefaultTableModel) totalCompositionFrame.viewPortfolioTable.getModel());
+              populateTableFromArrayList((ArrayList<StocksImpl>) map.get("inDateList"),
+                  (DefaultTableModel) totalCompositionFrame.viewPortfolioTable.getModel());
+            }
           }
+        } catch (ParseException ex) {
+          throw new RuntimeException(ex);
+        } catch (IOException ex) {
+          throw new RuntimeException(ex);
         }
-      } catch (ParseException ex) {
-        throw new RuntimeException(ex);
-      } catch (IOException ex) {
-        throw new RuntimeException(ex);
+      } else {
+        JOptionPane.showMessageDialog(null, "You have entered invalid date, please check.",
+            "Invalid date", JOptionPane.ERROR_MESSAGE);
       }
     });
   }
@@ -290,7 +322,7 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
   @Override
   public void viewPortfolioFrame() {
     generateDropDown((DefaultComboBoxModel) viewPortfolioFrame.portfolioFilesDropDown.getModel(),
-            features.getPortfolioNames());
+        features.getPortfolioNames());
     mainFrame.jSplitPane1.setRightComponent(viewPortfolioFrame.jPanel1);
   }
 
@@ -311,7 +343,7 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
       enterTheTickerValue();
     } else {
       JOptionPane.showMessageDialog(null, "File already exists, enter another name.", "Invalid"
-              + " ticker", JOptionPane.ERROR_MESSAGE);
+          + " ticker", JOptionPane.ERROR_MESSAGE);
       enterTheTickerValue();
     }
   }
@@ -334,10 +366,10 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
           String commissionFee = addSingleStockframe.commissionFeeTextField.getText();
 
           if (features.validateSingleStocksData(tickerValue, date, Integer.parseInt(stocks),
-                  Float.parseFloat(commissionFee))) {
+              Float.parseFloat(commissionFee))) {
             System.out.println("printing ticker value " + tickerValue);
             features.addStockToPortfolio(tickerValue, date, Integer.parseInt(stocks),
-                    Float.parseFloat(commissionFee));
+                Float.parseFloat(commissionFee));
             mainFrame.jSplitPane1.setRightComponent(afterAddingStockFrame.jPanel2);
             afterAddingStockFrame.addAnotherStock.addActionListener(addEvent -> {
               enterTheTickerValue();
@@ -349,8 +381,8 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
 
           } else {
             JOptionPane.showMessageDialog(null,
-                    "Few inputs are invalid, please check the inputs",
-                    "Invalid inputs while adding a stock", JOptionPane.ERROR_MESSAGE);
+                "Few inputs are invalid, please check the inputs",
+                "Invalid inputs while adding a stock", JOptionPane.ERROR_MESSAGE);
           }
         } catch (IOException ex) {
           throw new RuntimeException(ex);
@@ -378,20 +410,20 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
         try {
 
           boolean areValid = features.isValidateInputForMultiStocks(ticker,
-                  Float.parseFloat(amount),
-                  weightage,
-                  Float.parseFloat(fee), startDate, endDate, Integer.parseInt(frequency));
+              Float.parseFloat(amount),
+              weightage,
+              Float.parseFloat(fee), startDate, endDate, Integer.parseInt(frequency));
           if (areValid) {
 
             features.addDollarCostAveragingStocks(startDate, endDate, Integer.parseInt(frequency),
-                    ticker, Float.parseFloat(amount), weightage, Float.parseFloat(fee));
+                ticker, Float.parseFloat(amount), weightage, Float.parseFloat(fee));
 
             mainFrame.jSplitPane1.setRightComponent(afterAddingStockFrame.jPanel2);
             callAddAnotherStock();
           } else {
             JOptionPane.showMessageDialog(null,
-                    "Few inputs are invalid, please check the inputs",
-                    "Invalid inputs while adding a stock", JOptionPane.ERROR_MESSAGE);
+                "Few inputs are invalid, please check the inputs",
+                "Invalid inputs while adding a stock", JOptionPane.ERROR_MESSAGE);
           }
         } catch (ParseException ex) {
           throw new RuntimeException(ex);
@@ -412,7 +444,7 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
 
   @Override
   public void populateTableFromArrayList(ArrayList<StocksImpl> stockList,
-                                         DefaultTableModel model) {
+      DefaultTableModel model) {
     model.setRowCount(0);
     stockList.forEach(stock -> {
       Object[] row = new Object[10];
@@ -432,7 +464,7 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
 
   @Override
   public void populateTable(HashMap<String, TreeMap<Date, StocksImpl>> portfolio,
-                            DefaultTableModel model) {
+      DefaultTableModel model) {
     model.setRowCount(0);
     portfolio.forEach((comp, stockList) -> {
       stockList.forEach((date, stock) -> {
@@ -454,7 +486,7 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
 
   @Override
   public void populateTableFromTreeMap(TreeMap<Date, StocksImpl> portfolio,
-                                       DefaultTableModel model) {
+      DefaultTableModel model) {
     model.setRowCount(0);
     portfolio.forEach((comp, stock) -> {
       Object[] row = new Object[10];

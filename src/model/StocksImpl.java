@@ -77,7 +77,7 @@ public class StocksImpl implements Stocks {
    * @param shares number of shares.
    */
   public StocksImpl(String date, float open, float high, float low, float close, float volume,
-                    float shares) {
+      float shares) {
     this.date = date;
     this.open = open;
     this.high = high;
@@ -100,8 +100,8 @@ public class StocksImpl implements Stocks {
    * @param shares number of shares.
    */
   public StocksImpl(String company, String date, float open, float high, float low, float close,
-                    float volume,
-                    float shares, float fee) {
+      float volume,
+      float shares, float fee) {
     this.company = company;
     this.date = date;
     this.open = open;
@@ -130,8 +130,8 @@ public class StocksImpl implements Stocks {
    * @param isFuture   future date.
    */
   public StocksImpl(String name, String date, float open, float high, float low,
-                    float close, float volume,
-                    float shares, float fee, float percentage, boolean isFuture) {
+      float close, float volume,
+      float shares, float fee, float percentage, boolean isFuture) {
     this.company = name;
     this.date = date;
     this.open = open;
@@ -159,8 +159,8 @@ public class StocksImpl implements Stocks {
    */
   @Override
   public void setCurrentStock(String name, String date, float open, float high, float low,
-                              float close, float volume,
-                              float shares, float fee, float percentage, boolean isFuture) {
+      float close, float volume,
+      float shares, float fee, float percentage, boolean isFuture) {
     this.company = name;
     this.date = date;
     this.open = open;
@@ -307,7 +307,7 @@ public class StocksImpl implements Stocks {
 
   @Override
   public StocksImpl createAndAddStockInPortfolio(HashMap map, String ticker, String date,
-                                                 int stocks, float fee) throws ParseException {
+      int stocks, float fee) throws ParseException {
     String tickerValue = ticker.toUpperCase();
     StocksImpl currStock = null;
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
@@ -319,9 +319,9 @@ public class StocksImpl implements Stocks {
       StocksImpl currentStock = (StocksImpl) value;
       if (Objects.equals(currentStock.getDate(), formattedDateInput)) {
         currStock = new StocksImpl(tickerValue, currentStock.getDate(),
-                currentStock.getOpen(),
-                currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
-                currentStock.getVolume(), stocks, fee, 0, false);
+            currentStock.getOpen(),
+            currentStock.getHigh(), currentStock.getLow(), currentStock.getClose(),
+            currentStock.getVolume(), stocks, fee, 0, false);
         foundDate = true;
         break;
       }

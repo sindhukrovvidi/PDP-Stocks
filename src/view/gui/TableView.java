@@ -26,16 +26,16 @@ public class TableView extends javax.swing.JFrame {
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
     portfolioTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object[][]{
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null},
-                    {null, null, null, null, null, null, null, null, null, null}
-            },
-            new String[]{
-                    "Company", "Date", "Open", "High", "Low", "Close", "Volume", "Shares invested",
-                    "Total Value", "Commission fee"
-            }
+        new Object[][]{
+            {null, null, null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null, null, null}
+        },
+        new String[]{
+            "Company", "Date", "Open", "High", "Low", "Close", "Volume", "Shares invested",
+            "Total Value", "Commission fee"
+        }
     ) {
       //      Class[] types = new Class[]{
 //          java.lang.String.class, java.lang.String.class, java.lang.Float.class,
@@ -44,7 +44,7 @@ public class TableView extends javax.swing.JFrame {
 //          java.lang.Float.class
 //      };
       boolean[] canEdit = new boolean[]{
-              false, false, false, false, false, false, false, false, false, false
+          false, false, false, false, false, false, false, false, false, false
       };
 
 //      public Class getColumnClass(int columnIndex) {
@@ -63,15 +63,15 @@ public class TableView extends javax.swing.JFrame {
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 77, Short.MAX_VALUE))
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 77, Short.MAX_VALUE))
     );
 
     pack();

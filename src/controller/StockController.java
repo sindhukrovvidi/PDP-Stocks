@@ -43,7 +43,7 @@ public interface StockController {
    * @param values      stock trends in the form of a list.
    */
   void controllerToViewHelperForStocks(String companyName,
-                                       ArrayList<StocksImpl> values);
+      ArrayList<StocksImpl> values);
 
 
 }

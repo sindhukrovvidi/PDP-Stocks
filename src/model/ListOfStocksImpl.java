@@ -32,8 +32,8 @@ public class ListOfStocksImpl implements ListOfStocks {
    * @param company    name of the company.
    */
   public void updateStocksList(HashMap stocksList,
-                               StringBuilder data,
-                               String company) {
+      StringBuilder data,
+      String company) {
     if (!stocksList.containsKey(company)) {
       String line; // Reading header, Ignoring;
       String[] entries = data.toString().split("\r\n");
@@ -41,12 +41,12 @@ public class ListOfStocksImpl implements ListOfStocks {
 
         String[] fields = entries[i].split(",");
         StocksImpl newStock = new StocksImpl(
-                fields[0],
-                Float.parseFloat(fields[1]),
-                Float.parseFloat(fields[2]),
-                Float.parseFloat(fields[3]),
-                Float.parseFloat(fields[4]),
-                Float.parseFloat(fields[5])
+            fields[0],
+            Float.parseFloat(fields[1]),
+            Float.parseFloat(fields[2]),
+            Float.parseFloat(fields[3]),
+            Float.parseFloat(fields[4]),
+            Float.parseFloat(fields[5])
         );
         if (listOfStocks.containsKey(company)) {
           ArrayList<StocksImpl> currentValues = listOfStocks.get(company);

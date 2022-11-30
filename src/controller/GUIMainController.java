@@ -112,7 +112,8 @@ public class GUIMainController extends Controller implements Features {
     }
     return portfolioModel.validateInputForMultiStocks(investedAmount, weightage, fee, lowerDate,
             upperDate,
-            frequency);
+            frequency,
+        tickerValuesList);
 //    return false;
   }
 
@@ -201,15 +202,25 @@ public class GUIMainController extends Controller implements Features {
 
   }
 
-//  /**
-//   * @param filename
-//   */
-//  @Override
-//  public HashMap<String, TreeMap<Date, StocksImpl>> updateTheCurrentPortfolio(String filename)
-//      throws IOException, ParseException {
-//    upDateListOfStocksHelper(filename);
-//    return portfolioModel.getPortfolio();
-//  }
+  /**
+   * @param date
+   * @param shares
+   * @param fee
+   * @return
+   */
+  @Override
+  public int validateSellStocks(String date, float shares, float fee) {
+    return portfolioModel.validateSellInputs(date, shares, fee);
+  }
+
+  /**
+   * @param date
+   * @return
+   */
+  @Override
+  public boolean isValidDate(String date) {
+    return portfolioModel.isValidDate(date);
+  }
 
   private void upDateListOfStocksHelper(String filename) throws IOException, ParseException {
     FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();

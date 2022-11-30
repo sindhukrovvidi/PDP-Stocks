@@ -23,10 +23,10 @@ public class HTTPRequestsImpl implements HTTPRequests {
     System.out.println("Calliong data for...." + tickerSymbol);
     URL url = null;
     url = new URL("https://www.alphavantage"
-            + ".co/query?function=TIME_SERIES_DAILY"
-            + "&outputsize=full"
-            + "&symbol"
-            + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
+        + ".co/query?function=TIME_SERIES_DAILY"
+        + "&outputsize=full"
+        + "&symbol"
+        + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
     InputStream in = null;
     StringBuilder output = new StringBuilder();
     in = url.openStream();
@@ -51,9 +51,9 @@ public class HTTPRequestsImpl implements HTTPRequests {
   public StringBuilder getWeeklyData(String tickerSymbol) throws IOException {
     URL url = null;
     url = new URL("https://www.alphavantage"
-            + ".co/query?function=TIME_SERIES_WEEKLY_ADJUSTED"
-            + "&symbol"
-            + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
+        + ".co/query?function=TIME_SERIES_WEEKLY_ADJUSTED"
+        + "&symbol"
+        + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
     InputStream in = null;
     StringBuilder output = new StringBuilder();
     in = url.openStream();
@@ -79,9 +79,9 @@ public class HTTPRequestsImpl implements HTTPRequests {
   public StringBuilder getMonthlyData(String tickerSymbol) throws IOException {
     URL url = null;
     url = new URL("https://www.alphavantage"
-            + ".co/query?function=TIME_SERIES_MONTHLY_ADJUSTED"
-            + "&symbol"
-            + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
+        + ".co/query?function=TIME_SERIES_MONTHLY_ADJUSTED"
+        + "&symbol"
+        + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
     InputStream in = null;
     StringBuilder output = new StringBuilder();
     in = url.openStream();
@@ -107,9 +107,9 @@ public class HTTPRequestsImpl implements HTTPRequests {
   public StringBuilder getDailyData(String tickerSymbol) throws IOException {
     URL url = null;
     url = new URL("https://www.alphavantage"
-            + ".co/query?function=TIME_SERIES_DAILY"
-            + "&symbol"
-            + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
+        + ".co/query?function=TIME_SERIES_DAILY"
+        + "&symbol"
+        + "=" + tickerSymbol + "&apikey=" + apiKey + "&datatype=csv");
     InputStream in = null;
     StringBuilder output = new StringBuilder();
     in = url.openStream();

@@ -50,6 +50,6 @@ public class FileAccessorsImplTest {
     File f = new File(fp.toString() + "/c.csv");
     BufferedReader reader = fa1.readCSV(f.getPath());
     assertEquals("GOOG,2022-10-28,92.53,96.86,92.3225,96.58,3.5696924E7,5,482.90002",
-            reader.readLine());
+        reader.readLine());
   }
 }
