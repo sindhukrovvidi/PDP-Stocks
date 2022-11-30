@@ -1,18 +1,37 @@
 package view;
 
-import controller.Features;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.TreeMap;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import model.StocksImpl;
 
 public interface GUIInterface {
 
-  void addFeatures(Features features);
+  void displayStarterMenu();
 
-//  void setValue(String s);
+  void sellStocks();
 
-//  String getValue();
+  void calculateComposition(boolean isCostBasis);
 
-  void setText(String s);
+  void viewPortfolioFrame();
 
-  String getText();
+  void generateDropDown(DefaultComboBoxModel dropDown, String[] items);
 
-  void clearText();
+  void createPortfolioFile() throws IOException;
+
+  void enterTheTickerValue();
+
+  void callAddAnotherStock();
+
+  void populateTableFromArrayList(ArrayList<StocksImpl> stockList, DefaultTableModel model);
+
+  void populateTable(HashMap<String, TreeMap<Date, StocksImpl>> portfolio, DefaultTableModel model);
+
+  void populateTableFromTreeMap(TreeMap<Date, StocksImpl> portfolio, DefaultTableModel model);
+
+  void viewPortfolio();
 }

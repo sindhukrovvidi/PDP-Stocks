@@ -9,6 +9,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -120,7 +121,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
             for (Object currentTickerDatum : currentTickerData) {
               StocksImpl curStock = (StocksImpl) currentTickerDatum;
               String curStockDate = curStock.getDate();
-              if (curStockDate == dateLower.toString()) {
+              if (Objects.equals(curStockDate, dateLower.toString())) {
                 currData.put(newDate1, new StocksImpl(
                     tickerValue,
                     curStockDate,
@@ -129,20 +130,22 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
                     curStock.getLow(),
                     curStock.getClose(),
                     curStock.getVolume(),
-                    Math.round(stock.getPercentage() / curStock.getClose()),
+                    stock.getPercentage() / curStock.getClose(),
                     curStock.getCommisionFee(),
                     stock.getPercentage(),
                     false
                 ));
               }
-
             }
           }
         });
+        portfolios.put(tickerValue, currData);
       });
 
-      model.setPortfolio(portfolios);
       model.setPortfolioName(input);
+      model.setPortfolio(portfolios);
+      model.save("portfolios/flexible");
+
       controllerToViewHelper(portfolios);
 
       view.isSpeculateMenu();
@@ -222,7 +225,7 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
         speculateMenu();
       }
 
-      int stocksSold = model.sellTheStocks(checklist.get(tickerValue), sdformat.parse(date),
+      float stocksSold = model.sellTheStocks(checklist.get(tickerValue), sdformat.parse(date),
           numberOfSellingStocks, fee);
 
       if (stocksSold != 0) {

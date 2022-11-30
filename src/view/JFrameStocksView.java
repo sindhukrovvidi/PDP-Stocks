@@ -1,7 +1,6 @@
 package view;
 
 import controller.Features;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -26,6 +25,7 @@ import view.gui.MainFrame;
 import view.gui.TableView;
 import view.gui.ViewPortfolioFrame;
 import view.gui.TotalCompositionFrame;
+import view.gui.SellStocksFrame;
 
 public class JFrameStocksView extends JFrame implements GUIInterface {
 
@@ -42,16 +42,17 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
 
   protected MainFrame mainFrame = new MainFrame();
 
-  protected TableView tableView = new TableView();
+  protected TableView tableView;
 
-  protected ViewPortfolioFrame viewPortfolioFrame = new ViewPortfolioFrame();
+  protected ViewPortfolioFrame viewPortfolioFrame;
 
-  protected TotalCompositionFrame totalCompositionFrame = new TotalCompositionFrame();
+  protected TotalCompositionFrame totalCompositionFrame;
 
-  protected BuyStocksFrame buyStocksFrame = new BuyStocksFrame();
+  protected BuyStocksFrame buyStocksFrame;
+
+  protected SellStocksFrame sellStocksFrame;
 
 
-  protected String inputText;
   protected Features features;
 
   public JFrameStocksView(Features features) {
@@ -72,7 +73,6 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
   }
 
   private void initialLiseFrames() {
-    System.out.println("initialising framessssssssss");
     createPortfolioFrame = new CreatePortfolioFrame();
     addSingleStockframe = new AddSingleStockframe();
     dollarCostAveraging = new DollarCostAveraging();
@@ -80,15 +80,16 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
     viewPortfolioFrame = new ViewPortfolioFrame();
     totalCompositionFrame = new TotalCompositionFrame();
     buyStocksFrame = new BuyStocksFrame();
+    sellStocksFrame = new SellStocksFrame();
 
     createPortfolio = createPortfolioFrame.getCreatePortfolioFrame();
     singleStockAddFrame = addSingleStockframe.getFrame();
     dollarCostAveragingFrame = dollarCostAveraging.getFrame();
-//    mainFrame = new MainFrame();
 
   }
 
-  public void displayStarterMenu() throws IOException {
+  @Override
+  public void displayStarterMenu() {
 
     mainFrame.setVisible(true);
 
@@ -124,7 +125,7 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
     });
 
     // buy stocks
-    mainFrame.buyStocksButton.addActionListener(e-> {
+    mainFrame.buyStocksButton.addActionListener(e -> {
       initialLiseFrames();
       generateDropDown(
           (DefaultComboBoxModel) buyStocksFrame.portfolioFilesDropDown.getModel(),
@@ -147,11 +148,15 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
       });
     });
 
+    //sell stocks
+    mainFrame.sellStocksButton.addActionListener(e -> {
+      sellStocks();
+    });
+
     // total composition
     mainFrame.totalCompositionButton.addActionListener((e -> {
       calculateComposition(false);
     }));
-
 
     // total cost basis
     mainFrame.costBasisButton.addActionListener((e -> {
@@ -161,7 +166,72 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
 
   }
 
-  private void calculateComposition(boolean isCostBasis) {
+  @Override
+  public void sellStocks() {
+    initialLiseFrames();
+    generateDropDown(
+        (DefaultComboBoxModel) sellStocksFrame.portfolioFilesDropDown.getModel(),
+        features.getPortfolioNames());
+    mainFrame.jSplitPane1.setRightComponent(sellStocksFrame.jPanel1);
+    sellStocksFrame.portfolioFilesDropDown.addActionListener(file -> {
+      String portfolio = (String) sellStocksFrame.portfolioFilesDropDown.getSelectedItem();
+
+      HashMap<String, TreeMap<Date, StocksImpl>> portfolioEntries = null;
+      try {
+        portfolioEntries = features.renderTheSelectedPortfolio(portfolio);
+        String[] dropdownValues = portfolioEntries.keySet().toArray(new String[0]);
+
+        // get tickersymbol values using portfolioEntries.keySet();
+        generateDropDown((DefaultComboBoxModel) sellStocksFrame.jComboBox1.getModel(),
+            dropdownValues);
+        populateTable(features.getPortfolio(),
+            (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
+
+        sellStocksFrame.jComboBox1.addActionListener(ticker -> {
+          String tickerSelected = (String) sellStocksFrame.jComboBox1.getSelectedItem();
+          sellStocksFrame.jLabel3.setText("Below is the data for " + tickerSelected + " from "
+              + "your current portfolio");
+          populateTableFromTreeMap((features.getPortfolio()).get(tickerSelected),
+              (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
+
+          // now sell the stocks
+          sellStocksFrame.sellStocks.addActionListener(selling -> {
+
+            String date = sellStocksFrame.dateTextField.getText();
+            String shares = sellStocksFrame.stocksTextField.getText();
+            String fee = sellStocksFrame.feeTextField.getText();
+            try {
+              float stocksSold =
+                  features.sellTheStocks((features.getPortfolio()).get(tickerSelected), date,
+                      Float.parseFloat(shares), Float.parseFloat(fee));
+              if (stocksSold != 0) {
+                sellStocksFrame.jLabel3.setText("Your portfolio lacks " + stocksSold + " they "
+                    + "are not sold! The updated portfolio is: ");
+              } else {
+                sellStocksFrame.jLabel3.setText("Stocks have been successfully sold. The "
+                    + "updated portfolio is: ");
+              }
+              System.out.println("Successfully sold stocks..." + stocksSold);
+              populateTable(features.getPortfolio(),
+                  (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
+//              initialLiseFrames();
+            } catch (ParseException ex) {
+              throw new RuntimeException(ex);
+            }
+          });
+        });
+      } catch (IOException ex) {
+        throw new RuntimeException(ex);
+      } catch (ParseException ex) {
+        throw new RuntimeException(ex);
+      }
+
+
+    });
+  }
+
+  @Override
+  public void calculateComposition(boolean isCostBasis) {
     initialLiseFrames();
     generateDropDown(
         (DefaultComboBoxModel) totalCompositionFrame.portfolioFilesDropDown.getModel(),
@@ -206,21 +276,23 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
     });
   }
 
-  private void viewPortfolioFrame() {
+  @Override
+  public void viewPortfolioFrame() {
     generateDropDown((DefaultComboBoxModel) viewPortfolioFrame.portfolioFilesDropDown.getModel(),
         features.getPortfolioNames());
     mainFrame.jSplitPane1.setRightComponent(viewPortfolioFrame.jPanel1);
   }
 
-  private void generateDropDown(DefaultComboBoxModel dropDown, String[] items) {
+  @Override
+  public void generateDropDown(DefaultComboBoxModel dropDown, String[] items) {
     dropDown.removeAllElements();
-//    dropDown.addElement("-- Portfolios --");
     for (String item : items) {
       dropDown.addElement(item);
     }
   }
 
-  private void createPortfolioFile() throws IOException {
+  @Override
+  public void createPortfolioFile() throws IOException {
     System.out.println("createPortfolioFile is called");
     String filename = JOptionPane.showInputDialog("Enter the portfolio name.");
     boolean isFileExists = features.createPortfolio(filename);
@@ -233,15 +305,13 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
     }
   }
 
-  private void enterTheTickerValue() {
+  @Override
+  public void enterTheTickerValue() {
     initialLiseFrames();
     mainFrame.jSplitPane1.setRightComponent(createPortfolioFrame.panel);
-//    initialLiseFrames();
-    System.out.println("enterTheTickerValue is called");
 
     createPortfolioFrame.singleStockButton.addActionListener(e -> {
 
-      System.out.println("Calliong createPortfolioFrame.singleStockButton");
       mainFrame.jSplitPane1.setRightComponent(addSingleStockframe.panel);
 
       addSingleStockframe.addStockButton.addActionListener(event -> {
@@ -294,8 +364,6 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
         String fee = dollarCostAveraging.commissionFeeTextField.getText();
         String frequency = dollarCostAveraging.frequencyTextField.getText();
 
-        //     float investedAmount, String weightage, int fee,
-        //      String lowerDate, String upperDate, int frequency
         try {
 
           boolean areValid = features.isValidateInputForMultiStocks(ticker,
@@ -303,10 +371,10 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
               weightage,
               Float.parseFloat(fee), startDate, endDate, Integer.parseInt(frequency));
           if (areValid) {
-            // save them to portfolio
+
             features.addDollarCostAveragingStocks(startDate, endDate, Integer.parseInt(frequency),
                 ticker, Float.parseFloat(amount), weightage, Float.parseFloat(fee));
-            // show main menu
+
             mainFrame.jSplitPane1.setRightComponent(afterAddingStockFrame.jPanel2);
             callAddAnotherStock();
           } else {
@@ -321,98 +389,80 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
         }
       });
 
-      System.out.println("inside multi stock function");
     });
   }
 
-  private void callAddAnotherStock() {
-    System.out.println("Calledddd");
+  @Override
+  public void callAddAnotherStock() {
     afterAddingStockFrame.addAnotherStock.addActionListener(addEvent -> {
       enterTheTickerValue();
-//              afterAddingStockFrame.setVisible(false);
     });
   }
-//  public void modifyKeyListeners(JFrame frame, JTextField textfield) {
-//    System.out.println("modifyKeyListeners");
-//    frame.addKeyListener(new KeyAdapter() {
-//      @Override
-//      public void keyPressed(KeyEvent e) {
-//        super.keyPressed(e);
-//        if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
-//          System.out.println("Trying to print tickervalue" + textfield.getText());
-//          String data = textfield.getText();
-//          setText(data);
-//        }
-//      }
-//    });
-//
-//  }
 
   @Override
-  public void addFeatures(Features features) {
-//    createPortfolioFrame.singleStockButton.addActionListener(e -> {
-//      System.out.println("xfgchgjkkhgfxcjhk");
-//    });
-
-  }
-
-  @Override
-  public void setText(String s) {
-    inputText = s;
-  }
-
-  @Override
-  public String getText() {
-    return inputText;
-  }
-
-  @Override
-  public void clearText() {
-    setText("");
-  }
-
-  private void populateTableFromArrayList(ArrayList<StocksImpl> stockList,
+  public void populateTableFromArrayList(ArrayList<StocksImpl> stockList,
       DefaultTableModel model) {
     model.setRowCount(0);
     stockList.forEach(stock -> {
       Object[] row = new Object[10];
       row[0] = stock.getCompany();
       row[1] = stock.getDate();
-      row[2] = stock.getOpen();
-      row[3] = stock.getHigh();
-      row[4] = stock.getLow();
-      row[5] = stock.getClose();
-      row[6] = stock.getVolume();
-      row[7] = stock.getShares();
-      row[8] = stock.getShares() * stock.getClose();
+      row[2] = stock.getIsFuture() ? "Yet to update" : stock.getOpen();
+      row[3] = stock.getIsFuture() ? "Yet to update" : stock.getHigh();
+      row[4] = stock.getIsFuture() ? "Yet to update" : stock.getLow();
+      row[5] = stock.getIsFuture() ? "Yet to update" : stock.getClose();
+      row[6] = stock.getIsFuture() ? "Yet to update" : stock.getVolume();
+      row[7] = stock.getIsFuture() ? "Yet to update" : stock.getShares();
+      row[8] = stock.getIsFuture() ? "Yet to update" : stock.getShares() * stock.getClose();
       row[9] = stock.getCommisionFee();
       model.addRow(row);
     });
   }
 
-  private void populateTable(HashMap<String, TreeMap<Date, StocksImpl>> portfolio,
+  @Override
+  public void populateTable(HashMap<String, TreeMap<Date, StocksImpl>> portfolio,
       DefaultTableModel model) {
-//    DefaultTableModel model = (DefaultTableModel) tableView.portfolioTable.getModel();
     model.setRowCount(0);
     portfolio.forEach((comp, stockList) -> {
       stockList.forEach((date, stock) -> {
         Object[] row = new Object[10];
         row[0] = stock.getCompany();
         row[1] = stock.getDate();
-        row[2] = stock.getOpen();
-        row[3] = stock.getHigh();
-        row[4] = stock.getLow();
-        row[5] = stock.getClose();
-        row[6] = stock.getVolume();
-        row[7] = stock.getShares();
-        row[8] = stock.getShares() * stock.getClose();
+        row[2] = stock.getIsFuture() ? "Yet to update" : stock.getOpen();
+        row[3] = stock.getIsFuture() ? "Yet to update" : stock.getHigh();
+        row[4] = stock.getIsFuture() ? "Yet to update" : stock.getLow();
+        row[5] = stock.getIsFuture() ? "Yet to update" : stock.getClose();
+        row[6] = stock.getIsFuture() ? "Yet to update" : stock.getVolume();
+        row[7] = stock.getIsFuture() ? "Yet to update" : stock.getShares();
+        row[8] = stock.getIsFuture() ? "Yet to update" : stock.getShares() * stock.getClose();
         row[9] = stock.getCommisionFee();
         model.addRow(row);
       });
     });
   }
 
-  private void viewPortfolio() {
+  @Override
+  public void populateTableFromTreeMap(TreeMap<Date, StocksImpl> portfolio,
+      DefaultTableModel model) {
+    model.setRowCount(0);
+    portfolio.forEach((comp, stock) -> {
+      Object[] row = new Object[10];
+      row[0] = stock.getCompany();
+      row[1] = stock.getDate();
+      row[2] = stock.getIsFuture() ? "Yet to update" : stock.getOpen();
+      row[3] = stock.getIsFuture() ? "Yet to update" : stock.getHigh();
+      row[4] = stock.getIsFuture() ? "Yet to update" : stock.getLow();
+      row[5] = stock.getIsFuture() ? "Yet to update" : stock.getClose();
+      row[6] = stock.getIsFuture() ? "Yet to update" : stock.getVolume();
+      row[7] = stock.getIsFuture() ? "Yet to update" : stock.getShares();
+      row[8] = stock.getIsFuture() ? "Yet to update" : stock.getShares() * stock.getClose();
+      row[9] = stock.getCommisionFee();
+      model.addRow(row);
+    });
+  }
+
+  @Override
+  public void viewPortfolio() {
     HashMap<String, TreeMap<Date, StocksImpl>> portfolio = features.getPortfolio();
     populateTable(portfolio, (DefaultTableModel) tableView.portfolioTable.getModel());
     mainFrame.jSplitPane1.setRightComponent(tableView.jScrollPane1);

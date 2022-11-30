@@ -22,14 +22,14 @@ public interface Stocks {
    */
   void setCurrentStock(String company, String date, float open, float high, float low,
                        float close, float volume,
-                       int shares, float commissionFee, float percentage, boolean isFuture);
+                       float shares, float commissionFee, float percentage, boolean isFuture);
 
   /**
    * Method used to update the quantity of the stocks.
    *
    * @param values value to be updated.
    */
-  void updateStockValues(int values);
+  void updateStockValues(float values);
 
   /**
    * Method used to get date.
@@ -85,7 +85,7 @@ public interface Stocks {
    *
    * @return number of shares.
    */
-  int getShares();
+  float getShares();
 
   StocksImpl createAndAddStockInPortfolio(HashMap map, String ticker, String date,
       int stocks,  float fee) throws ParseException;

@@ -38,19 +38,19 @@ public class TableView extends javax.swing.JFrame {
             "Total Value", "Commission fee"
         }
     ) {
-      Class[] types = new Class[]{
-          java.lang.String.class, java.lang.String.class, java.lang.Float.class,
-          java.lang.Float.class, java.lang.Float.class, java.lang.Float.class,
-          java.lang.Float.class, java.lang.Integer.class, java.lang.Float.class,
-          java.lang.Float.class
-      };
+//      Class[] types = new Class[]{
+//          java.lang.String.class, java.lang.String.class, java.lang.Float.class,
+//          java.lang.Float.class, java.lang.Float.class, java.lang.Float.class,
+//          java.lang.Float.class, java.lang.Integer.class, java.lang.Float.class,
+//          java.lang.Float.class
+//      };
       boolean[] canEdit = new boolean[]{
-          false, false, false, false, false, false, false, false, true, true
+          false, false, false, false, false, false, false, false, false, false
       };
 
-      public Class getColumnClass(int columnIndex) {
-        return types[columnIndex];
-      }
+//      public Class getColumnClass(int columnIndex) {
+//        return types[columnIndex];
+//      }
 
       public boolean isCellEditable(int rowIndex, int columnIndex) {
         return canEdit[columnIndex];

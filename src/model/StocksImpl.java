@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class StocksImpl implements Stocks {
 
-  private int shares;
+  private float shares;
 
   private float open;
   private float close;
@@ -78,7 +78,7 @@ public class StocksImpl implements Stocks {
    * @param shares number of shares.
    */
   public StocksImpl(String date, float open, float high, float low, float close, float volume,
-      int shares) {
+      float shares) {
     this.date = date;
     this.open = open;
     this.high = high;
@@ -102,7 +102,7 @@ public class StocksImpl implements Stocks {
    */
   public StocksImpl(String company, String date, float open, float high, float low, float close,
       float volume,
-      int shares, float fee) {
+      float shares, float fee) {
     this.company = company;
     this.date = date;
     this.open = open;
@@ -116,7 +116,7 @@ public class StocksImpl implements Stocks {
 
   public StocksImpl(String name, String date, float open, float high, float low,
       float close, float volume,
-      int shares, float fee, float percentage, boolean isFuture) {
+      float shares, float fee, float percentage, boolean isFuture) {
     this.company = name;
     this.date = date;
     this.open = open;
@@ -145,7 +145,7 @@ public class StocksImpl implements Stocks {
   @Override
   public void setCurrentStock(String name, String date, float open, float high, float low,
       float close, float volume,
-      int shares, float fee, float percentage, boolean isFuture) {
+      float shares, float fee, float percentage, boolean isFuture) {
     this.company = name;
     this.date = date;
     this.open = open;
@@ -179,7 +179,7 @@ public class StocksImpl implements Stocks {
    * @param values value to be updated.
    */
   @Override
-  public void updateStockValues(int values) {
+  public void updateStockValues(float values) {
     this.shares = values;
   }
 
@@ -268,11 +268,11 @@ public class StocksImpl implements Stocks {
    * @return number of shares.
    */
   @Override
-  public int getShares() {
+  public float getShares() {
     return this.shares;
   }
 
-  public void setShares(int shares) {
+  public void setShares(float shares) {
     this.shares = shares;
   }
 

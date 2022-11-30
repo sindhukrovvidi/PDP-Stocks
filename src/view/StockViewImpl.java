@@ -53,7 +53,7 @@ public class StockViewImpl implements StockView {
   @Override
   public void displayPortfolio(boolean displayHeaders, String company, String date,
       float open, float high,
-      float low, float close, float volume, int shares, float fee) throws IOException {
+      float low, float close, float volume, float shares, float fee) throws IOException {
 
     Formatter fmt = new Formatter();
     if (displayHeaders) {
@@ -72,7 +72,7 @@ public class StockViewImpl implements StockView {
   public void viewCompositionOfPortfolio(boolean displayHeaders, String company, String date,
       float open,
       float close,
-      int shares, float fee, float total, String dateOfComposition) throws IOException {
+      float shares, float fee, float total, String dateOfComposition) throws IOException {
     Formatter fmt = new Formatter();
     if (displayHeaders) {
       this.out.append("Total value till " + dateOfComposition + " is: " + total + "\n");
@@ -132,7 +132,7 @@ public class StockViewImpl implements StockView {
   }
 
   @Override
-  public void printLackStocks(int stocksSold) throws IOException {
+  public void printLackStocks(float stocksSold) throws IOException {
     this.out.append("Your portfolio lacks " + stocksSold + " they are not sold!");
   }
 

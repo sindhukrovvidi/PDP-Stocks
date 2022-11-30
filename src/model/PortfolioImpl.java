@@ -1,10 +1,5 @@
 package model;
 
-import static model.Input.takeStringInput;
-import static model.Output.append;
-import static model.Output.appendNewLine;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
@@ -20,11 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Class that implements the portfolio interface and is responsible for portfolio actions.
@@ -81,8 +74,8 @@ public class PortfolioImpl implements Portfolio {
    * @return returns hashmap.
    */
   @Override
-  public HashMap<String, Integer> getCompanyWiseShares() {
-    HashMap<String, Integer> companyShares = new HashMap();
+  public HashMap<String, Float> getCompanyWiseShares() {
+    HashMap<String, Float> companyShares = new HashMap();
     entriesInPortfolio.forEach((comp, stocks) -> {
       stocks.forEach((date, stock) -> {
         if (companyShares.containsKey(comp)) {
@@ -224,7 +217,7 @@ public class PortfolioImpl implements Portfolio {
     LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-    HashMap<String, Integer> companyShares = this.getCompanyWiseShares();
+    HashMap<String, Float> companyShares = this.getCompanyWiseShares();
     TreeMap<String, Integer> barData = new TreeMap<String, Integer>();
 
     List<LocalDate> listOfDates = getDaysBetweenTwoDates(dateLower, dateUpper);
@@ -234,7 +227,7 @@ public class PortfolioImpl implements Portfolio {
         StocksImpl currStock = currentData.get(date.toString());
         float close = currStock != null ? currStock.getClose() : 0;
         String currDate = currStock != null ? currStock.getDate() : date.toString();
-        int shares = companyShares.get(k);
+        float shares = companyShares.get(k);
         if (barData.containsKey(currDate)) {
           barData.put(currDate, Math.round(shares * close + barData.get(currDate)));
         } else {
@@ -274,7 +267,7 @@ public class PortfolioImpl implements Portfolio {
     LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-    HashMap<String, Integer> companyShares = this.getCompanyWiseShares();
+    HashMap<String, Float> companyShares = this.getCompanyWiseShares();
     TreeMap<String, Integer> performanceData = new TreeMap<String, Integer>();
     entries.forEach((k, v) -> {
       HashMap<String, StocksImpl> currentData = readTheData(v);
@@ -283,7 +276,7 @@ public class PortfolioImpl implements Portfolio {
         StocksImpl currStock = currentData.get(date.toString());
         float close = currStock.getClose();
         String currDate = currStock.getDate();
-        int shares = companyShares.get(k);
+        float shares = companyShares.get(k);
         if (performanceData.containsKey(currDate)) {
           performanceData.put(currDate, Math.round(shares * close + performanceData.get(currDate)));
         } else {
@@ -323,7 +316,7 @@ public class PortfolioImpl implements Portfolio {
     String newDateString1 = (sdformat.format(newDate1)).substring(0, 7);
     String newDateString2 = (sdformat.format(newDate2)).substring(0, 7);
 
-    HashMap<String, Integer> companyShares = this.getCompanyWiseShares();
+    HashMap<String, Float> companyShares = this.getCompanyWiseShares();
     TreeMap<Date, Integer> performanceData = new TreeMap<Date, Integer>();
 
     LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -492,7 +485,7 @@ public class PortfolioImpl implements Portfolio {
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     long t = ChronoUnit.DAYS.between(dateLower, dateUpper);
 
-    HashMap<String, Integer> companyShares = this.getCompanyWiseShares();
+    HashMap<String, Float> companyShares = this.getCompanyWiseShares();
 
     HTTPRequests requests = new HTTPRequestsImpl();
     TreeMap<LocalDate, Integer> barData = new TreeMap();
@@ -503,7 +496,7 @@ public class PortfolioImpl implements Portfolio {
 
       HashMap<String, StringBuilder> dailyStocksData = new HashMap();
 
-      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+      for (Entry<String, Float> entry : companyShares.entrySet()) {
         String comp = entry.getKey();
         StringBuilder data = requests.getDailyData(comp);
         dailyStocksData.put(comp, data);
@@ -517,7 +510,7 @@ public class PortfolioImpl implements Portfolio {
     } else if (31 <= t && t < 150) { // weekly data
       HashMap<String, StringBuilder> weeklyStocksData = new HashMap();
 
-      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+      for (Entry<String, Float> entry : companyShares.entrySet()) {
         String comp = entry.getKey();
         StringBuilder data = requests.getWeeklyData(comp);
         weeklyStocksData.put(comp, data);
@@ -530,7 +523,7 @@ public class PortfolioImpl implements Portfolio {
     } else if (150 <= t && t <= 900) { // month
       HashMap<String, StringBuilder> monthlyStocksData = new HashMap();
 
-      for (Entry<String, Integer> entry : companyShares.entrySet()) {
+      for (Entry<String, Float> entry : companyShares.entrySet()) {
         String comp = entry.getKey();
         StringBuilder data = requests.getMonthlyData(comp);
         monthlyStocksData.put(comp, data);
@@ -565,7 +558,7 @@ public class PortfolioImpl implements Portfolio {
       for (LocalDate futureDate : futureDates) {
         addStockInPortfolio(new StocksImpl(
             stock.toUpperCase(),
-            futureDate.toString(), 0, 0, 0, 0, 0, 0, 0,
+            futureDate.toString(), 0, 0, 0, 0, 0, 0, fee,
             valueInvested * (Float.parseFloat(percentages[0]) / 100), true
         ));
       }
@@ -575,7 +568,6 @@ public class PortfolioImpl implements Portfolio {
         Date newDate = sdformat.parse(stockDate);
         LocalDate formattedStockData =
             newDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        boolean isFuture = formattedStockData.compareTo(LocalDate.now()) > 1 ? true : false;
         if (listOfDates.contains(formattedStockData)) {
           addStockInPortfolio(new StocksImpl(
               stock.toUpperCase(),
@@ -585,7 +577,7 @@ public class PortfolioImpl implements Portfolio {
               currentStockDatum.getLow(),
               currentStockDatum.getClose(),
               currentStockDatum.getVolume(),
-              Math.round((valueInvested * (Float.parseFloat(percentages[0]) / 100))
+              (valueInvested * (Float.parseFloat(percentages[0]) / 100)
                   / currentStockDatum.getClose()),
               fee,
               Float.parseFloat(percentages[0]) / 100,
@@ -646,31 +638,9 @@ public class PortfolioImpl implements Portfolio {
     return areValidInputs;
   }
 
-  //  @Override
-//  public HashMap<String, TreeMap<Date, StocksImpl>> sellingHelper() throws IOException {
-//    String tickerValue = takeStringInput("Enter the ticker value:\n");
-//    HashMap<String, TreeMap<Date, StocksImpl>> checklist = this.getPortfolio();
-//    if (checklist.containsKey(tickerValue)) {
-//      SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-//      TreeMap<Date, StocksImpl> validDatesList = checklist.get(tickerValue);
-//      return checklist;
-////      viewDatesByCompany(checklist, tickerValue);
-////      String date = takeStringInput("Please enter a valid date as per the above list");
-////      Date newDate = sdformat.parse(date);
-////      //TODO while invalid date
-////      validatingSellStocks(validDatesList, newDate);
-////      viewDatesByCompany(checklist, tickerValue);
-////      model.save("portfolios/flexible");
-//    }
-////    else {
-////      append("The ticker symbol entered is invalid.\n");
-////      sellingHelper();
-////    }
-//    return null;
-//  }
   @Override
-  public int sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
-      int numberOfSellingStocks, float fee) {
+  public float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
+      float numberOfSellingStocks, float fee) {
     for (Map.Entry<Date, StocksImpl>
         entry : validDatesList.entrySet()) {
       if ((numberOfSellingStocks == 0) || entry.getKey().compareTo(newDate) > 0) {
@@ -686,26 +656,9 @@ public class PortfolioImpl implements Portfolio {
         numberOfSellingStocks = 0;
       }
     }
+    System.out.println("calling sellTheStocks...." + numberOfSellingStocks);
     return numberOfSellingStocks;
   }
-
-//  public Object viewPortfolioHelper() {
-//    Object[][] data = {};
-////    DefaultTableModel model =(DefaultTableModel) this.table.getModel();
-//    entriesInPortfolio.forEach((comp, stockList) -> {
-//      stockList.forEach((date, stock) -> {
-//          Object[] row = new Object[5];
-//          row[0]=stock.getCompany();
-//          row[1]=stock.getShares();
-//          model.
-//      });
-//
-//    });
-//    return data;
-//  }
-//  public void saveGUIStocks() {
-//    this.save("",getPortfolio(),"portfolios/flexible");
-//  }
 
   @Override
   public String[] getPortfolioNames() {
@@ -750,7 +703,7 @@ public class PortfolioImpl implements Portfolio {
                   curStock.getLow(),
                   curStock.getClose(),
                   curStock.getVolume(),
-                  Math.round(stock.getPercentage() / curStock.getClose()),
+                  (stock.getPercentage() / curStock.getClose()),
                   curStock.getCommisionFee(),
                   stock.getPercentage(),
                   false
@@ -764,13 +717,6 @@ public class PortfolioImpl implements Portfolio {
 
     this.setPortfolio(portfolios);
     this.setPortfolioName(input);
-//      controllerToViewHelper(portfolios);
-
-//      view.isSpeculateMenu();
-//      String currInput = takeStringInput();
-//      if (currInput.equals("YES")) {
-//        model = speculateMenu();
-//      }
 
     return this.entriesInPortfolio;
   }

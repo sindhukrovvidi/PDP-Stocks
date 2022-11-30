@@ -1,8 +1,6 @@
 package controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,5 +38,6 @@ public interface Features {
   HashMap getCompositionOfThePortfolio(String fileName, String date, boolean isCostBasis) throws ParseException, IOException;
 
 //  HashMap<String, TreeMap<Date, StocksImpl>> updateTheCurrentPortfolio(String filename) throws IOException, ParseException;
-
+float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, String newDate,
+    float numberOfSellingStocks, float fee) throws ParseException;
 }

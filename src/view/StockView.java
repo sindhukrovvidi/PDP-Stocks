@@ -60,7 +60,7 @@ public interface StockView {
    */
   void displayPortfolio(boolean displayHeaders, String company, String date,
       float open, float high,
-      float low, float close, float volume, int shares, float fee) throws IOException;
+      float low, float close, float volume, float shares, float fee) throws IOException;
 
   /**
    * Renders the composition of the stock.
@@ -79,7 +79,7 @@ public interface StockView {
   void viewCompositionOfPortfolio(boolean displayHeaders, String company, String date,
       float open,
       float close,
-      int shares, float fee, float total, String dateOfComposition) throws IOException;
+      float shares, float fee, float total, String dateOfComposition) throws IOException;
 
   /**
    * Render the performance of the portfolio for a giben time.
@@ -137,7 +137,7 @@ public interface StockView {
    * @param stocks no of stocks lack.
    * @throws IOException with invalid input/output.
    */
-  void printLackStocks(int stocks) throws IOException;
+  void printLackStocks(float stocks) throws IOException;
 
   /**
    * error message for invalid ticker.

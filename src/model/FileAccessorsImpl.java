@@ -150,7 +150,7 @@ public class FileAccessorsImpl implements FileAccessors {
           Float.parseFloat(fields[4]),
           Float.parseFloat(fields[5]),
           Float.parseFloat(fields[6]),
-          Integer.parseInt(fields[7]),
+          Float.parseFloat(fields[7]),
           Float.parseFloat(fields[8]),
           Float.parseFloat(fields[10]),
           Boolean.parseBoolean(fields[11])

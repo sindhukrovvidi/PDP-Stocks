@@ -214,7 +214,6 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
       ArrayList values = (ArrayList) map.get(s.trim().toUpperCase());
       if (values == null) {
         investMultipleStocksAtOnce();
-//        return null;
       }
     }
 
@@ -225,16 +224,8 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     } else {
       model.addMultipleStocksInPortfolio(getStockList().getLStocksMap(), lowerDate, upperDate,
           frequency, tickerValuesList, valueInvested, weightage, fee);
-//      view.displayPortfolio();
-      System.out.println("Updated in portfolio");
-//      stocksController.afterStocksDisplay();
-      // Should show more options
-//      isBulkStockAddition();
     }
   }
 
-  public void createStockAndInPortfolio() {
-
-  }
 }
 

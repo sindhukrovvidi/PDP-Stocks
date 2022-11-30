@@ -49,7 +49,8 @@ public class SellStocksFrame extends javax.swing.JFrame {
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-    portfolioFilesDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+    portfolioFilesDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+
 
     viewPortfolioTable.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {
@@ -70,7 +71,7 @@ public class SellStocksFrame extends javax.swing.JFrame {
 
     chooseTickerLabel.setText("Choose ticker:");
 
-    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
 
     enterDateLabel.setText("Enter date:");
 
@@ -105,10 +106,10 @@ public class SellStocksFrame extends javax.swing.JFrame {
                                             .addComponent(jLabel1)
                                             .addComponent(chooseTickerLabel))
                                         .addGap(18, 18, 18)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jComboBox1, 0, 100, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jComboBox1, 0, 152, Short.MAX_VALUE)
                                             .addComponent(stocksTextField))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)
+                                        .addGap(110, 110, 110)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(enterDateLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))

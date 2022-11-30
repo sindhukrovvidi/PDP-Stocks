@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,12 +26,7 @@ public class GUIMainController extends Controller implements Features {
   private JFrameStocksView view;
 
   public GUIMainController() throws IOException {
-//    super();
     initialiseModel();
-//    portfolioModel = new PortfolioImpl();
-//    stockModel = new StocksImpl();
-//    view = new JFrameStocksView(this);
-//    portfolioController = new FlexiblePortfolioControllerImpl(stockModel, portfolioModel, view);
 
   }
 
@@ -43,8 +39,6 @@ public class GUIMainController extends Controller implements Features {
 
   public void setView(JFrameStocksView v) {
     view = v;
-    //provide view with all the callbacks
-    view.addFeatures(this);
   }
 
   public void programStartsHere() throws IOException, ParseException {
@@ -183,6 +177,26 @@ public class GUIMainController extends Controller implements Features {
     System.out.println("GUI controller getCompositionOfThePortfolio returning");
     return portfolioModel.getCompostion(getStockList().getLStocksMap(), date);
 
+
+  }
+
+  /**
+   * @param validDatesList
+   * @param newDate
+   * @param numberOfSellingStocks
+   * @param fee
+   * @return
+   */
+  @Override
+  public float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, String newDate,
+      float numberOfSellingStocks, float fee) throws ParseException {
+    SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+    float stocksSold =  portfolioModel.sellTheStocks(validDatesList, sdformat.parse(newDate),
+        numberOfSellingStocks,
+        fee);
+    portfolioModel.save("portfolios/flexible");
+    System.out.println(portfolioModel.getPortfolio());
+    return stocksSold;
 
   }
 

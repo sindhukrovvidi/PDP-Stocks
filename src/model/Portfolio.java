@@ -104,7 +104,7 @@ public interface Portfolio {
    * @return returns hashmap.
    */
 
-  HashMap<String, Integer> getCompanyWiseShares();
+  HashMap<String, Float> getCompanyWiseShares();
 
   /**
    * Fetches the day wise data for a given time range.
@@ -215,8 +215,8 @@ public interface Portfolio {
    * @param fee                   commission fee for selling the stocks.
    * @return remaining stocks after selling.
    */
-  int sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
-      int numberOfSellingStocks, float fee);
+  float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
+      float numberOfSellingStocks, float fee);
 
   String[] getPortfolioNames();
 
