@@ -295,11 +295,7 @@ public class StocksImpl implements Stocks {
   public boolean isValidDate(String date) {
     try {
       LocalDate lt = LocalDate.parse(date);
-      if (lt.compareTo(LocalDate.now()) < 0) {
-        return true;
-      } else {
-        return false;
-      }
+      return lt.compareTo(LocalDate.now()) < 0;
     } catch (Exception e) {
       return false;
     }

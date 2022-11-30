@@ -195,10 +195,6 @@ public class StockViewImpl implements StockView {
   }
 
   @Override
-  public void addFeature(MainController main) throws IOException, ParseException {
-  }
-
-  @Override
   public void inValidDateMessage() throws IOException {
     this.out.append("Entered an invalid date, check!!");
   }

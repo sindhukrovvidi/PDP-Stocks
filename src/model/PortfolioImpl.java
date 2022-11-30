@@ -46,9 +46,7 @@ public class PortfolioImpl implements Portfolio {
     String company = data.getCompany();
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     TreeMap<Date, StocksImpl> currStockData = new TreeMap<>();
-    if (data.getDate().equals("")) {
 
-    }
     Date newDate = sdformat.parse(data.getDate());
 
     if (entriesInPortfolio.containsKey(company)) {

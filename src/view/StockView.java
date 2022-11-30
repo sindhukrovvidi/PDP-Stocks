@@ -35,14 +35,6 @@ public interface StockView {
    */
   void displayStarterMenu(MainController main) throws IOException;
 
-  /**
-   * Calls the respective function in controller.
-   *
-   * @param features main controller object
-   * @throws IOException    with invalid input/output.
-   * @throws ParseException with invalid date.
-   */
-  void addFeature(MainController features) throws IOException, ParseException;
 
   /**
    * Renders the portfolio.
