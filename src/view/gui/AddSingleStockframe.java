@@ -47,7 +47,6 @@ public class AddSingleStockframe {
 
     addSingleStockFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-
     addStockButton.setText("Add");
 
     tickerValueLabel.setText("Enter ticker value");
@@ -61,100 +60,100 @@ public class AddSingleStockframe {
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(panel);
     panel.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.
+                        Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.
-                                            Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addContainerGap()
-                                            .addGroup(jPanel2Layout.createParallelGroup(javax.
-                                                            swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(tickerValueLabel)
-                                                    .addComponent(commissionFeeLabel)
-                                                    .addComponent(dateLabel)
-                                                    .addComponent(stocksLabel))
-                                            .addGap(60, 60, 60)
-                                            .addGroup(jPanel2Layout.createParallelGroup(javax.
-                                                            swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(commissionFeeTextField,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                            200, javax.swing.GroupLayout.
-                                                                    PREFERRED_SIZE)
-                                                    .addComponent(stocksTextField, javax.swing.
-                                                                    GroupLayout.PREFERRED_SIZE,
-                                                            200, javax.swing.GroupLayout.
-                                                                    PREFERRED_SIZE)
-                                                    .addComponent(tickerValuetextField,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                            200, javax.swing.GroupLayout.
-                                                                    PREFERRED_SIZE)
-                                                    .addComponent(dateTextField,
-                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                            200, javax.swing.
-                                                                    GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addGap(126, 126, 126)
-                                            .addComponent(addStockButton)))
-                            .addContainerGap(132, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.
+                                swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tickerValueLabel)
+                            .addComponent(commissionFeeLabel)
+                            .addComponent(dateLabel)
+                            .addComponent(stocksLabel))
+                        .addGap(60, 60, 60)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.
+                                swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(commissionFeeTextField,
+                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                200, javax.swing.GroupLayout.
+                                    PREFERRED_SIZE)
+                            .addComponent(stocksTextField, javax.swing.
+                                    GroupLayout.PREFERRED_SIZE,
+                                200, javax.swing.GroupLayout.
+                                    PREFERRED_SIZE)
+                            .addComponent(tickerValuetextField,
+                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                200, javax.swing.GroupLayout.
+                                    PREFERRED_SIZE)
+                            .addComponent(dateTextField,
+                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                200, javax.swing.
+                                    GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(126, 126, 126)
+                        .addComponent(addStockButton)))
+                .addContainerGap(132, Short.MAX_VALUE))
     );
     jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(23, 23, 23)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.
-                                            Alignment.BASELINE)
-                                    .addComponent(tickerValuetextField, javax.swing.GroupLayout.
-                                                    PREFERRED_SIZE,
-                                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tickerValueLabel))
-                            .addGap(28, 28, 28)
-                            .addGroup(jPanel2Layout.createParallelGroup
-                                            (javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent
-                                            (dateTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(dateLabel))
-                            .addGap(26, 26, 26)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.
-                                            Alignment.BASELINE)
-                                    .addComponent(stocksTextField, javax.swing.GroupLayout.
-                                                    PREFERRED_SIZE,
-                                            javax.swing.GroupLayout.DEFAULT_SIZE, javax.
-                                                    swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(stocksLabel))
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.
-                                            GroupLayout.Alignment.BASELINE)
-                                    .addComponent(commissionFeeTextField, javax.swing.
-                                                    GroupLayout.PREFERRED_SIZE,
-                                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(commissionFeeLabel))
-                            .addGap(37, 37, 37)
-                            .addComponent(addStockButton)
-                            .addContainerGap(41, Short.MAX_VALUE))
+        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.
+                        Alignment.BASELINE)
+                    .addComponent(tickerValuetextField, javax.swing.GroupLayout.
+                            PREFERRED_SIZE,
+                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tickerValueLabel))
+                .addGap(28, 28, 28)
+                .addGroup(jPanel2Layout.createParallelGroup
+                        (javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent
+                        (dateTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dateLabel))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.
+                        Alignment.BASELINE)
+                    .addComponent(stocksTextField, javax.swing.GroupLayout.
+                            PREFERRED_SIZE,
+                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.
+                            swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(stocksLabel))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.
+                        GroupLayout.Alignment.BASELINE)
+                    .addComponent(commissionFeeTextField, javax.swing.
+                            GroupLayout.PREFERRED_SIZE,
+                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(commissionFeeLabel))
+                .addGap(37, 37, 37)
+                .addComponent(addStockButton)
+                .addContainerGap(41, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout =
-            new javax.swing.GroupLayout(addSingleStockFrame.getContentPane());
+        new javax.swing.GroupLayout(addSingleStockFrame.getContentPane());
     addSingleStockFrame.getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addContainerGap())
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
     );
     layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addContainerGap())
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
     );
 
     addSingleStockFrame.pack();

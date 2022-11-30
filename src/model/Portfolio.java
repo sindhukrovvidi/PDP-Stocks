@@ -27,6 +27,8 @@ public interface Portfolio {
    */
   HashMap<String, TreeMap<Date, StocksImpl>> getPortfolio();
 
+  boolean isValidDate(String date);
+
   /**
    * Method to create a portfolio.
    *
@@ -115,7 +117,7 @@ public interface Portfolio {
    * @return a treemap with dates and value on that day.
    */
   TreeMap<LocalDate, Integer> getDaysWiseData(HashMap<String, StringBuilder> entries,
-                                              Date newDate1, Date newDate2);
+      Date newDate1, Date newDate2);
 
   /**
    * Fetches the week wise data for a given time range.
@@ -126,7 +128,7 @@ public interface Portfolio {
    * @return a treemap with dates and value on that day.
    */
   TreeMap<LocalDate, Integer> getWeekWiseData(HashMap<String, StringBuilder> entries,
-                                              Date newDate1, Date newDate2);
+      Date newDate1, Date newDate2);
 
   /**
    * Fetches the month wise data for a given time range.
@@ -137,7 +139,7 @@ public interface Portfolio {
    * @return a treemap with dates and value on that day.
    */
   TreeMap<LocalDate, Integer> getMonthWiseData(HashMap<String, StringBuilder> entries,
-                                               Date newDate1, Date newDate2);
+      Date newDate1, Date newDate2);
 
   /**
    * Retrieves the composition of the portfolio.
@@ -158,7 +160,7 @@ public interface Portfolio {
    * @return String that has the performance data.
    */
   String getScaleValue(TreeMap<LocalDate, Integer> performanceData, String date1,
-                       String date2);
+      String date2);
 
   /**
    * Calculates the performance of the portfolio in given timerange.
@@ -185,9 +187,9 @@ public interface Portfolio {
    * @throws ParseException while parsing an invalid date.
    */
   void addMultipleStocksInPortfolio(HashMap map, String lowerDate, String upperDate,
-                                    int frequency, String[] stocksInput, float valueInvested,
-                                    String weightage, float fee)
-          throws ParseException;
+      int frequency, String[] stocksInput, float valueInvested,
+      String weightage, float fee)
+      throws ParseException;
 
   /**
    * Validates all the inputs for addition of multiple stocks.
@@ -202,8 +204,8 @@ public interface Portfolio {
    * @throws ParseException while parsing incvalid date.
    */
   boolean validateInputForMultiStocks(float investedAmount, String weightage, float fee,
-                                      String lowerDate, String upperDate, int frequency)
-          throws ParseException;
+      String lowerDate, String upperDate, int frequency, String[] tickerValuesList)
+      throws ParseException;
 
 
   /**
@@ -216,10 +218,12 @@ public interface Portfolio {
    * @return remaining stocks after selling.
    */
   float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
-                      float numberOfSellingStocks, float fee);
+      float numberOfSellingStocks, float fee);
 
   String[] getPortfolioNames();
 
   HashMap<String, TreeMap<Date, StocksImpl>> fetchSelectedPortfolio(String input, HashMap stockMap)
-          throws FileAlreadyExistsException;
+      throws FileAlreadyExistsException;
+
+  int validateSellInputs(String date, float shares, float fee);
 }

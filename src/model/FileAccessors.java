@@ -28,7 +28,7 @@ public interface FileAccessors {
    * @param hashMap  content to be written into the file.
    */
   void writeIntoCSVFile(String fileName, HashMap<String, TreeMap<Date, StocksImpl>> hashMap,
-                        String path);
+      String path);
 
   /**
    * Method used to check if the file exists or not.
@@ -47,7 +47,7 @@ public interface FileAccessors {
    */
 
   HashMap<String, TreeMap<Date, StocksImpl>> viewFile(String portfolioName, String path)
-          throws IOException, ParseException;
+      throws IOException, ParseException;
 
   /**
    * Method used to display the list of portfolios present in the directory.

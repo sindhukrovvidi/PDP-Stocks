@@ -102,15 +102,15 @@ abstract public class StockControllerImpl extends Controller implements StockCon
    */
   @Override
   public void controllerToViewHelperForStocks(String companyName,
-                                              ArrayList<StocksImpl> values) {
+      ArrayList<StocksImpl> values) {
 
     AtomicBoolean displayHeaders = new AtomicBoolean(true);
     values.forEach((v) -> {
       try {
         view.displayListOfDates(displayHeaders.get(), companyName,
-                v.getDate(),
-                v.getOpen(), v.getHigh(), v.getLow(),
-                v.getClose(), v.getVolume());
+            v.getDate(),
+            v.getOpen(), v.getHigh(), v.getLow(),
+            v.getClose(), v.getVolume());
         displayHeaders.set(false);
       } catch (IOException e) {
         throw new RuntimeException(e);

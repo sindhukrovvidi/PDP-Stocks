@@ -97,7 +97,7 @@ public class MainControllerImpl implements MainController {
         input = takeStringInput();
 
         portfolioControllerImpl = new InflexiblePortfolioControllerImpl(portfolioImpl,
-                view);
+            view);
         this.portfolioImpl = portfolioControllerImpl.viewSpeculate(input);
         programStartsHere();
         break;
@@ -110,7 +110,7 @@ public class MainControllerImpl implements MainController {
         input = takeStringInput();
 
         portfolioControllerImpl = new FlexiblePortfolioControllerImpl(portfolioImpl,
-                view);
+            view);
         this.portfolioImpl = portfolioControllerImpl.viewSpeculate(input);
         if (portfolioImpl.getIsFlexible() && portfolioImpl.getBuy()) {
           getInitialController(11);
@@ -141,14 +141,14 @@ public class MainControllerImpl implements MainController {
         PortfolioControllerImpl portfolioControllersImpl;
         if (isFlexible) {
           portfolioControllersImpl = new FlexiblePortfolioControllerImpl(
-                  this.stocksImpl,
-                  this.portfolioImpl,
-                  view);
+              this.stocksImpl,
+              this.portfolioImpl,
+              view);
         } else {
           portfolioControllersImpl = new InflexiblePortfolioControllerImpl(
-                  this.stocksImpl,
-                  this.portfolioImpl,
-                  view);
+              this.stocksImpl,
+              this.portfolioImpl,
+              view);
         }
         this.portfolioImpl = portfolioControllersImpl.addStock();
         if (this.portfolioImpl == null) {
@@ -162,10 +162,10 @@ public class MainControllerImpl implements MainController {
       case 11:
 
         portfolioControllersImpl = new FlexiblePortfolioControllerImpl(
-                this.stocksImpl,
-                this.portfolioImpl,
-                view,
-                new FlexibleStockControllerImpl(new StocksImpl(), view));
+            this.stocksImpl,
+            this.portfolioImpl,
+            view,
+            new FlexibleStockControllerImpl(new StocksImpl(), view));
 
         StocksImpl stocksImpls = portfolioControllersImpl.isBulkStockAddition();
         if (stocksImpls == null) {
@@ -195,7 +195,7 @@ public class MainControllerImpl implements MainController {
 
       FileAccessors fileAccessor = new FileAccessorsImpl();
       String path = this.portfolioImpl.getIsFlexible() ? "portfolios/flexible" : "portfolios" +
-              "/inflexible";
+          "/inflexible";
       if (!fileAccessor.isFileExists(input, path)) {
         this.portfolioImpl.setPortfolioName(input);
       } else {

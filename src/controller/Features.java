@@ -16,35 +16,39 @@ public interface Features {
   boolean createPortfolio(String filename) throws IOException;
 
   boolean validateSingleStocksData(String ticker, String date, int stocks, float fee)
-          throws IOException;
+      throws IOException;
 
   void addStockToPortfolio(String tickerName, String date, int stocks, float fee)
-          throws ParseException;
+      throws ParseException;
 
   void saveCurrentPortfolio();
 
   HashMap<String, TreeMap<Date, StocksImpl>> getPortfolio();
 
   boolean isValidateInputForMultiStocks(String stocksInput, float investedAmount, String weightage
-          , float fee,
-                                        String lowerDate, String upperDate, int frequency)
-          throws ParseException, IOException;
+      , float fee,
+      String lowerDate, String upperDate, int frequency)
+      throws ParseException, IOException;
 
   void addDollarCostAveragingStocks(String lowerDate, String upperDate, int frequency,
-                                    String tickerValuesList, float valueInvested, String weightage,
-                                    float fee)
-          throws ParseException;
+      String tickerValuesList, float valueInvested, String weightage,
+      float fee)
+      throws ParseException;
 
   String[] getPortfolioNames();
 
   HashMap<String, TreeMap<Date, StocksImpl>> renderTheSelectedPortfolio(String fileName)
-          throws IOException, ParseException;
+      throws IOException, ParseException;
 
 
   HashMap getCompositionOfThePortfolio(String fileName, String date, boolean isCostBasis)
-          throws ParseException, IOException;
+      throws ParseException, IOException;
 
 
   float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, String newDate,
-                      float numberOfSellingStocks, float fee) throws ParseException;
+      float numberOfSellingStocks, float fee) throws ParseException;
+
+  int validateSellStocks(String date, float shares, float fee);
+
+  boolean isValidDate(String date);
 }

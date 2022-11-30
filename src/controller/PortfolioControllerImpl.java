@@ -241,7 +241,7 @@ abstract public class PortfolioControllerImpl extends Controller implements Port
     }
 
     boolean areValid = model.validateInputForMultiStocks(valueInvested, weightage, fee, lowerDate,
-            upperDate, frequency);
+            upperDate, frequency, tickerValuesList);
     if (!areValid) {
       investMultipleStocksAtOnce();
     } else {

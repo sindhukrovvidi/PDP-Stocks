@@ -46,9 +46,7 @@ public class PortfolioImpl implements Portfolio {
     String company = data.getCompany();
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     TreeMap<Date, StocksImpl> currStockData = new TreeMap<>();
-    if (data.getDate().equals("")) {
 
-    }
     Date newDate = sdformat.parse(data.getDate());
 
     if (entriesInPortfolio.containsKey(company)) {
@@ -96,6 +94,21 @@ public class PortfolioImpl implements Portfolio {
   @Override
   public HashMap<String, TreeMap<Date, StocksImpl>> getPortfolio() {
     return entriesInPortfolio;
+  }
+
+  /**
+   * @param date
+   * @return
+   */
+  @Override
+  public boolean isValidDate(String date) {
+    try {
+      SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+      sdformat.parse(date);
+      return true;
+    } catch (ParseException e) {
+      return false;
+    }
   }
 
   /**
@@ -212,8 +225,8 @@ public class PortfolioImpl implements Portfolio {
    */
   @Override
   public TreeMap<LocalDate, Integer> getDaysWiseData(
-          HashMap<String, StringBuilder> entries,
-          Date newDate1, Date newDate2) {
+      HashMap<String, StringBuilder> entries,
+      Date newDate1, Date newDate2) {
     LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
@@ -262,8 +275,8 @@ public class PortfolioImpl implements Portfolio {
    */
   @Override
   public TreeMap<LocalDate, Integer> getWeekWiseData(HashMap<String, StringBuilder> entries,
-                                                     Date newDate1,
-                                                     Date newDate2) {
+      Date newDate1,
+      Date newDate2) {
     LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
@@ -310,7 +323,7 @@ public class PortfolioImpl implements Portfolio {
    */
   @Override
   public TreeMap<LocalDate, Integer> getMonthWiseData(HashMap<String, StringBuilder> entries,
-                                                      Date newDate1, Date newDate2) {
+      Date newDate1, Date newDate2) {
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     System.out.println(newDate1.toString());
     String newDateString1 = (sdformat.format(newDate1)).substring(0, 7);
@@ -375,12 +388,12 @@ public class PortfolioImpl implements Portfolio {
 
       String[] fields = entries[i].split(",");
       StocksImpl newStock = new StocksImpl(
-              fields[0],
-              Float.parseFloat(fields[1]),
-              Float.parseFloat(fields[2]),
-              Float.parseFloat(fields[3]),
-              Float.parseFloat(fields[4]),
-              Float.parseFloat(fields[5])
+          fields[0],
+          Float.parseFloat(fields[1]),
+          Float.parseFloat(fields[2]),
+          Float.parseFloat(fields[3]),
+          Float.parseFloat(fields[4]),
+          Float.parseFloat(fields[5])
       );
       currListStocks.put(fields[0], newStock);
     }
@@ -417,7 +430,7 @@ public class PortfolioImpl implements Portfolio {
               formattedcurrStockDate = sdformat.parse(currStock.getDate());
               if (formattedcurrStockDate.compareTo(formattedDate) == 0) {
                 total_composition.set(
-                        total_composition.get() + (currStock.getClose() * stockVal.getShares()));
+                    total_composition.get() + (currStock.getClose() * stockVal.getShares()));
                 total_comission_fee.set(total_comission_fee.get() + stockVal.getCommisionFee());
                 inDateList.add(stockVal);
               }
@@ -431,7 +444,7 @@ public class PortfolioImpl implements Portfolio {
     });
 
     float final_total_value = this.getIsCostBasis() ?
-            total_composition.get() + total_comission_fee.get() : total_composition.get();
+        total_composition.get() + total_comission_fee.get() : total_composition.get();
 
     HashMap returnObj = new HashMap();
     returnObj.put("inDateList", inDateList);
@@ -456,14 +469,14 @@ public class PortfolioImpl implements Portfolio {
    */
   @Override
   public String getScaleValue(TreeMap<LocalDate, Integer> performanceData, String date1,
-                              String date2) {
+      String date2) {
     int maxStartCount = 50;
 
     double min = performanceData.values().stream().mapToDouble(e -> e).min().orElse(0);
     double max = performanceData.values().stream().mapToDouble(e -> e).max().orElse(0);
     StringBuilder sb = new StringBuilder();
     sb.append("Performance of portfolio " + this.portfolioName + " from " + date1 + " to " +
-            date2 + "\n\n");
+        date2 + "\n\n");
     performanceData.forEach((k, v) -> {
       double norm = (v - min) / (max - min);
       String line = k + " " + "*".repeat((int) Math.ceil(norm * maxStartCount));
@@ -472,14 +485,14 @@ public class PortfolioImpl implements Portfolio {
     });
     sb.append("\n");
     sb.append(
-            "Scale: Each * represents value " + Math.round((max - min) / 50) + "$ more than base " +
-                    "value of $" + Math.round(min));
+        "Scale: Each * represents value " + Math.round((max - min) / 50) + "$ more than base " +
+            "value of $" + Math.round(min));
     return sb.toString();
   }
 
   @Override
   public String calculatePerformaceOverTime(String date1, String date2)
-          throws IOException, ParseException {
+      throws IOException, ParseException {
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     Date newDate1 = sdformat.parse(date1);
     Date newDate2 = sdformat.parse(date2);
@@ -542,9 +555,9 @@ public class PortfolioImpl implements Portfolio {
 
   @Override
   public void addMultipleStocksInPortfolio(HashMap map, String lowerDate, String upperDate,
-                                           int frequency, String[] stocksInput, float valueInvested,
-                                           String weightage, float fee)
-          throws ParseException {
+      int frequency, String[] stocksInput, float valueInvested,
+      String weightage, float fee)
+      throws ParseException {
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 
     List<LocalDate> listOfDates = getDatesForFrequency(lowerDate, upperDate, frequency);
@@ -552,17 +565,17 @@ public class PortfolioImpl implements Portfolio {
     int index = 0;
 
     List<LocalDate> futureDates =
-            listOfDates.stream().filter(ele -> ele.compareTo(LocalDate.now()) > 0).collect(
-                    Collectors.toList());
+        listOfDates.stream().filter(ele -> ele.compareTo(LocalDate.now()) > 0).collect(
+            Collectors.toList());
 
     for (String stock : stocksInput) {
       ArrayList<StocksImpl> currentStockData = (ArrayList<StocksImpl>) map.get(stock.toUpperCase());
 
       for (LocalDate futureDate : futureDates) {
         addStockInPortfolio(new StocksImpl(
-                stock.toUpperCase(),
-                futureDate.toString(), 0, 0, 0, 0, 0, 0, fee,
-                valueInvested * (Float.parseFloat(percentages[0]) / 100), true
+            stock.toUpperCase(),
+            futureDate.toString(), 0, 0, 0, 0, 0, 0, fee,
+            valueInvested * (Float.parseFloat(percentages[0]) / 100), true
         ));
       }
 
@@ -570,21 +583,21 @@ public class PortfolioImpl implements Portfolio {
         String stockDate = currentStockDatum.getDate();
         Date newDate = sdformat.parse(stockDate);
         LocalDate formattedStockData =
-                newDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            newDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         if (listOfDates.contains(formattedStockData)) {
           addStockInPortfolio(new StocksImpl(
-                  stock.toUpperCase(),
-                  currentStockDatum.getDate(),
-                  currentStockDatum.getOpen(),
-                  currentStockDatum.getHigh(),
-                  currentStockDatum.getLow(),
-                  currentStockDatum.getClose(),
-                  currentStockDatum.getVolume(),
-                  (valueInvested * (Float.parseFloat(percentages[0]) / 100)
-                          / currentStockDatum.getClose()),
-                  fee,
-                  Float.parseFloat(percentages[0]) / 100,
-                  false
+              stock.toUpperCase(),
+              currentStockDatum.getDate(),
+              currentStockDatum.getOpen(),
+              currentStockDatum.getHigh(),
+              currentStockDatum.getLow(),
+              currentStockDatum.getClose(),
+              currentStockDatum.getVolume(),
+              (valueInvested * (Float.parseFloat(percentages[0]) / 100)
+                  / currentStockDatum.getClose()),
+              fee,
+              Float.parseFloat(percentages[0]) / 100,
+              false
           ));
         }
       }
@@ -594,7 +607,7 @@ public class PortfolioImpl implements Portfolio {
   }
 
   private List<LocalDate> getDatesForFrequency(String startDate, String endDate, int frequency)
-          throws ParseException {
+      throws ParseException {
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
     Date newDate1 = sdformat.parse(startDate);
     Date newDate2 = sdformat.parse(endDate);
@@ -619,8 +632,8 @@ public class PortfolioImpl implements Portfolio {
 
   @Override
   public boolean validateInputForMultiStocks(float investedAmount, String weightage, float fee,
-                                             String lowerDate, String upperDate, int frequency)
-          throws ParseException {
+      String lowerDate, String upperDate, int frequency, String[] tickerValuesList)
+      throws ParseException {
     boolean areValidInputs = true;
 
     String[] percentages = weightage.split(",");
@@ -635,8 +648,8 @@ public class PortfolioImpl implements Portfolio {
     LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-    if (investedAmount <= 0 || fee <= 0 || totalWeightage < 100 || (dateLower.compareTo(dateUpper)
-            >= 0) || frequency < 0) {
+    if (investedAmount <= 0 || fee <= 0 || totalWeightage != 100 || (dateLower.compareTo(dateUpper)
+        >= 0) || frequency < 0 || percentages.length != tickerValuesList.length) {
       areValidInputs = false;
     }
     return areValidInputs;
@@ -644,9 +657,10 @@ public class PortfolioImpl implements Portfolio {
 
   @Override
   public float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
-                             float numberOfSellingStocks, float fee) {
+      float numberOfSellingStocks, float fee) {
+//    if (validDatesList != null) {
     for (Map.Entry<Date, StocksImpl>
-            entry : validDatesList.entrySet()) {
+        entry : validDatesList.entrySet()) {
       if ((numberOfSellingStocks == 0) || entry.getKey().compareTo(newDate) > 0) {
         break;
       }
@@ -661,6 +675,7 @@ public class PortfolioImpl implements Portfolio {
       }
     }
     System.out.println("calling sellTheStocks...." + numberOfSellingStocks);
+//    }
     return numberOfSellingStocks;
   }
 
@@ -680,8 +695,8 @@ public class PortfolioImpl implements Portfolio {
    * @throws FileAlreadyExistsException if the file is already present.
    */
   public HashMap<String, TreeMap<Date, StocksImpl>> fetchSelectedPortfolio(String input,
-                                                                           HashMap stockMap)
-          throws FileAlreadyExistsException {
+      HashMap stockMap)
+      throws FileAlreadyExistsException {
 
     HashMap<String, TreeMap<Date, StocksImpl>> portfolios = entriesInPortfolio;
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
@@ -707,17 +722,17 @@ public class PortfolioImpl implements Portfolio {
             String curStockDate = curStock.getDate();
             if (curStockDate == dateLower.toString()) {
               currData.put(newDate1, new StocksImpl(
-                      tickerValue,
-                      curStockDate,
-                      curStock.getOpen(),
-                      curStock.getHigh(),
-                      curStock.getLow(),
-                      curStock.getClose(),
-                      curStock.getVolume(),
-                      (stock.getPercentage() / curStock.getClose()),
-                      curStock.getCommisionFee(),
-                      stock.getPercentage(),
-                      false
+                  tickerValue,
+                  curStockDate,
+                  curStock.getOpen(),
+                  curStock.getHigh(),
+                  curStock.getLow(),
+                  curStock.getClose(),
+                  curStock.getVolume(),
+                  (stock.getPercentage() / curStock.getClose()),
+                  curStock.getCommisionFee(),
+                  stock.getPercentage(),
+                  false
               ));
             }
 
@@ -730,5 +745,26 @@ public class PortfolioImpl implements Portfolio {
     this.setPortfolioName(input);
 
     return this.entriesInPortfolio;
+  }
+
+
+  /**
+   * @param date
+   * @param shares
+   * @param fee
+   * @return
+   */
+  @Override
+  public int validateSellInputs(String date, float shares, float fee) {
+    if (!isValidDate(date)) {
+      return 3;
+    }
+    if (shares <= 0) {
+      return 1;
+    }
+    if (fee <= 0) {
+      return 2;
+    }
+    return 4;
   }
 }
