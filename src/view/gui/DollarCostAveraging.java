@@ -1,14 +1,14 @@
 package view.gui;
 
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change the license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /**
- * @author sindhukrovvidi
+ * Class that contains all the methods to perform the dollar cost averaging plan in a portfolio.
  */
 public class DollarCostAveraging {
 
@@ -33,7 +33,7 @@ public class DollarCostAveraging {
   public JFrame dollarCostAveragingFrame;
 
   /**
-   * Creates new form testframe
+   * Creates new form test frame.
    */
   public DollarCostAveraging() {
     dollarCostAveragingFrame = new JFrame();
@@ -90,138 +90,174 @@ public class DollarCostAveraging {
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
-        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(
-                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(frequencyLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(frequencyTextField,
-                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(weightageLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25,
-                                Short.MAX_VALUE)
-                            .addComponent(weightageTextField,
-                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(amountInvestedLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(amountInvestedTextField,
-                                javax.swing.GroupLayout.PREFERRED_SIZE, 200,
-                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(endDateLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(endDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                200
-                                , javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(startDateLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(startDateTextField,
-                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(tickerListLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tickerListTextField,
-                                javax.swing.GroupLayout.PREFERRED_SIZE
-                                , 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(commissionFeeLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(commissionFeeTextField,
-                                javax.swing.GroupLayout.PREFERRED_SIZE, 200,
-                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(64, 64, 64))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                jPanel2Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(addMultiStockButton)
-                    .addGap(225, 225, 225))
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(
+                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout
+                                                    .Alignment.LEADING)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addComponent(frequencyLabel)
+                                                    .addPreferredGap(javax.swing.LayoutStyle
+                                                                    .ComponentPlacement.RELATED,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            Short.MAX_VALUE)
+                                                    .addComponent(frequencyTextField,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            200, javax.swing.GroupLayout
+                                                                    .PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addComponent(weightageLabel)
+                                                    .addPreferredGap(javax.swing.LayoutStyle
+                                                                    .ComponentPlacement.RELATED,
+                                                            25,
+                                                            Short.MAX_VALUE)
+                                                    .addComponent(weightageTextField,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            200, javax.swing.GroupLayout
+                                                                    .PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addComponent(amountInvestedLabel)
+                                                    .addPreferredGap(javax.swing.LayoutStyle
+                                                                    .ComponentPlacement.RELATED,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            Short.MAX_VALUE)
+                                                    .addComponent(amountInvestedTextField,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            200,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addComponent(endDateLabel)
+                                                    .addPreferredGap(javax.swing.LayoutStyle
+                                                                    .ComponentPlacement.RELATED,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            Short.MAX_VALUE)
+                                                    .addComponent(endDateTextField,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            200,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addComponent(startDateLabel)
+                                                    .addPreferredGap(javax.swing.LayoutStyle
+                                                                    .ComponentPlacement.RELATED,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            Short.MAX_VALUE)
+                                                    .addComponent(startDateTextField,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            200, javax.swing.GroupLayout
+                                                                    .PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addComponent(tickerListLabel)
+                                                    .addPreferredGap(javax.swing.LayoutStyle
+                                                                    .ComponentPlacement.RELATED,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            Short.MAX_VALUE)
+                                                    .addComponent(tickerListTextField,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            200, javax.swing.GroupLayout
+                                                                    .PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addComponent(commissionFeeLabel)
+                                                    .addPreferredGap(javax.swing.LayoutStyle
+                                                                    .ComponentPlacement.RELATED,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            Short.MAX_VALUE)
+                                                    .addComponent(commissionFeeTextField,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            200,
+                                                            javax.swing.GroupLayout
+                                                                    .PREFERRED_SIZE)))
+                            .addGap(64, 64, 64))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                            jPanel2Layout.createSequentialGroup()
+                                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                            Short.MAX_VALUE)
+                                    .addComponent(addMultiStockButton)
+                                    .addGap(225, 225, 225))
     );
     jPanel2Layout.setVerticalGroup(
-        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(
-                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tickerListTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tickerListLabel))
-                .addGap(28, 28, 28)
-                .addGroup(
-                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(startDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(startDateLabel))
-                .addGap(26, 26, 26)
-                .addGroup(
-                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(endDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(endDateLabel))
-                .addGap(18, 18, 18)
-                .addGroup(
-                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(amountInvestedTextField,
-                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(amountInvestedLabel))
-                .addGap(24, 24, 24)
-                .addGroup(
-                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(weightageLabel)
-                        .addComponent(weightageTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(
-                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(commissionFeeLabel)
-                        .addComponent(commissionFeeTextField,
-                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(
-                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(frequencyLabel)
-                        .addComponent(frequencyTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(addMultiStockButton)
-                .addContainerGap(26, Short.MAX_VALUE))
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(23, 23, 23)
+                            .addGroup(
+                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout
+                                                    .Alignment.BASELINE)
+                                            .addComponent(tickerListTextField, javax.swing
+                                                            .GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tickerListLabel))
+                            .addGap(28, 28, 28)
+                            .addGroup(
+                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout
+                                                    .Alignment.BASELINE)
+                                            .addComponent(startDateTextField, javax.swing
+                                                            .GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(startDateLabel))
+                            .addGap(26, 26, 26)
+                            .addGroup(
+                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout
+                                                    .Alignment.BASELINE)
+                                            .addComponent(endDateTextField, javax.swing
+                                                            .GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(endDateLabel))
+                            .addGap(18, 18, 18)
+                            .addGroup(
+                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout
+                                                    .Alignment.BASELINE)
+                                            .addComponent(amountInvestedTextField,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(amountInvestedLabel))
+                            .addGap(24, 24, 24)
+                            .addGroup(
+                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout
+                                                    .Alignment.BASELINE)
+                                            .addComponent(weightageLabel)
+                                            .addComponent(weightageTextField, javax.swing
+                                                            .GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(
+                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout
+                                                    .Alignment.BASELINE)
+                                            .addComponent(commissionFeeLabel)
+                                            .addComponent(commissionFeeTextField,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(
+                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout
+                                                    .Alignment.BASELINE)
+                                            .addComponent(frequencyLabel)
+                                            .addComponent(frequencyTextField, javax.swing
+                                                            .GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addComponent(addMultiStockButton)
+                            .addContainerGap(26, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout =
-        new javax.swing.GroupLayout(dollarCostAveragingFrame.getContentPane());
+            new javax.swing.GroupLayout(dollarCostAveragingFrame.getContentPane());
     dollarCostAveragingFrame.getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
 
     dollarCostAveragingFrame.pack();

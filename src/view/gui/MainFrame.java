@@ -1,5 +1,9 @@
 package view.gui;
 
+/**
+ * Class that extends the java swings and contains all the methods to that are responsible for
+ * implementation of the main frame.
+ */
 public class MainFrame extends javax.swing.JFrame {
 
   public javax.swing.JButton buyStocksButton;
@@ -15,7 +19,7 @@ public class MainFrame extends javax.swing.JFrame {
   public javax.swing.JButton viewPortfolioButton;
 
   /**
-   * Creates new form MainFrame
+   * Creates new form MainFrame.
    */
   public MainFrame() {
     initComponents();
@@ -65,48 +69,48 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.GroupLayout leftMenuLayout = new javax.swing.GroupLayout(leftMenu);
     leftMenu.setLayout(leftMenuLayout);
     leftMenuLayout.setHorizontalGroup(
-        leftMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(leftMenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(
-                    leftMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(leftMenuLayout.createParallelGroup(
-                                javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(totalCompositionButton,
-                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(costBasisButton, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(sellStocksButton, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(buyStocksButton, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(viewPortfolioButton, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(createPortfolioButton,
-                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(performanceButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            leftMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(leftMenuLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(
+                                    leftMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(leftMenuLayout.createParallelGroup(
+                                                            javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(totalCompositionButton,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(costBasisButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(sellStocksButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(buyStocksButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(viewPortfolioButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(createPortfolioButton,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(performanceButton))
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     leftMenuLayout.setVerticalGroup(
-        leftMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(leftMenuLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(createPortfolioButton)
-                .addGap(38, 38, 38)
-                .addComponent(viewPortfolioButton)
-                .addGap(37, 37, 37)
-                .addComponent(buyStocksButton)
-                .addGap(31, 31, 31)
-                .addComponent(sellStocksButton)
-                .addGap(36, 36, 36)
-                .addComponent(totalCompositionButton)
-                .addGap(39, 39, 39)
-                .addComponent(costBasisButton)
-                .addGap(37, 37, 37)
-                .addComponent(performanceButton)
-                .addContainerGap(64, Short.MAX_VALUE))
+            leftMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(leftMenuLayout.createSequentialGroup()
+                            .addGap(40, 40, 40)
+                            .addComponent(createPortfolioButton)
+                            .addGap(38, 38, 38)
+                            .addComponent(viewPortfolioButton)
+                            .addGap(37, 37, 37)
+                            .addComponent(buyStocksButton)
+                            .addGap(31, 31, 31)
+                            .addComponent(sellStocksButton)
+                            .addGap(36, 36, 36)
+                            .addComponent(totalCompositionButton)
+                            .addGap(39, 39, 39)
+                            .addComponent(costBasisButton)
+                            .addGap(37, 37, 37)
+                            .addComponent(performanceButton)
+                            .addContainerGap(64, Short.MAX_VALUE))
     );
 
     jSplitPane1.setLeftComponent(leftMenu);
@@ -114,12 +118,12 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.GroupLayout rightPanelLayout = new javax.swing.GroupLayout(rightPanel);
     rightPanel.setLayout(rightPanelLayout);
     rightPanelLayout.setHorizontalGroup(
-        rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 554, Short.MAX_VALUE)
+            rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGap(0, 554, Short.MAX_VALUE)
     );
     rightPanelLayout.setVerticalGroup(
-        rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 483, Short.MAX_VALUE)
+            rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGap(0, 483, Short.MAX_VALUE)
     );
 
     jSplitPane1.setRightComponent(rightPanel);
@@ -127,37 +131,38 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
     mainPanel.setLayout(mainPanelLayout);
     mainPanelLayout.setHorizontalGroup(
-        mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING,
-                javax.swing.GroupLayout.PREFERRED_SIZE, 1000,
-                javax.swing.GroupLayout.PREFERRED_SIZE)
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 1000,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)
     );
     mainPanelLayout.setVerticalGroup(
-        mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSplitPane1)
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addContainerGap())
     );
     layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addContainerGap())
     );
 
     pack();
-  }// </editor-fold>
+  }
+  // </editor-fold>
 
   private void viewPortfolioButtonActionPerformed(java.awt.event.ActionEvent evt) {
     // TODO add your handling code here:
