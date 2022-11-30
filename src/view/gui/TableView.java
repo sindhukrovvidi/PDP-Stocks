@@ -1,7 +1,11 @@
 package view.gui;
 
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 
+/**
+ * Class that extends the java swings and contains all the methods to that are responsible for
+ * implementation of a table view frame.
+ */
 public class TableView extends javax.swing.JFrame {
 
 
@@ -10,7 +14,7 @@ public class TableView extends javax.swing.JFrame {
   public javax.swing.JTable portfolioTable;
 
   /**
-   * Creates new form TableView
+   * Constructor to create new form TableView.
    */
   public TableView() {
     initComponents();
@@ -26,30 +30,22 @@ public class TableView extends javax.swing.JFrame {
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
     portfolioTable.setModel(new javax.swing.table.DefaultTableModel(
-        new Object[][]{
-            {null, null, null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null, null, null}
-        },
-        new String[]{
-            "Company", "Date", "Open", "High", "Low", "Close", "Volume", "Shares invested",
-            "Total Value", "Commission fee"
-        }
+            new Object[][]{
+                    {null, null, null, null, null, null, null, null, null, null},
+                    {null, null, null, null, null, null, null, null, null, null},
+                    {null, null, null, null, null, null, null, null, null, null},
+                    {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String[]{
+                    "Company", "Date", "Open", "High", "Low", "Close", "Volume", "Shares invested",
+                    "Total Value", "Commission fee"
+            }
     ) {
-      //      Class[] types = new Class[]{
-//          java.lang.String.class, java.lang.String.class, java.lang.Float.class,
-//          java.lang.Float.class, java.lang.Float.class, java.lang.Float.class,
-//          java.lang.Float.class, java.lang.Integer.class, java.lang.Float.class,
-//          java.lang.Float.class
-//      };
-      boolean[] canEdit = new boolean[]{
-          false, false, false, false, false, false, false, false, false, false
+
+      final boolean[] canEdit = new boolean[]{
+              false, false, false, false, false, false, false, false, false, false
       };
 
-//      public Class getColumnClass(int columnIndex) {
-//        return types[columnIndex];
-//      }
 
       public boolean isCellEditable(int rowIndex, int columnIndex) {
         return canEdit[columnIndex];
@@ -63,15 +59,15 @@ public class TableView extends javax.swing.JFrame {
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 77, Short.MAX_VALUE))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 77, Short.MAX_VALUE))
     );
 
     pack();
