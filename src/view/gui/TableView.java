@@ -1,6 +1,6 @@
 package view.gui;
 
-import javax.swing.*;
+import javax.swing.ScrollPaneConstants;
 
 /**
  * Class that extends the java swings and contains all the methods to that are responsible for
@@ -60,7 +60,8 @@ public class TableView extends javax.swing.JFrame {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604,
+                Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

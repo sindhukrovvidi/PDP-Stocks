@@ -118,7 +118,8 @@ public class SellStocksFrame extends javax.swing.JFrame {
                                             .addGap(18, 18, 18)
                                             .addGroup(jPanel1Layout.createParallelGroup(
                                                     javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jComboBox1, 0, 152, Short.MAX_VALUE)
+                                                .addComponent(jComboBox1, 0, 152,
+                                                    Short.MAX_VALUE)
                                                 .addComponent(stocksTextField))
                                             .addGap(110, 110, 110)
                                             .addGroup(jPanel1Layout.createParallelGroup(
@@ -129,7 +130,8 @@ public class SellStocksFrame extends javax.swing.JFrame {
                                                     javax.swing.GroupLayout.Alignment.TRAILING))
                                             .addGap(18, 18, 18)
                                             .addGroup(jPanel1Layout.createParallelGroup(
-                                                    javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    javax.swing.GroupLayout
+                                                        .Alignment.LEADING, false)
                                                 .addComponent(dateTextField)
                                                 .addComponent(feeTextField,
                                                     javax.swing.GroupLayout.DEFAULT_SIZE, 109,

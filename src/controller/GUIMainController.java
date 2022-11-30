@@ -22,8 +22,6 @@ public class GUIMainController extends Controller implements Features {
   private Portfolio portfolioModel;
 
   private StocksImpl stockModel;
-
-  private PortfolioController portfolioController;
   private JFrameStocksView view;
 
   public GUIMainController() throws IOException {
@@ -35,7 +33,6 @@ public class GUIMainController extends Controller implements Features {
     portfolioModel = new PortfolioImpl();
     stockModel = new StocksImpl();
     view = new JFrameStocksView(this);
-    portfolioController = new FlexiblePortfolioControllerImpl(stockModel, portfolioModel, view);
   }
 
   public void setView(JFrameStocksView v) {
@@ -69,10 +66,7 @@ public class GUIMainController extends Controller implements Features {
     updateListOfStocks(tickerValue);
     HashMap map = getStockList().getLStocksMap();
     ArrayList values = (ArrayList) map.get(tickerValue);
-    if (!(values == null) && stockModel.isValidDate(date) && (stocks > 0) && (fee > 0)) {
-      return true;
-    }
-    return false;
+    return !(values == null) && stockModel.isValidDate(date) && (stocks > 0) && (fee > 0);
   }
 
   public void addStockToPortfolio(String tickerName, String date, int stocks, float fee)
@@ -81,8 +75,6 @@ public class GUIMainController extends Controller implements Features {
         tickerName, date,
         stocks, fee);
     portfolioModel.addStockInPortfolio(currStock);
-//    System.out.println(portfolioModel.getPortfolio());
-//    portfolioModel.addStockInPortfolio();
 
   }
 
@@ -106,21 +98,19 @@ public class GUIMainController extends Controller implements Features {
       HashMap map = getStockList().getLStocksMap();
       ArrayList values = (ArrayList) map.get(s.trim().toUpperCase());
       if (values == null) {
-        return false;//        return null;
+        return false;
       }
     }
     return portfolioModel.validateInputForMultiStocks(investedAmount, weightage, fee, lowerDate,
         upperDate,
         frequency,
         tickerValuesList);
-//    return false;
   }
 
   @Override
   public void addDollarCostAveragingStocks(String lowerDate, String upperDate, int frequency,
       String tickerValuesList, float valueInvested, String weightage, float fee)
       throws ParseException {
-//    if(tickerValuesList not null)
     String[] tickerList;
     if (tickerValuesList.length() > 0) {
       tickerList = tickerValuesList.split(",");
@@ -139,17 +129,6 @@ public class GUIMainController extends Controller implements Features {
   @Override
   public HashMap<String, TreeMap<Date, StocksImpl>> renderTheSelectedPortfolio(String fileName)
       throws IOException, ParseException {
-//    FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
-//    if (!fileAccessorsImpl.isFileExists(fileName, "portfolios/flexible")) {
-//      throw new FileNotFoundException(fileName);
-//    }
-//
-//    HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(fileName,
-//        "portfolios"
-//            + "/flexible");
-//    for (String s : portfolios.keySet()) {
-//      updateListOfStocks(s);
-//    }
     upDateListOfStocksHelper(fileName);
 
     return portfolioModel.fetchSelectedPortfolio(fileName, getStockList().getLStocksMap());
@@ -160,22 +139,7 @@ public class GUIMainController extends Controller implements Features {
       throws ParseException, IOException {
 
     upDateListOfStocksHelper(fileName);
-//
-//    FileAccessorsImpl fileAccessorsImpl = new FileAccessorsImpl();
-//    if (!fileAccessorsImpl.isFileExists(fileName, "portfolios/flexible")) {
-//      throw new FileNotFoundException(fileName);
-//    }
-//
-//    HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(fileName,
-//        "portfolios"
-//            + "/flexible");
-//    for (String s : portfolios.keySet()) {
-//      updateListOfStocks(s);
-//    }
     portfolioModel.setIsCostBasis(isCostBasis);
-//    portfolioModel.setPortfolioName(fileName);
-//    portfolioModel.setPortfolio(portfolios);
-    System.out.println("GUI controller getCompositionOfThePortfolio returning");
     return portfolioModel.getCompostion(getStockList().getLStocksMap(), date);
 
 

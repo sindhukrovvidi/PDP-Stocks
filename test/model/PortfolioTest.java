@@ -15,6 +15,9 @@ import view.PortfolioViewImpl;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for inidividual stocks in portfolio.
+ */
 public class PortfolioTest {
 
   Portfolio portfolio = new PortfolioImpl();
@@ -150,9 +153,9 @@ public class PortfolioTest {
   @Test(expected = IllegalArgumentException.class)
   public void testNegativeCommission() throws ParseException, FileAlreadyExistsException {
     s2.setCurrentStock("GOOGGLE INC", "2022-11-16", 121, 23, 23, 34,
-        45, 2, -23, 0 , false);
+        45, 2, -23, 0, false);
     s3.setCurrentStock("GOOGGLE INC", "2022-11-12", 121, 23, 23, 34,
-        45, 4, 0, 0,false);
+        45, 4, 0, 0, false);
     treeMaps.put(new Date(), s2);
     entriesInPortfolio.put(portfolioName, treeMaps);
     portfolio.addStockInPortfolio(s2);

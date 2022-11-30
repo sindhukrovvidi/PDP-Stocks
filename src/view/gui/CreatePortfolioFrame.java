@@ -1,6 +1,7 @@
 package view.gui;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Class that contains all the methods for creating a portfolio on a GUI.

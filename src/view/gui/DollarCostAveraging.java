@@ -5,7 +5,7 @@ package view.gui;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 /**
  * Class that contains all the methods to perform the dollar cost averaging plan in a portfolio.
@@ -262,14 +262,5 @@ public class DollarCostAveraging {
 
     dollarCostAveragingFrame.pack();
   }
-
-  private void endDateTextFieldActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
-  }
-
-  private void addMultiStockButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
-  }
-
 }
 

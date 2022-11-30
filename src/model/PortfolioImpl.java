@@ -658,7 +658,6 @@ public class PortfolioImpl implements Portfolio {
   @Override
   public float sellTheStocks(TreeMap<Date, StocksImpl> validDatesList, Date newDate,
       float numberOfSellingStocks, float fee) {
-//    if (validDatesList != null) {
     for (Map.Entry<Date, StocksImpl>
         entry : validDatesList.entrySet()) {
       if ((numberOfSellingStocks == 0) || entry.getKey().compareTo(newDate) > 0) {
@@ -674,8 +673,6 @@ public class PortfolioImpl implements Portfolio {
         numberOfSellingStocks = 0;
       }
     }
-    System.out.println("calling sellTheStocks...." + numberOfSellingStocks);
-//    }
     return numberOfSellingStocks;
   }
 

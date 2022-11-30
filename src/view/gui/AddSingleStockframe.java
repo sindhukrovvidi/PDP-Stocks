@@ -1,6 +1,6 @@
 package view.gui;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 /**
  * Class that contains methods to add a single stock in the frame.

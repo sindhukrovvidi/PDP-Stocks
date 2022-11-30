@@ -28,8 +28,8 @@ public class Main {
       MainControllerImpl helperController = new MainControllerImpl();
       helperController.programStartsHere();
     } else {
-      GUIMainController GUIMainController = new GUIMainController();
-      GUIMainController.programStartsHere();
+      GUIMainController guiMainController = new GUIMainController();
+      guiMainController.programStartsHere();
     }
   }
 }
