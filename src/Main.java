@@ -1,5 +1,4 @@
 import controller.GUIMainController;
-import controller.MainController;
 import controller.MainControllerImpl;
 
 import java.io.IOException;

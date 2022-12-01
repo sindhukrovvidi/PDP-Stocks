@@ -111,8 +111,7 @@ public class FileAccessorsImpl implements FileAccessors {
       theDir.mkdirs();
     }
     File f = filename.contains(".csv") ? new File(fp.toString() + "/" + filename) :
-        new File(fp.toString() + "/" + filename +
-            ".csv");
+        new File(fp.toString() + "/" + filename + ".csv");
 
     return f.exists() && !f.isDirectory();
   }
@@ -136,8 +135,7 @@ public class FileAccessorsImpl implements FileAccessors {
       theDir.mkdirs();
     }
     File f = portfolioName.contains(".csv") ? new File(fp.toString() + "/" + portfolioName)
-        : new File(fp.toString() + "/" + portfolioName +
-            ".csv");
+        : new File(fp.toString() + "/" + portfolioName + ".csv");
 
     BufferedReader reader = readCSV(f.getPath());
     while ((line = reader.readLine()) != null && !line.isEmpty()) {

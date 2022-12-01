@@ -24,9 +24,6 @@ public class TotalCompositionFrame extends javax.swing.JFrame {
     initComponents();
   }
 
-  /**
-   * This method is called from within the constructor to initialize the form.
-   */
   private void initComponents() {
 
     jScrollBar1 = new javax.swing.JScrollBar();
@@ -61,7 +58,7 @@ public class TotalCompositionFrame extends javax.swing.JFrame {
 
     choosePortfolioLabel.setText("Choose portfolio:");
 
-    dateLabel.setText("Enter date:");
+    dateLabel.setText("Enter date (yyyy-mm-dd):");
 
     displayText.setText("Displays the composition of the portfolio for selected date");
 

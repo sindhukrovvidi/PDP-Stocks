@@ -11,7 +11,6 @@ import model.FileAccessorsImpl;
 import model.Portfolio;
 import model.PortfolioImpl;
 import model.StocksImpl;
-//import view.JFrameStocksView;
 import view.PortfolioViewImpl;
 import view.StockView;
 import view.StockViewImpl;
@@ -193,8 +192,8 @@ public class MainControllerImpl implements MainController {
       String input = takeStringInput();
 
       FileAccessors fileAccessor = new FileAccessorsImpl();
-      String path = this.portfolioImpl.getIsFlexible() ? "portfolios/flexible" : "portfolios" +
-          "/inflexible";
+      String path = this.portfolioImpl.getIsFlexible() ? "portfolios/flexible" : "portfolios"
+          + "/inflexible";
       if (!fileAccessor.isFileExists(input, path)) {
         this.portfolioImpl.setPortfolioName(input);
       } else {

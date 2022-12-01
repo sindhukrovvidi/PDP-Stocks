@@ -25,7 +25,6 @@ public class MainFrame extends javax.swing.JFrame {
     initComponents();
   }
 
-  // <editor-fold defaultstate="collapsed" desc="Generated Code">
   private void initComponents() {
 
     mainPanel = new javax.swing.JPanel();
@@ -43,18 +42,8 @@ public class MainFrame extends javax.swing.JFrame {
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
     createPortfolioButton.setText("Create Portfolio");
-    createPortfolioButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        createPortfolioButtonActionPerformed(evt);
-      }
-    });
 
     viewPortfolioButton.setText("View Portfolio");
-    viewPortfolioButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        viewPortfolioButtonActionPerformed(evt);
-      }
-    });
 
     buyStocksButton.setText("Buy stocks");
 
@@ -162,18 +151,5 @@ public class MainFrame extends javax.swing.JFrame {
 
     pack();
   }
-  // </editor-fold>
-
-  private void viewPortfolioButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
-  }
-
-  private void createPortfolioButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
-  }
-
-  // Variables declaration - do not modify
-
-  // End of variables declaration
 }
 

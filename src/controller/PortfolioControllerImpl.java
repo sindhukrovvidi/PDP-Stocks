@@ -21,7 +21,7 @@ import static model.Input.takeStringInput;
 /**
  * Class that controls the portfolios and that implements the functions in  portfolio controller.
  */
-abstract public class PortfolioControllerImpl extends Controller implements PortfolioController {
+public abstract class PortfolioControllerImpl extends Controller implements PortfolioController {
 
 
   protected Portfolio model;

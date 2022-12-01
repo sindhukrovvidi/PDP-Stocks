@@ -171,7 +171,8 @@ public interface Portfolio {
    * @throws IOException    for invalid input.
    * @throws ParseException while parsing invalid date.
    */
-  String calculatePerformaceOverTime(String date1, String date2) throws IOException, ParseException;
+  TreeMap<LocalDate, Integer> calculatePerformaceOverTime(String date1, String date2)
+      throws IOException, ParseException;
 
   /**
    * Adds multiple stocks at ince in a portfolio.
@@ -226,4 +227,6 @@ public interface Portfolio {
       throws FileAlreadyExistsException;
 
   int validateSellInputs(String date, float shares, float fee);
+
+  boolean validatePerformanceDate(String date1, String date2);
 }

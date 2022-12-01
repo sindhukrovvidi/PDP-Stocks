@@ -77,7 +77,7 @@ public class SellStocksFrame extends javax.swing.JFrame {
 
     jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{}));
 
-    enterDateLabel.setText("Enter date:");
+    enterDateLabel.setText("Enter date (yyyy-mm-dd):");
 
     jLabel1.setText("Enter stocks to sell:");
 

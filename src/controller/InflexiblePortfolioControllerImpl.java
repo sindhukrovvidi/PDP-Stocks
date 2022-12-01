@@ -68,8 +68,7 @@ public class InflexiblePortfolioControllerImpl extends PortfolioControllerImpl {
       }
 
       HashMap<String, TreeMap<Date, StocksImpl>> portfolios = fileAccessorsImpl.viewFile(input,
-          "portfolios" +
-              "/inflexible");
+          "portfolios" + "/inflexible");
       for (String s : portfolios.keySet()) {
         updateListOfStocks(s);
       }

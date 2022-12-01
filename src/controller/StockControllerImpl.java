@@ -13,7 +13,7 @@ import static model.Input.takeIntegerInput;
 /**
  * Class that controls all the stock functions and implements the stock controller.
  */
-abstract public class StockControllerImpl extends Controller implements StockController {
+public abstract class StockControllerImpl extends Controller implements StockController {
 
   protected StocksImpl model;
   protected StockView view;

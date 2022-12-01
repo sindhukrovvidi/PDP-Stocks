@@ -10,13 +10,12 @@ import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import view.PortfolioView;
 import view.PortfolioViewImpl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for inidividual stocks in portfolio.
+ * Tests for individual stocks in portfolio.
  */
 public class PortfolioTest {
 

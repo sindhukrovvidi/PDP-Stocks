@@ -36,56 +36,56 @@ public class StockViewImpl implements StockView {
    */
   @Override
   public void displayListOfDates(boolean displayHeaders, String company, String date,
-                                 float open, float high,
-                                 float low, float close, float volume) throws IOException {
+      float open, float high,
+      float low, float close, float volume) throws IOException {
 
     Formatter fmt = new Formatter();
     if (displayHeaders) {
       fmt.format("Following are the stock details of the company " + company + ".\n");
       fmt.format("%15s %15s %15s %15s %15s %15s\n", "Date", "Open", "High", "Low",
-              "close", "Volume");
+          "close", "Volume");
     }
     fmt.format("%15s %15s %15s %15s %15s %15s\n", date, open, high, low,
-            close, volume);
+        close, volume);
     this.out.append(fmt.toString());
   }
 
   @Override
   public void displayPortfolio(boolean displayHeaders, String company, String date,
-                               float open, float high,
-                               float low, float close, float volume, float shares, float fee)
-          throws IOException {
+      float open, float high,
+      float low, float close, float volume, float shares, float fee)
+      throws IOException {
 
     Formatter fmt = new Formatter();
     if (displayHeaders) {
       fmt.format("%15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n", "Company", "Date", "Open",
-              "High", "Low",
-              "Close", "Volume", "Shares Invested", "Total Value", "Commission fee"
-                      + "\n");
+          "High", "Low",
+          "Close", "Volume", "Shares Invested", "Total Value", "Commission fee"
+              + "\n");
     }
     fmt.format("%15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n", company, date, open, high,
-            low,
-            close, volume, shares, (shares * close), fee);
+        low,
+        close, volume, shares, (shares * close), fee);
     this.out.append(fmt.toString());
   }
 
   @Override
   public void viewCompositionOfPortfolio(boolean displayHeaders, String company, String date,
-                                         float open,
-                                         float close,
-                                         float shares, float fee, float total,
-                                         String dateOfComposition) throws IOException {
+      float open,
+      float close,
+      float shares, float fee, float total,
+      String dateOfComposition) throws IOException {
     Formatter fmt = new Formatter();
     if (displayHeaders) {
       this.out.append("Total value till " + dateOfComposition + " is: " + total + "\n");
       this.out.append(
-              "Following is the list of stocks till date: " + dateOfComposition + "\n");
+          "Following is the list of stocks till date: " + dateOfComposition + "\n");
       fmt.format("%15s %15s %15s %15s %15s %15s\n", "Company", "Date", "Open",
-              "Close", "Shares Invested", "Commission fee"
-                      + "\n");
+          "Close", "Shares Invested", "Commission fee"
+              + "\n");
     }
     fmt.format("%15s %15s %15s %15s %15s %15s \n", company, date, open,
-            close, shares, fee);
+        close, shares, fee);
     this.out.append(fmt.toString());
 
   }
@@ -104,9 +104,9 @@ public class StockViewImpl implements StockView {
   @Override
   public void displayFlexibleViewMenu() throws IOException {
     this.out.append("Choose from the below options:\n 1.Buy stocks.\n "
-            + "2.Sell the stocks.\n 3.Get the total cost basis for the portfolio.\n 4.Get the "
-            + "composition of the portfolio.\n 5.Get the portfolio performance over time.\n " +
-            "6.Exit");
+        + "2.Sell the stocks.\n 3.Get the total cost basis for the portfolio.\n 4.Get the "
+        + "composition of the portfolio.\n 5.Get the portfolio performance over time.\n "
+        + "6.Exit");
   }
 
   @Override
@@ -167,30 +167,30 @@ public class StockViewImpl implements StockView {
   @Override
   public void enterDateforComposition() throws IOException {
     this.out.append(
-            "Enter the date in YYYY-MM-DD to view the composition on that particular date.");
+        "Enter the date in YYYY-MM-DD to view the composition on that particular date.");
   }
 
   @Override
   public void greaterDateMessage() throws IOException {
     this.out.append("The entered date is greater than current date, so can't evaluate your "
-            + "portfolio");
+        + "portfolio");
   }
 
   @Override
   public void zeroComposition() throws IOException {
     this.out.append(
-            "Total composition of the portfolio is 0 as you do not have any stocks purchased by "
-                    + "then.");
+        "Total composition of the portfolio is 0 as you do not have any stocks purchased by "
+            + "then.");
   }
 
   @Override
   public void displayStarterMenu(MainController main) throws IOException {
     this.out.append("Choose from below options to proceed further. (Type the index number).\n"
-            + "1. Create a inflexible portfolio.\n"
-            + "2. Create a flexible portfolio.\n"
-            + "3. View inflexible portfolio.\n"
-            + "4. View/Edit/Sell flexible portfolio.\n"
-            + "5. Exit\n");
+        + "1. Create a inflexible portfolio.\n"
+        + "2. Create a flexible portfolio.\n"
+        + "3. View inflexible portfolio.\n"
+        + "4. View/Edit/Sell flexible portfolio.\n"
+        + "5. Exit\n");
   }
 
   @Override
@@ -231,8 +231,8 @@ public class StockViewImpl implements StockView {
   @Override
   public void enterExistingPortfolioName(String list) throws IOException {
     this.out.append("Enter the name of the portfolio from the below list: (Just enter the "
-            + "filename without the extension \n"
-            + list);
+        + "filename without the extension \n"
+        + list);
   }
 
   @Override
@@ -252,9 +252,9 @@ public class StockViewImpl implements StockView {
   @Override
   public void displayBulkAdditionMenu() throws IOException {
     this.out.append("Choose from the below options.\n"
-            + "1. Add a single stock to the portfolio.\n"
-            + "2. Add multiple stocks at once.\n"
-            + "3. Save the current portfolio.\n");
+        + "1. Add a single stock to the portfolio.\n"
+        + "2. Add multiple stocks at once.\n"
+        + "3. Save the current portfolio.\n");
   }
 
   @Override
@@ -270,7 +270,7 @@ public class StockViewImpl implements StockView {
   @Override
   public void enterTheWeightage() throws IOException {
     this.out.append("Enter the weightage for each stock. Keep in mind that it "
-            + "should add up to 100!!!");
+        + "should add up to 100!!!");
   }
 
   @Override
@@ -281,8 +281,8 @@ public class StockViewImpl implements StockView {
   @Override
   public void stocksAfterStocksDisplay() throws IOException {
     this.out.append("Select from the following options.\n1. Add this to "
-            + "portfolio.\n2. Do not add and search stocks for new company.\n3. Go back. "
-            + "\n 4. Exit\n");
+        + "portfolio.\n2. Do not add and search stocks for new company.\n3. Go back. "
+        + "\n 4. Exit\n");
   }
 }
 

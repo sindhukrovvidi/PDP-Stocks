@@ -158,15 +158,5 @@ public class AddSingleStockframe {
 
     addSingleStockFrame.pack();
   }
-
-  private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
-  }
-
-  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
-  }
-
-
 }
 

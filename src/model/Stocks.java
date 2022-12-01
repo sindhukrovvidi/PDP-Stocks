@@ -87,6 +87,17 @@ public interface Stocks {
    */
   float getShares();
 
+  /**
+   * Create a stock from the plan and addds them to portfolio.
+   *
+   * @param map    data from the portfolio.
+   * @param ticker ticker symbol entered by the user.
+   * @param date   date of the stock.
+   * @param stocks stocks to be invested.
+   * @param fee    commission fee.
+   * @return a stock model with the updated data.
+   * @throws ParseException with invalid date.
+   */
   StocksImpl createAndAddStockInPortfolio(HashMap map, String ticker, String date,
       int stocks, float fee) throws ParseException;
 

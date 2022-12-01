@@ -256,7 +256,9 @@ public class FlexiblePortfolioControllerImpl extends PortfolioControllerImpl {
     view.enterUpperLimitDate();
     String date2 = takeStringInput();
 
-    String performanceData = model.calculatePerformaceOverTime(date1, date2);
+    TreeMap<LocalDate, Integer> barData = model.calculatePerformaceOverTime(date1, date2);
+    String performanceData = model.getScaleValue(barData, date1, date2);
+
     if (performanceData == null) {
       view.performanceDateErrorMessage();
       performanceOverTime();
