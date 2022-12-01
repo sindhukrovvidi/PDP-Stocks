@@ -16,4 +16,5 @@ Support for GUI:
     model.
   2.New classes are created for frames in view under gui package to render different frames based on
     the user selection.
-  3.Created a GUIInterface class which has all the methods required in the view.
+  3.Created a GUIInterface and JFrameStocksView class which has all the methods required in the view
+  .

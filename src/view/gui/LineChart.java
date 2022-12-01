@@ -29,7 +29,7 @@ public class LineChart extends JPanel {
    */
   public void updateData(TreeMap<LocalDate, Integer> portfolioPerformance) {
 
-    renderLineChart chart = new renderLineChart(
+    RenderLineChart chart = new RenderLineChart(
         "Performance of the Portfolio",
         "Performance of the Portfolio",
         createDataset(portfolioPerformance));
@@ -54,9 +54,9 @@ public class LineChart extends JPanel {
   /**
    * Renders line chart after loading the data.
    */
-  public class renderLineChart extends JFrame {
+  public class RenderLineChart extends JFrame {
 
-    private renderLineChart(String applicationTitle, String chartTitle,
+    private RenderLineChart(String applicationTitle, String chartTitle,
         DefaultCategoryDataset dataset) {
       super(applicationTitle);
       JFreeChart lineChart = ChartFactory.createLineChart(

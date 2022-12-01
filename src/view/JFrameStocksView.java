@@ -126,7 +126,6 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
       viewPortfolioFrame.portfolioFilesDropDown.addActionListener(event -> {
         String portfolio = (String) viewPortfolioFrame.portfolioFilesDropDown.getSelectedItem();
         if (portfolio != null) {
-          System.out.println("Got the portfolio name from dropdown...." + portfolio);
           try {
             populateTable(features.renderTheSelectedPortfolio(portfolio),
                 (DefaultTableModel) viewPortfolioFrame.viewPortfolioTable.getModel());
@@ -149,7 +148,6 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
       buyStocksFrame.portfolioFilesDropDown.addActionListener(selected -> {
         String portfolio = (String) buyStocksFrame.portfolioFilesDropDown.getSelectedItem();
         try {
-          System.out.println("Rendering view for portfolio...." + portfolio);
           populateTable(features.renderTheSelectedPortfolio(portfolio),
               (DefaultTableModel) buyStocksFrame.viewPortfolioTable.getModel());
           buyStocksFrame.addStocks.addActionListener(cliked -> {
@@ -252,7 +250,6 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
           try {
             int validInputs = features.validateSellStocks(date, Float.parseFloat(shares),
                 Float.parseFloat(fee));
-            System.out.println("validating sell inpustsssss..." + validInputs);
             switch (validInputs) {
               case 1:
                 JOptionPane.showMessageDialog(null, "Shares should be greater than zero.",
@@ -267,8 +264,6 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
                     "Invalid date", JOptionPane.ERROR_MESSAGE);
                 break;
               default:
-                System.out.println("Printing in GUI");
-                System.out.println((features.getPortfolio()).get(tickerSelected.get()));
                 float stocksSold =
                     features.sellTheStocks((features.getPortfolio()).get(tickerSelected.get()),
                         date,
@@ -280,11 +275,9 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
                   sellStocksFrame.jLabel3.setText("Stocks have been successfully sold. The "
                       + "updated portfolio is: ");
                 }
-                System.out.println("Successfully sold stocks..." + stocksSold);
                 populateTable(features.getPortfolio(),
                     (DefaultTableModel) sellStocksFrame.viewPortfolioTable.getModel());
                 break;
-
             }
 
           } catch (ParseException ex) {
@@ -369,7 +362,6 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
 
   @Override
   public void createPortfolioFile() throws IOException {
-    System.out.println("createPortfolioFile is called");
     String filename = JOptionPane.showInputDialog("Enter the portfolio name.");
     boolean isFileExists = features.createPortfolio(filename);
     if (isFileExists) {
@@ -400,7 +392,6 @@ public class JFrameStocksView extends JFrame implements GUIInterface {
 
           if (features.validateSingleStocksData(tickerValue, date, Integer.parseInt(stocks),
               Float.parseFloat(commissionFee))) {
-            System.out.println("printing ticker value " + tickerValue);
             features.addStockToPortfolio(tickerValue, date, Integer.parseInt(stocks),
                 Float.parseFloat(commissionFee));
             mainFrame.jSplitPane1.setRightComponent(afterAddingStockFrame.jPanel2);

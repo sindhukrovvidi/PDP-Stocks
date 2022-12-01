@@ -332,20 +332,55 @@ public class PortfolioImpl implements Portfolio {
   public TreeMap<LocalDate, Integer> getMonthWiseData(HashMap<String, StringBuilder> entries,
       Date newDate1, Date newDate2) {
     SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-    String newDateString1 = (sdformat.format(newDate1)).substring(0, 7);
-    String newDateString2 = (sdformat.format(newDate2)).substring(0, 7);
 
     HashMap<String, Float> companyShares = this.getCompanyWiseShares();
-    TreeMap<Date, Integer> performanceData = new TreeMap<Date, Integer>();
+    TreeMap<String, Integer> performanceData = new TreeMap<String, Integer>();
 
     LocalDate dateLower = newDate1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate dateUpper = newDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    List<LocalDate> listOfDates = getMonthsDataTwoBetween(dateLower, dateUpper);
 
     entries.forEach((k, v) -> {
       HashMap<String, StocksImpl> currentData = readTheData(v);
+      listOfDates.forEach((date) -> {
+        currentData.forEach((key, val) -> {
+          Date stockDate = null;
+          try {
+            stockDate = sdformat.parse(key);
+          } catch (ParseException e) {
+            throw new RuntimeException(e);
+          }
+          LocalDate currStockDate =
+              stockDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          if ((currStockDate.getMonthValue() == date.getMonthValue()) && (currStockDate.getYear()
+              == date.getYear())) {
+            StocksImpl currStock = currentData.get(key);
+            float shares = companyShares.get(k);
+            float close = currStock.getClose();
+            String currDate = currStock.getDate();
+            if (performanceData.containsKey(currDate)) {
+              performanceData.put(currDate,
+                  Math.round(shares * close + performanceData.get(currDate)));
+            } else {
+              performanceData.put(currDate, Math.round(shares * close));
+            }
+          }
+        });
+      });
     });
 
-    return null;
+    TreeMap<LocalDate, Integer> finalData = new TreeMap();
+    performanceData.forEach((key, val) -> {
+      Date newDate = null;
+      try {
+        newDate = sdformat.parse(key);
+        LocalDate currDate = newDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        finalData.put(currDate, val);
+      } catch (ParseException e) {
+        throw new RuntimeException(e);
+      }
+    });
+    return finalData;
   }
 
   private List getWeeksBetweenTwoDates(LocalDate dateLower, LocalDate dateUpper) {
@@ -357,6 +392,25 @@ public class PortfolioImpl implements Portfolio {
     LocalDate endDate;
     do {
       endDate = startDate.plusDays(7);
+      if (endDate.compareTo(endFridayDate) <= 0) {
+        listOfDates.add(endDate);
+      }
+
+      startDate = endDate;
+    }
+    while (startDate.compareTo(endFridayDate) <= 0);
+    return listOfDates;
+  }
+
+  private List getMonthsDataTwoBetween(LocalDate dateLower, LocalDate dateUpper) {
+    LocalDate startFridayDate = dateLower.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
+    LocalDate endFridayDate = dateUpper.with(TemporalAdjusters.next((DayOfWeek.FRIDAY)));
+    List<LocalDate> listOfDates = new ArrayList<LocalDate>();
+    listOfDates.add(startFridayDate);
+    LocalDate startDate = startFridayDate;
+    LocalDate endDate;
+    do {
+      endDate = startDate.plusDays(30);
       if (endDate.compareTo(endFridayDate) <= 0) {
         listOfDates.add(endDate);
       }

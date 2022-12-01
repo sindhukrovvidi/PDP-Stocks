@@ -20,7 +20,6 @@ public class HTTPRequestsImpl implements HTTPRequests {
    */
   @Override
   public StringBuilder getData(String tickerSymbol) throws IOException {
-    System.out.println("Calliong data for...." + tickerSymbol);
     URL url = null;
     url = new URL("https://www.alphavantage"
         + ".co/query?function=TIME_SERIES_DAILY"
